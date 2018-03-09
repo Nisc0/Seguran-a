@@ -15,7 +15,7 @@ public class CatalogoUser {
 	/**
 	 * Construtor
 	 */
-	private CatalogoTiposSensor() { 
+	private CatalogoUser() {
 		users = new HashMap<>();
 	}
 	

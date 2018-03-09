@@ -6,14 +6,15 @@ package domain;
  */
 public class User {
 	private String userID;
-	private Map<String,User> follows;
+	private Map<String, User> follows;
+	private Map<String, Photo> photos;
 	
 	public User (String id){
 		userID = id;
 		follows = new HashMap<>();
 	}
 	
-	public User obterUserID() {
+	public String obterUserID() {
 		return userID;
 	}
 	
