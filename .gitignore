@@ -30,6 +30,7 @@ proguard/
 .idea/
 
 *.class
+*.pdf
 
 # gwt caches and compiled units #
 war/gwt_bree/
