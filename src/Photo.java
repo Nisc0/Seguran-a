@@ -1,4 +1,4 @@
-package domain;
+import java.util.*;
 
 /**
  * Classe que define as fotos
@@ -15,14 +15,15 @@ public class Photo {
     public Photo (String id){
         photoID = id;
         opinion = new HashMap<>();
+        comments = new ArrayList<>();
     }
 
     public String obterPhotoID() {
         return photoID;
     }
 
-    public boolean addComment(User user, String comm){
-        //Comment novoComm = new Comment (comm, )
-        return true; //TODO:
+    public void addComment(String user, String comm){
+        Comment novoComm = new Comment (user, comm);
+        comments.add(novoComm);
     }
 }

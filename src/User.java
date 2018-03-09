@@ -1,4 +1,5 @@
-package domain;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Classe que define utilizadores
@@ -12,6 +13,7 @@ public class User {
 	public User (String id){
 		userID = id;
 		follows = new HashMap<>();
+		photos = new HashMap<>();
 	}
 	
 	public String obterUserID() {
@@ -20,15 +22,16 @@ public class User {
 	
 	public boolean addFollows(String userID, User user) {
 
-		if(containsFollows(String userID))
+		if(containsFollows(userID))
 		    return false;
 		else {
-	        follows.put(userID, user):
-	        return true;
+            follows.put(userID, user);
+            return true;
+        }
 	}
 	
 	public boolean containsFollows(String userID) {
-		return follows.containdKey(userID);
+		return follows.containsKey(userID);
 	}
 	
 	public User getFollows(String userID) {

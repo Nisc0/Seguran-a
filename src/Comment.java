@@ -1,15 +1,20 @@
-package domain;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Classe que define as fotos
  * @author
  */
 public class Comment {
-    private Map<String, String> commMap; //User e respetivo comentario
+    private String userID;
+    private String comment;
     private Date dataPub;
 
     public Comment(String userID, String comm) {
-
+        this.userID = userID;
+        this.comment = comm;
+        Calendar cal = Calendar.getInstance();
+        this.dataPub = cal.getTime();
     }
 
 }
