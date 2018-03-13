@@ -16,6 +16,26 @@ public class User {
 		photos = new HashMap<>();
 	}
 
+    //////////////    FOLLOWS    /////////////////////
+
+	public boolean addFollows(String userID, User user) {
+
+		if(containsFollows(userID))
+		    return false;
+		else {
+            follows.put(userID, user);
+            return true;
+        }
+	}
+
+	public boolean containsFollows(String userID) {
+		return follows.containsKey(userID);
+	}
+
+	public User getFollows(String userID) {
+		return follows.get(userID);
+	}
+
     //////////////    PHOTOS    /////////////////////
 
     public boolean addPhoto(Photo photo) {
@@ -39,7 +59,7 @@ public class User {
             return null;
     }
 
-    public Collection<Photo> getAllPhotos() {
+    public Iterable<Photo> getAllPhotos() {
         return photos.values();
     }
 
@@ -47,68 +67,30 @@ public class User {
 		return userID;
 	}
 
-    //////////////    FOLLOWS    /////////////////////
-
-	public boolean addFollows(String userID, User user) {
-
-		if(containsFollows(userID))
-		    return false;
-		else {
-            follows.put(userID, user);
-            return true;
-        }
-	}
-
-	public boolean containsFollows(String userID) {
-		return follows.containsKey(userID);
-	}
-
-	public User getFollows(String userID) {
-		return follows.get(userID);
-	}
-
 	//////////////    TRATAMENTO DE PHOTOS    /////////////////////
 
-	public Iterable<Photo> getFollowPhoto(String userID) {
 
-		User uID = getFollows(userID);
-		if (uID != null)
-			return uID.getAllPhotos();
+    
+	public Iterable<PhotoData> getAllPhotoData() {
 
-		else
-			return null;
-	}
-
-    /**
-	public Iterable<Data<String, Date>> getAllPhotoData() {
-
-		List<Data<String, Date>> res;
-
-		res = new ArrayList<Data<String, Date>>();
-		for(Photo ph : uID.getAllPhotos()) {
-			res.add(ph.getDataPhoto());
+		List<PhotoData> res = new ArrayList<PhotoData>();
+		for(Photo ph : photos) {
+			res.add(ph.makePhotoData());
 		}
-
+		
 		return res;
 
 	}
 
-	public Iterable<Opinion<Integer, Integer, List<Comment>>> getAllPhotoOpinion() {
+	public Iterable<PhotoOpinion> getAllPhotoOpinion() {
 
-		uID = getFollows(userID);
-		List<Opinion<Integer, Integer, List<Comment>>> res;
-
-		if(uID != null) {
-			res = new ArrayList<Opinion<Integer, Integer, List<Comment>>>();
-			for(Photo ph : uID.getAllPhotos()) {
-				res.add(ph.getOpinionPhoto());
-			}
+		List<PhotoOpinion> res = new ArrayList<PhotoOpinion>;
+		    for(Photo ph : uID.getAllPhotos()) {
+			res.add(ph.makePhotoOpinion());
 		}
+		return res;
 
-		else
-			return null;
 	}
-    **/
 
 	public boolean makeComment(String com, String uID, String phID) {
 
