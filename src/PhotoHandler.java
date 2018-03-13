@@ -10,9 +10,30 @@ public class PhotoHandler {
         return curr.addPhoto(photo);
     }
     
-    public Iterable<> getPhotosData(User userID) {
-           //TODO: 
+    public Iterable<Photos> getPhotosData(String userID) {
+           
+        User uID = curr.getFollows(userID);
+        if(uID != null) {
+            return uID.getAllPhotos();
+        }
+        else
+            return null; // ver se devemos mandar exception
         
     }
-
+    
+    public Iterable<> getPhotoOpinion(String userID, String photoID) {
+        
+        User uID = curr.getFollows(userID);
+            if(uID != null) {
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
 }
