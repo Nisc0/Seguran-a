@@ -3,17 +3,18 @@ import java.util.*;
 
 /**
  * Classe que define as fotos
+ *
  * @author
  */
 public class Photo {
     private String photoID;
     private Date datePub; //data de publicacao
-    private Map<String,Boolean> opinion;
+    private Map<String, Boolean> opinion;
     private int likes;
     private int dislikes;
     private List<Comment> comments;
 
-    public Photo (String id){
+    public Photo(String id) {
         photoID = id;
         opinion = new HashMap<>();
         comments = new ArrayList<>();
@@ -27,16 +28,16 @@ public class Photo {
         return photoID;
     }
 
-    public void addComment(String user, String comm){
-        Comment novoComm = new Comment (user, comm);
+    public void addComment(String user, String comm) {
+        Comment novoComm = new Comment(user, comm);
         comments.add(novoComm);
     }
 
     //TODO: tem de se verificar se o user pertence aos followers (mas n aqui!)
-    public boolean addOpinion(String user, boolean opi){
+    public boolean addOpinion(String user, boolean opi) {
         boolean lastOpi;
         lastOpi = opinion.put(user, opi);
-        if(lastOpi == opi){
+        if (lastOpi == opi) {
             return false;
         }
 
@@ -59,7 +60,5 @@ public class Photo {
     public PhotoOpinion makePhotoOpinion() {
         return new PhotoOpinion(photoID, likes, dislikes, comments);
     }
-
-
 
 }

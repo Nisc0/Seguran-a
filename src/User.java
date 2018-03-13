@@ -1,40 +1,53 @@
-import java.sql.Date;
 import java.util.*;
 
 /**
  * Classe que define utilizadores
+ *
  * @author
+ * 47823
+ * 47829
+ * 47840
  */
 public class User {
-	private String userID;
-	private Map<String, User> follows;
-	private Map<String, Photo> photos;
+    private String userID;
+    private Map<String, User> follows;
+    private Map<String, Photo> photos;
 
-	public User (String id){
-		userID = id;
-		follows = new HashMap<>();
-		photos = new HashMap<>();
-	}
+    public User(String id) {
+        userID = id;
+        follows = new HashMap<>();
+        photos = new HashMap<>();
+    }
 
     //////////////    FOLLOWS    /////////////////////
 
-	public boolean addFollows(String userID, User user) {
+    public boolean addFollow(String userID, User user) {
 
-		if(containsFollows(userID))
-		    return false;
-		else {
+        if (containsFollow(userID)) {
+            return false;
+        } else {
             follows.put(userID, user);
             return true;
         }
-	}
+    }
 
-	public boolean containsFollows(String userID) {
-		return follows.containsKey(userID);
-	}
+    public boolean removeFollow(String userID, User user) {
 
-	public User getFollows(String userID) {
-		return follows.get(userID);
-	}
+        if (containsFollow(userID)) {
+            follows.remove(userID);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean containsFollow(String userID) {
+        return follows.containsKey(userID);
+    }
+
+    public User getFollow(String userID) {
+        return follows.get(userID);
+    }
 
     //////////////    PHOTOS    /////////////////////
 
@@ -48,7 +61,7 @@ public class User {
         }
     }
 
-    public boolean containsPhoto(String photoID) {
+    private boolean containsPhoto(String photoID) {
         return photos.containsKey(photoID);
     }
 
@@ -63,44 +76,52 @@ public class User {
         return photos.values();
     }
 
-	public String obterUserID() {
-		return userID;
-	}
+    public String obterUserID() {
+        return userID;
+    }
 
-	//////////////    TRATAMENTO DE PHOTOS    /////////////////////
+    //////////////    TRATAMENTO DE PHOTOS    /////////////////////
 
 
-    
-	public Iterable<PhotoData> getAllPhotoData() {
+    public Iterable<PhotoData> getAllPhotoData() {
 
-		List<PhotoData> res = new ArrayList<PhotoData>();
-		for(Photo ph : photos) {
-			res.add(ph.makePhotoData());
-		}
-		
-		return res;
+        List<PhotoData> res = new ArrayList<>();
+        for (Photo ph : photos.values()) {
+            res.add(ph.makePhotoData());
+        }
+        return res;
+    }
 
-	}
+    /**
+     * public PhotoOpinion getPhotoOpinion(String photoID) {
+     * <p>
+     * if (containsPhoto(photoID))
+     * return getPhoto(photoID).makePhotoOpinion();
+     * else
+     * return null;
+     * <p>
+     * }
+     */
 
-	public PhotoOpinion getPhotoOpinion(String photoID) {
+    public Iterable<PhotoOpinion> getAllPhotoOpinion() {
 
-		if(containsPhoto(photoID))
-			return getPhoto(photoID).makePhotoOpinion;
-		else
-			return null;
+        List<PhotoOpinion> res = new ArrayList<>();
+        for (Photo ph : photos.values()) {
+            res.add(ph.makePhotoOpinion());
+        }
+        return res;
+    }
 
-	}
+    public boolean makeComment(String com, String uID, String phID) {
 
-	public boolean makeComment(String com, String uID, String phID) {
-
-		if (phID != null) {
-			Photo photo = getPhoto(phID);
-			if (photo != null) {
-				photo.addComment(uID, com);
-				return true;
-			}
-		}
-		return false;
-	}
+        if (phID != null) {
+            Photo photo = getPhoto(phID);
+            if (photo != null) {
+                photo.addComment(uID, com);
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
