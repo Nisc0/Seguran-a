@@ -82,13 +82,12 @@ public class User {
 
 	}
 
-	public Iterable<PhotoOpinion> getAllPhotoOpinion() {
+	public PhotoOpinion getPhotoOpinion(String photoID) {
 
-		List<PhotoOpinion> res = new ArrayList<PhotoOpinion>;
-		    for(Photo ph : uID.getAllPhotos()) {
-			res.add(ph.makePhotoOpinion());
-		}
-		return res;
+		if(containsPhoto(photoID))
+			return getPhoto(photoID).makePhotoOpinion;
+		else
+			return null;
 
 	}
 
