@@ -52,11 +52,11 @@ public class Photo {
         return this.datePub;
     }
 
-    public PhotoData makeDataPhoto() {
+    public PhotoData makePhotoData() {
         return new PhotoData(photoID, datePub);
     }
 
-    public PhotoOpinion makeOpinionPhoto() {
+    public PhotoOpinion makePhotoOpinion() {
         return new PhotoOpinion(photoID, likes, dislikes, comments);
     }
 
