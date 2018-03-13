@@ -32,7 +32,7 @@ public class Photo {
         comments.add(novoComm);
     }
 
-    //TODO: tem de se verificar se o user pertence aos followers
+    //TODO: tem de se verificar se o user pertence aos followers (mas n aqui!)
     public boolean addOpinion(String user, boolean opi){
         boolean lastOpi;
         lastOpi = opinion.put(user, opi);
@@ -52,11 +52,11 @@ public class Photo {
         return this.datePub;
     }
 
-    public PhotoData getDataPhoto() {
+    public PhotoData makeDataPhoto() {
         return new PhotoData(photoID, datePub);
     }
 
-    public PhotoOpinion getOpinionPhoto() {
+    public PhotoOpinion makeOpinionPhoto() {
         return new PhotoOpinion(photoID, likes, dislikes, comments);
     }
 
