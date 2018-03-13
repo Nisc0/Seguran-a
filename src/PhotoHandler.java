@@ -10,7 +10,7 @@ public class PhotoHandler {
         return curr.addPhoto(photo);
     }
     
-    public Iterable<Photos> getPhotosData(String userID) {
+    public Iterable<PhotoData> getPhotosData(String userID) {
            
         User uID = curr.getFollows(userID);
         if(uID != null) {
@@ -21,10 +21,12 @@ public class PhotoHandler {
         
     }
     
-    public Iterable<> getPhotoOpinion(String userID, String photoID) {
+    public Iterable<PhotoOpinion> getPhotoOpinion(String userID, String photoID) {
         
         User uID = curr.getFollows(userID);
             if(uID != null) {
+                uID.
+                    //TODO:
                 
                 
                 
