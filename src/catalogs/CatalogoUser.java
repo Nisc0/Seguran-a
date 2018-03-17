@@ -1,3 +1,7 @@
+package catalogs;
+
+import domain.User;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +33,7 @@ public class CatalogoUser {
         if(containsUser(userID))
             return false;
         else {
-            users.put(userID, new User (userID));
+            users.put(userID, new User(userID));
             return true;
         }
     }
