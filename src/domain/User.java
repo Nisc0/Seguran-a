@@ -1,3 +1,6 @@
+package domain;
+
+import catalogs.CatalogoUser;
 import java.util.*;
 
 /**
@@ -8,30 +11,37 @@ import java.util.*;
  * 47829
  * 47840
  */
+
 public class User {
+
     private String userID;
     private Map<String, User> follows;
     private Map<String, Photo> photos;
+    private static CatalogoUser catUser;
 
     public User(String id) {
         userID = id;
         follows = new HashMap<>();
         photos = new HashMap<>();
+        catUser = CatalogoUser.getCatalogo();
     }
 
     //////////////    FOLLOWS    /////////////////////
 
-    public boolean addFollow(String userID, User user) {
+    public boolean addFollow(String userID) {
 
-        if (containsFollow(userID)) {
-            return false;
-        } else {
-            follows.put(userID, user);
-            return true;
+        if (!containsFollow(userID)) {
+            User u = catUser.getUser(userID);
+            if (u != null) {
+                follows.put(userID, u);
+                return true;
+            }
         }
+            return false;
+
     }
 
-    public boolean removeFollow(String userID, User user) {
+    public boolean removeFollow(String userID) {
 
         if (containsFollow(userID)) {
             follows.remove(userID);
