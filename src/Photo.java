@@ -3,7 +3,6 @@ import java.util.*;
 
 /**
  * Classe que define as fotos
- *
  * @author
  */
 public class Photo {
@@ -33,17 +32,21 @@ public class Photo {
         comments.add(novoComm);
     }
 
-    //TODO: tem de se verificar se o user pertence aos followers (mas n aqui!)
     public boolean addOpinion(String user, boolean opi) {
-        boolean lastOpi;
-        lastOpi = opinion.put(user, opi);
-        if (lastOpi == opi) {
+
+        Boolean lastOpi = opinion.put(user, opi);
+        if (lastOpi != null && lastOpi == opi)
             return false;
-        }
 
         if (opi) {
+            if(lastOpi != null) {
+                dislikes--;
+            }
             likes++;
         } else {
+            if(lastOpi != null) {
+                likes--;
+            }
             dislikes++;
         }
         return true;

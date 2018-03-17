@@ -76,7 +76,7 @@ public class User {
         return photos.values();
     }
 
-    public String obterUserID() {
+    public String getID() {
         return userID;
     }
 
@@ -92,16 +92,14 @@ public class User {
         return res;
     }
 
-    /**
-     * public PhotoOpinion getPhotoOpinion(String photoID) {
-     * <p>
-     * if (containsPhoto(photoID))
-     * return getPhoto(photoID).makePhotoOpinion();
-     * else
-     * return null;
-     * <p>
-     * }
-     */
+
+    public PhotoOpinion getPhotoOpinion(String photoID) {
+        if (containsPhoto(photoID))
+            return getPhoto(photoID).makePhotoOpinion();
+        else
+            return null;
+
+    }
 
     public Iterable<PhotoOpinion> getAllPhotoOpinion() {
 

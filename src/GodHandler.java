@@ -1,10 +1,10 @@
-public class abstract GodHandler {
-  
+public abstract class  GodHandler {
+
   protected User curr;
 
 
-  protect User getCurr() {
-    return curr;
+  protected User getCurr() {
+    return this.curr;
   }
-  
+
 }
