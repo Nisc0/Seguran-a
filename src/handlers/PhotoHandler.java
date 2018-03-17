@@ -1,6 +1,7 @@
 package handlers;
 
 import domain.*;
+import exceptions.*;
 import java.util.ArrayList;
 
 public class PhotoHandler extends GodHandler{
@@ -9,40 +10,43 @@ public class PhotoHandler extends GodHandler{
         this.curr = curr;
     }
 
-    public boolean addPhoto(Photo photo) {
-        return curr.addPhoto(photo);
-    }
+    public void addPhoto(Photo photo) throws DuplicatePhotoException {
 
-    public Iterable<PhotoData> getPhotosData(String userID) {
+        if (curr.getPhoto(photo.getPhotoID()) != null)
+            throw new DuplicatePhotoException();
 
-        User uID = curr.getFollow(userID);
-        if (uID != null) {
-            return uID.getAllPhotoData();
-        } else
-            return new ArrayList<>(); // ver se devemos mandar exception
-
-        //TODO:Nao deves.. tens -> esta escrito no enunciado!!!
-        //caso contrário, devolve um erro;
-        //caso contrário, devolve um erro;
+        curr.addPhoto(photo);
 
     }
 
-    public PhotoOpinion getPhotoOpinion(String userID, String photoID) {
+    public Iterable<PhotoData> getPhotosData(String userID) throws NotFollowingException {
 
         User uID = curr.getFollow(userID);
-        if (uID != null) {
-            return uID.getPhotoOpinion(photoID);
-        } else
-            return null;
+        if (uID == null)
+            throw new NotFollowingException();
+
+        return uID.getAllPhotoData();
+
     }
 
-    public Iterable<Photo> getAllUserPhotos(String userID) {
+    public PhotoOpinion getPhotoOpinion(String userID, String photoID) throws NotFollowingException {
 
         User uID = curr.getFollow(userID);
-        if(uID != null)
-            return uID.getAllPhotos();
-        else
-            return new ArrayList<>();
+        if (uID == null)
+            throw new NotFollowingException();
+
+        return uID.getPhotoOpinion(photoID);
+
+    }
+
+
+    public Iterable<Photo> getAllUserPhotos(String userID) throws NotFollowingException {
+
+        User uID = curr.getFollow(userID);
+        if(uID == null)
+            throw new NotFollowingException();
+
+        return uID.getAllPhotos();
 
     }
 

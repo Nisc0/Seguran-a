@@ -1,6 +1,7 @@
 package handlers;
 
 import domain.*;
+import exceptions.*;
 
 public class OpinionHandler extends  GodHandler {
 
@@ -9,30 +10,42 @@ public class OpinionHandler extends  GodHandler {
         this.curr = curr;
     }
 
-    public boolean makeComment(String comment, String userID, String photoID) {
+    public boolean makeComment(String comment, String userID, String photoID) throws NotFollowingException{
+
         User uID = curr.getFollow(userID);
-        return (uID != null) && uID.makeComment(comment, userID, photoID);
+        if(uID == null)
+            throw new NotFollowingException();
+
+        return uID.makeComment(comment, userID, photoID);
+
+
     }
 
-    public boolean addLike(String userID, String photoID) {
+    public boolean addLike(String userID, String photoID) throws NotFollowingException, NoSuchPhotoException{
+
         User uID = curr.getFollow(userID);
-        if (uID != null) {
-            Photo pID = uID.getPhoto(photoID);
-            if (pID != null) {
-                return pID.addOpinion(uID.getID(), true);
-            }
-        }
-        return false;
+        if (uID == null)
+            throw new NotFollowingException();
+
+        Photo pID = uID.getPhoto(photoID);
+        if (pID == null)
+            throw new NoSuchPhotoException();
+
+        return pID.addOpinion(uID.getID(), true);
+
     }
 
-    public boolean addDisLike(String userID, String photoID) {
+    public boolean addDisLike(String userID, String photoID) throws NotFollowingException, NoSuchPhotoException{
+
         User uID = curr.getFollow(userID);
-        if (uID != null) {
-            Photo pID = uID.getPhoto(photoID);
-            if (pID != null) {
-                return pID.addOpinion(uID.getID(), false);
-            }
-        }
-        return false;
+        if (uID == null)
+            throw new NotFollowingException();
+
+        Photo pID = uID.getPhoto(photoID);
+        if (pID == null)
+            throw new NoSuchPhotoException();
+
+        return pID.addOpinion(uID.getID(), false);
+
     }
 }
