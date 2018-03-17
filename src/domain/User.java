@@ -15,44 +15,26 @@ import java.util.*;
 public class User {
 
     private String userID;
+    private String password;
     private Map<String, User> follows;
     private Map<String, Photo> photos;
-    private static CatalogoUser catUser;
+
 
     public User(String id) {
         userID = id;
         follows = new HashMap<>();
         photos = new HashMap<>();
-        catUser = CatalogoUser.getCatalogo();
+
     }
 
     //////////////    FOLLOWS    /////////////////////
 
-    public boolean addFollow(String userID) {
-
-        if (!containsFollow(userID)) {
-            User u = catUser.getUser(userID);
-            if (u != null) {
-                follows.put(userID, u);
-                return true;
-            }
-        }
-            return false;
-
+    public void addFollow(User u) {
+        follows.put(u.getID(), u);
     }
 
-    public boolean removeFollow(String userID) {
-
-        if (containsFollow(userID)) {
-            follows.remove(userID);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private boolean containsFollow(String userID) {
-        return follows.containsKey(userID);
+    public void removeFollow(String userID) {
+        follows.remove(userID);
     }
 
     public User getFollow(String userID) {
@@ -61,14 +43,8 @@ public class User {
 
     //////////////    PHOTOS    /////////////////////
 
-    public boolean addPhoto(Photo photo) {
-
-        if (containsPhoto(photo.getPhotoID()))
-            return false;
-        else {
-            photos.put(photo.getPhotoID(), photo);
-            return true;
-        }
+    public void addPhoto(Photo photo) {
+        photos.put(photo.getPhotoID(), photo);
     }
 
     private boolean containsPhoto(String photoID) {
@@ -119,6 +95,8 @@ public class User {
         }
         return res;
     }
+
+    //////////////    TRATAMENTO DE OPINIIONS    /////////////////////
 
     public boolean makeComment(String com, String uID, String phID) {
 
