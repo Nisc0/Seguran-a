@@ -2,7 +2,7 @@ import java.util.List;
 
 public class PhotoOpinion {
 
-    //private String photoID;
+    private String photoID;
     private int likes;
     private int dislikes;
     private List<Comment> comm;
