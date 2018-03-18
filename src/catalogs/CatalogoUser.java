@@ -1,5 +1,6 @@
 package catalogs;
 
+import catalogs_interface.ICatalogoUser;
 import domain.User;
 
 import java.util.HashMap;
@@ -7,9 +8,9 @@ import java.util.Map;
 
 /**
  * Classe que define catalogos de user
- * @author minunes
+ * @author grupoxxx
  */
-public class CatalogoUser {
+public class CatalogoUser implements ICatalogoUser {
 
     private static CatalogoUser instance;
     private Map<String,User> users;
@@ -22,12 +23,13 @@ public class CatalogoUser {
     }
 
     public static CatalogoUser getCatalogo() {
-        if (instance == null){
-            instance = new CatalogoUser();
+        if (CatalogoUser.instance == null){
+            CatalogoUser.instance = new CatalogoUser();
         }
-        return instance;
+        return CatalogoUser.instance;
     }
 
+    @Override
     public boolean addUser(String userID) {
 
         if(containsUser(userID))
@@ -38,18 +40,18 @@ public class CatalogoUser {
         }
     }
 
-    public boolean containsUser( String userID) {
+    @Override
+    public boolean containsUser(String userID) {
         return users.containsKey(userID);
     }
 
+    @Override
     public User getUser(String userID) {
         return users.get(userID);
     }
 
-    /**
-     * Os nomes dos tipos de sensores existentes neste catalogo
-     * @return Uma colecao iteravel com os nomes dos tipos de sensores
-     */
+
+    @Override
     public Iterable<String> getUsers() {
         return users.keySet();
     }

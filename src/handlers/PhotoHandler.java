@@ -25,7 +25,7 @@ public class PhotoHandler extends GodHandler{
         if (uID == null)
             throw new NotFollowingException();
 
-        return uID.getAllPhotoData();
+        return uID.getAllPhotosData();
 
     }
 

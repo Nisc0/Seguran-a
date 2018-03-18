@@ -1,18 +1,18 @@
 package domain;
 
-import catalogs.CatalogoUser;
+import domain_interface.IUser;
+
 import java.util.*;
 
 /**
  * Classe que define utilizadores
  *
- * @author
- * 47823
- * 47829
- * 47840
+ * @author 47823
+ * @author 47829
+ * @author 47840
  */
 
-public class User {
+public class User implements IUser {
 
     private String userID;
     private String password;
@@ -27,22 +27,32 @@ public class User {
 
     }
 
+
+    @Override
+    public String getID() {
+        return userID;
+    }
+
     //////////////    FOLLOWS    /////////////////////
 
+    @Override
     public void addFollow(User u) {
         follows.put(u.getID(), u);
     }
 
+    @Override
     public void removeFollow(String userID) {
         follows.remove(userID);
     }
 
+    @Override
     public User getFollow(String userID) {
         return follows.get(userID);
     }
 
     //////////////    PHOTOS    /////////////////////
 
+    @Override
     public void addPhoto(Photo photo) {
         photos.put(photo.getPhotoID(), photo);
     }
@@ -51,6 +61,7 @@ public class User {
         return photos.containsKey(photoID);
     }
 
+    @Override
     public Photo getPhoto(String photoID) {
         if (containsPhoto(photoID))
             return photos.get(photoID);
@@ -58,18 +69,17 @@ public class User {
             return null;
     }
 
+    @Override
     public Iterable<Photo> getAllPhotos() {
         return photos.values();
     }
 
-    public String getID() {
-        return userID;
-    }
 
     //////////////    TRATAMENTO DE PHOTOS    /////////////////////
 
 
-    public Iterable<PhotoData> getAllPhotoData() {
+    @Override
+    public Iterable<PhotoData> getAllPhotosData() {
 
         List<PhotoData> res = new ArrayList<>();
         for (Photo ph : photos.values()) {
@@ -79,6 +89,7 @@ public class User {
     }
 
 
+    @Override
     public PhotoOpinion getPhotoOpinion(String photoID) {
         if (containsPhoto(photoID))
             return getPhoto(photoID).makePhotoOpinion();
@@ -87,6 +98,8 @@ public class User {
 
     }
 
+    /* mt possivelmente nao preciso
+    @Override
     public Iterable<PhotoOpinion> getAllPhotoOpinion() {
 
         List<PhotoOpinion> res = new ArrayList<>();
@@ -95,9 +108,11 @@ public class User {
         }
         return res;
     }
+    */
 
     //////////////    TRATAMENTO DE OPINIIONS    /////////////////////
 
+    @Override
     public boolean makeComment(String com, String uID, String phID) {
 
         if (phID != null) {
