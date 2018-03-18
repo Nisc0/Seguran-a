@@ -20,4 +20,11 @@ public class PhotoData {
         this.date = date;
     }
 
+    public String getPhotoID() {
+        return photoID;
+    }
+
+    public Date getDate() {
+        return date;
+    }
 }

@@ -23,4 +23,15 @@ public class Comment {
         this.dataPub = cal.getTime();
     }
 
+    public String getUserID() {
+        return userID;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public Date getDataPub() {
+        return dataPub;
+    }
 }

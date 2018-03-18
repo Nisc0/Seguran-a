@@ -24,4 +24,19 @@ public class PhotoOpinion {
         this.comm = comm;
     }
 
+    public String getPhotoID() {
+        return photoID;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public int getDislikes() {
+        return dislikes;
+    }
+
+    public List<Comment> getComm() {
+        return comm;
+    }
 }
