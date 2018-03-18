@@ -7,9 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Classe que define catalogos de user
- * @author grupoxxx
+ * Classe que define utilizadores
+ *
+ * @author 47823
+ * @author 47829
+ * @author 47840
  */
+
 public class CatalogoUser implements ICatalogoUser {
 
     private static CatalogoUser instance;

@@ -2,6 +2,14 @@ package domain;
 
 import java.util.List;
 
+/**
+ * Classe que define a opiniao duma foto
+ *
+ * @author 47823
+ * @author 47829
+ * @author 47840
+ */
+
 public class PhotoOpinion {
 
     private String photoID;

@@ -3,10 +3,15 @@ package domain;
 import domain_interface.IPhoto;
 
 import java.util.*;
+
 /**
- * Classe que define as fotos
- * @author
+ * Classe que define fotos
+ *
+ * @author 47823
+ * @author 47829
+ * @author 47840
  */
+
 public class Photo implements IPhoto {
     private String photoID;
     private Date datePub; //data de publicacao

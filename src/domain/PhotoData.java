@@ -2,6 +2,14 @@ package domain;
 
 import java.util.Date;
 
+/**
+ * Classe que define a informacao base duma foto
+ *
+ * @author 47823
+ * @author 47829
+ * @author 47840
+ */
+
 public class PhotoData {
 
     private String photoID;

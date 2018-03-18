@@ -4,9 +4,13 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Classe que define as fotos
- * @author
+ * Classe que define comentarios de fotos
+ *
+ * @author 47823
+ * @author 47829
+ * @author 47840
  */
+
 public class Comment {
     private String userID;
     private String comment;
