@@ -1,5 +1,7 @@
 package domain;
 
+import domain_interface.IComment;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -11,7 +13,7 @@ import java.util.Date;
  * @author 47840
  */
 
-public class Comment {
+public class Comment implements IComment {
     private String userID;
     private String comment;
     private Date dataPub;
@@ -23,14 +25,17 @@ public class Comment {
         this.dataPub = cal.getTime();
     }
 
+    @Override
     public String getUserID() {
         return userID;
     }
 
+    @Override
     public String getComment() {
         return comment;
     }
 
+    @Override
     public Date getDataPub() {
         return dataPub;
     }

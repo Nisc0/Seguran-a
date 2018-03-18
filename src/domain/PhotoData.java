@@ -1,5 +1,7 @@
 package domain;
 
+import domain_interface.IPhotoData;
+
 import java.util.Date;
 
 /**
@@ -10,7 +12,7 @@ import java.util.Date;
  * @author 47840
  */
 
-public class PhotoData {
+public class PhotoData implements IPhotoData {
 
     private String photoID;
     private Date date;
@@ -20,10 +22,12 @@ public class PhotoData {
         this.date = date;
     }
 
+    @Override
     public String getPhotoID() {
         return photoID;
     }
 
+    @Override
     public Date getDate() {
         return date;
     }

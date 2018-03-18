@@ -1,5 +1,7 @@
 package domain;
 
+import domain_interface.IPhotoOpinion;
+
 import java.util.List;
 
 /**
@@ -10,7 +12,7 @@ import java.util.List;
  * @author 47840
  */
 
-public class PhotoOpinion {
+public class PhotoOpinion implements IPhotoOpinion {
 
     private String photoID;
     private int likes;
@@ -24,18 +26,22 @@ public class PhotoOpinion {
         this.comm = comm;
     }
 
+    @Override
     public String getPhotoID() {
         return photoID;
     }
 
+    @Override
     public int getLikes() {
         return likes;
     }
 
+    @Override
     public int getDislikes() {
         return dislikes;
     }
 
+    @Override
     public List<Comment> getComm() {
         return comm;
     }
