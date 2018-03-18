@@ -35,8 +35,7 @@ public class Photo implements IPhoto {
     }
 
     public void addComment(String user, String comm) {
-        Comment novoComm = new Comment(user, comm);
-        comments.add(novoComm);
+        comments.add(new Comment(user, comm));
     }
 
     public boolean addOpinion(String user, boolean opi) {
