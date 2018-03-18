@@ -13,6 +13,11 @@ public interface IUser {
      */
     String getID();
 
+    /**
+     * Obtem a pass do utilizador
+     * @return a pass do utilizador
+     */
+    String getPass();
 
     /**
      * Adiciona um utilizador à lista de pessoas que se está a seguir

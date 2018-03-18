@@ -27,13 +27,20 @@ public class User implements IUser {
 
     }
 
-
     @Override
     public String getID() {
         return userID;
     }
 
+    @Override
+    public String getPass() { return password; }
+
     //////////////    FOLLOWS    /////////////////////
+
+    @Override
+    public User getFollow(String userID) {
+        return follows.get(userID);
+    }
 
     @Override
     public void addFollow(User u) {
@@ -45,38 +52,20 @@ public class User implements IUser {
         follows.remove(userID);
     }
 
-    @Override
-    public User getFollow(String userID) {
-        return follows.get(userID);
-    }
 
     //////////////    PHOTOS    /////////////////////
+
+    @Override
+    public Photo getPhoto(String photoID) {
+        return photos.get(photoID);
+    }
 
     @Override
     public void addPhoto(Photo photo) {
         photos.put(photo.getPhotoID(), photo);
     }
 
-    private boolean containsPhoto(String photoID) {
-        return photos.containsKey(photoID);
-    }
-
-    @Override
-    public Photo getPhoto(String photoID) {
-        if (containsPhoto(photoID))
-            return photos.get(photoID);
-        else
-            return null;
-    }
-
-    @Override
-    public Iterable<Photo> getAllPhotos() {
-        return photos.values();
-    }
-
-
     //////////////    TRATAMENTO DE PHOTOS    /////////////////////
-
 
     @Override
     public Iterable<PhotoData> getAllPhotosData() {
@@ -88,14 +77,20 @@ public class User implements IUser {
         return res;
     }
 
-
     @Override
     public PhotoOpinion getPhotoOpinion(String photoID) {
-        if (containsPhoto(photoID))
-            return getPhoto(photoID).makePhotoOpinion();
+
+        Photo ph = photos.get(photoID);
+        if (ph != null)
+            return ph.makePhotoOpinion();
         else
             return null;
 
+    }
+
+    @Override
+    public Iterable<Photo> getAllPhotos() {
+        return photos.values();
     }
 
     /* mt possivelmente nao preciso
@@ -115,12 +110,10 @@ public class User implements IUser {
     @Override
     public boolean makeComment(String com, String uID, String phID) {
 
-        if (phID != null) {
-            Photo photo = getPhoto(phID);
-            if (photo != null) {
-                photo.addComment(uID, com);
-                return true;
-            }
+        Photo photo = getPhoto(phID);
+        if (photo != null) {
+            photo.addComment(uID, com);
+            return true;
         }
         return false;
     }
