@@ -10,18 +10,21 @@ public class OpinionHandler extends  GodHandler {
         this.curr = curr;
     }
 
-    public boolean makeComment(String comment, String userID, String photoID) throws NotFollowingException{
+    public boolean makeComment(String comment, String userID, String photoID) throws NotFollowingException, NoSuchPhotoException {
 
         User uID = curr.getFollow(userID);
         if(uID == null)
             throw new NotFollowingException();
 
-        return uID.makeComment(comment, userID, photoID);
+        if (!uID.makeComment(comment, userID, photoID))
+            throw new NoSuchPhotoException();
+
+        return true;
 
 
     }
 
-    public boolean addLike(String userID, String photoID) throws NotFollowingException, NoSuchPhotoException{
+    public boolean addLike(String userID, String photoID) throws NotFollowingException, NoSuchPhotoException, AlreadyLikedException{
 
         User uID = curr.getFollow(userID);
         if (uID == null)
@@ -31,11 +34,14 @@ public class OpinionHandler extends  GodHandler {
         if (pID == null)
             throw new NoSuchPhotoException();
 
-        return pID.addOpinion(uID.getID(), true);
+        if (!pID.addOpinion(uID.getID(), true))
+            throw new  AlreadyLikedException();
+
+        return true;
 
     }
 
-    public boolean addDisLike(String userID, String photoID) throws NotFollowingException, NoSuchPhotoException{
+    public boolean addDisLike(String userID, String photoID) throws NotFollowingException, NoSuchPhotoException, AlreadyDisLikedException{
 
         User uID = curr.getFollow(userID);
         if (uID == null)
@@ -45,7 +51,11 @@ public class OpinionHandler extends  GodHandler {
         if (pID == null)
             throw new NoSuchPhotoException();
 
-        return pID.addOpinion(uID.getID(), false);
+        if (!pID.addOpinion(uID.getID(), false))
+            throw new  AlreadyDisLikedException();
+
+        return true;
+
 
     }
 }

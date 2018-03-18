@@ -29,13 +29,17 @@ public class PhotoHandler extends GodHandler{
 
     }
 
-    public PhotoOpinion getPhotoOpinion(String userID, String photoID) throws NotFollowingException {
+    public PhotoOpinion getPhotoOpinion(String userID, String photoID) throws NotFollowingException, NoSuchPhotoException {
 
         User uID = curr.getFollow(userID);
         if (uID == null)
             throw new NotFollowingException();
 
-        return uID.getPhotoOpinion(photoID);
+        PhotoOpinion phO = uID.getPhotoOpinion(photoID);
+        if(phO == null)
+            throw new NoSuchPhotoException();
+
+        return phO;
 
     }
 

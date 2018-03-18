@@ -30,7 +30,7 @@ public class FollowerHandler extends GodHandler{
     }
 
 
-    public boolean removeFollow(String userID) throws  NoSuchUserException{
+    public boolean removeFollow(String userID) throws  NoSuchUserException {
 
         User u = catUser.getUser(userID);
         if(u == null)
