@@ -1,6 +1,6 @@
 package message;
 
-public enum Msg_Type {
+public enum MsgType {
     STARTSESSION,
     ADDPHOTO,
     ALLPHOTOSDATA,

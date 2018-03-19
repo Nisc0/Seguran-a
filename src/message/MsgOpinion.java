@@ -1,14 +1,17 @@
 package message;
 
-public class Msg_Follower extends Message {
+public class MsgOpinion extends Message {
 
     private String followID;
     private String photoID;
+    private String comment;
 
-    public Msg_Follower(Msg_Type c_type, Msg_Error c_err, String user, String followID, String photoID) {
+
+    public MsgOpinion(MsgType c_type, MsgError c_err, String user, String followID, String photoID, String comment) {
         super(c_type, c_err, user);
         this.followID = followID;
         this.photoID = photoID;
+        this.comment = comment;
 
     }
 
@@ -18,5 +21,9 @@ public class Msg_Follower extends Message {
 
     public String getPhotoID() {
         return photoID;
+    }
+
+    public String getComment() {
+        return comment;
     }
 }

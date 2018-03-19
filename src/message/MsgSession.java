@@ -1,10 +1,10 @@
 package message;
 
-public class Msg_Session extends Message {
+public class MsgSession extends Message {
 
     private String pass;
 
-    public Msg_Session(Msg_Type c_type, Msg_Error c_err, String user, String pass) {
+    public MsgSession(MsgType c_type, MsgError c_err, String user, String pass) {
         super(c_type, c_err, user);
         this.pass = pass;
     }
