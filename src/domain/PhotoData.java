@@ -31,4 +31,9 @@ public class PhotoData implements IPhotoData {
     public Date getDate() {
         return date;
     }
+
+    @Override
+    public String toString(){
+        return ("photoID: " + photoID + ", " + date.toString());
+    }
 }

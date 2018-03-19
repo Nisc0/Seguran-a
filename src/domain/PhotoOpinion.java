@@ -45,4 +45,14 @@ public class PhotoOpinion implements IPhotoOpinion {
     public List<Comment> getComm() {
         return comm;
     }
+
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("photoID: " + photoID + ", ");
+        sb.append("likes: " + likes + ", ");
+        sb.append("dislikes: " + dislikes + ", ");
+        sb.append("comments: " + comm);
+        return sb.toString();
+    }
 }
