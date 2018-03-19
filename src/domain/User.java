@@ -20,8 +20,9 @@ public class User implements IUser {
     private Map<String, Photo> photos;
 
 
-    public User(String id) {
+    public User(String id, String pass) {
         userID = id;
+        password = pass;
         follows = new HashMap<>();
         photos = new HashMap<>();
 
