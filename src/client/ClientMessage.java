@@ -1,28 +1,36 @@
 package client;
 
+import domain.IPCheck;
 import domain.Message;
+import domain.Photo;
+import domain.User;
+import exceptions.NotValidAddressException;
 
 //Classe que empacota uma Message e envia-a para o clientNetwork
 public class ClientMessage {
-	
-	private ClientNetwork cl;
-	
-	public ClientMessage(String user, String pwd, String server) {
-		
-		//verificar qual a mensagem a ser criada - criar varias messages
-		
-		String[] serverPort = server.split(":");
-		int port;
-		try {
-			port = Integer.parseInt(serverPort[1]);
-		} catch (NumberFormatException e) {
-			//TODO: verificar se deu bosta e nao eh com um SOP!
-			System.out.println("Porta dada errada!");
-		}
-		Message msg = new Message(user, pwd, serverPort[0], port);
-		cl.sendReceive(msg);
-		
-	}
-	
-	
+
+    private ClientNetwork cl;
+    private String server;
+    private int port;
+    private User curr;
+
+    public ClientMessage(String server, int port) {
+        this.server = server;
+        this.port = port;
+/**
+        Message msg = new Message(user, pwd, serverPort[0], port);
+        cl.sendReceive(msg);
+*/
+    }
+
+    public void addPhoto(String photoID){
+        Photo photo = new Photo(photoID);
+        curr.addPhoto(photo);
+    }
+
+    public void getPhotoData(String photoID){
+        System.out.println(curr.getAllPhotosData());
+    }
+
+
 }
