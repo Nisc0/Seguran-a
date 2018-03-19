@@ -12,7 +12,6 @@ public class ClientMessage {
     private ClientNetwork cl;
     private String server;
     private int port;
-    private User curr;
 
     public ClientMessage(String server, int port) {
         this.server = server;
