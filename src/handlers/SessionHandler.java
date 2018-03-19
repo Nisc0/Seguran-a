@@ -2,7 +2,7 @@ package handlers;
 
 import catalogs.CatalogoUser;
 import domain.*;
-import exceptions.WrongUserPassowrdException;
+import exceptions.WrongUserPasswordException;
 
 public class SessionHandler extends GodHandler {
 
@@ -13,7 +13,7 @@ public class SessionHandler extends GodHandler {
         catUser = CatalogoUser.getCatalogo();
     }
 
-    public boolean startSession(String userID, String pass) throws WrongUserPassowrdException{
+    public boolean startSession(String userID, String pass) throws WrongUserPasswordException {
 
         User u = catUser.getUser(userID);
         if (u == null) {
@@ -23,7 +23,7 @@ public class SessionHandler extends GodHandler {
         if (u.getPass().equals(pass))
             return true;
 
-        throw new WrongUserPassowrdException();
+        throw new WrongUserPasswordException();
 
     }
 }
