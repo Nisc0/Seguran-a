@@ -2,6 +2,7 @@ package domain;
 
 import domain_interface.IPhoto;
 
+import java.awt.image.BufferedImage;
 import java.util.*;
 
 /**
@@ -14,6 +15,8 @@ import java.util.*;
 
 public class Photo implements IPhoto {
     private String photoID;
+    private int photoSize;
+    private BufferedImage image; // é para mudar
     private Date datePub; //data de publicacao
     private Map<String, Boolean> opinion;
     private int likes;
