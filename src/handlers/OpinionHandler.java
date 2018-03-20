@@ -7,12 +7,12 @@ public class OpinionHandler extends  GodHandler {
 
 
     public OpinionHandler(User curr) {
-        this.curr = curr;
+        this.currUser = curr;
     }
 
     public boolean makeComment(String comment, String userID, String photoID) throws NotFollowingException, NoSuchPhotoException {
 
-        User uID = curr.getFollow(userID);
+        User uID = currUser.getFollow(userID);
         if(uID == null)
             throw new NotFollowingException();
 
@@ -26,7 +26,7 @@ public class OpinionHandler extends  GodHandler {
 
     public boolean addLike(String userID, String photoID) throws NotFollowingException, NoSuchPhotoException, AlreadyLikedException{
 
-        User uID = curr.getFollow(userID);
+        User uID = currUser.getFollow(userID);
         if (uID == null)
             throw new NotFollowingException();
 
@@ -43,7 +43,7 @@ public class OpinionHandler extends  GodHandler {
 
     public boolean addDisLike(String userID, String photoID) throws NotFollowingException, NoSuchPhotoException, AlreadyDisLikedException{
 
-        User uID = curr.getFollow(userID);
+        User uID = currUser.getFollow(userID);
         if (uID == null)
             throw new NotFollowingException();
 

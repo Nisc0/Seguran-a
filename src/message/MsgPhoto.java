@@ -1,21 +1,23 @@
 package message;
 
+import domain.Photo;
+
 public class MsgPhoto extends Message {
 
-    private String followID;
     private String photoID;
+    private Photo photo;
 
-    public MsgPhoto(MsgType c_type, MsgError c_err, String user, String followID, String photoID) {
-        super(c_type, c_err, user);
-        this.followID = followID;
+    public MsgPhoto(MsgType c_type, MsgError c_err, String user, String followID, String photoID, Photo photo) {
+        super(c_type, c_err, user, followID);
         this.photoID = photoID;
-    }
-
-    public String getFollowID() {
-        return followID;
+        this.photo = photo;
     }
 
     public String getPhotoID() {
         return photoID;
+    }
+
+    public Photo getPhoto() {
+        return photo;
     }
 }

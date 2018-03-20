@@ -10,7 +10,7 @@ public class FollowerHandler extends GodHandler{
 
     public FollowerHandler(User curr) {
 
-        this.curr = curr;
+        this.currUser = curr;
         catUser = CatalogoUser.getCatalogo();
 
     }
@@ -21,10 +21,10 @@ public class FollowerHandler extends GodHandler{
         User u = catUser.getUser(userID);
         if(u == null)
             throw new NoSuchUserException();
-        if (u == curr.getFollow(userID))
+        if (u == currUser.getFollow(userID))
             throw new AlreadyFollowingException();
 
-        curr.addFollow(u);
+        currUser.addFollow(u);
         return true;
 
     }
@@ -36,7 +36,7 @@ public class FollowerHandler extends GodHandler{
         if(u == null)
             throw new NoSuchUserException();
 
-        curr.removeFollow(userID);
+        currUser.removeFollow(userID);
         return true;
 
     }

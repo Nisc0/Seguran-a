@@ -12,9 +12,9 @@ import java.net.Socket;
 public class ServerThread extends Thread {
 
     private Socket socket;
-    private ObjectOutputStream outStream = null;
-    private ObjectInputStream inStream = null;
-    private ServerMessage srvMsg = null;
+    private ObjectOutputStream outStream;
+    private ObjectInputStream inStream;
+    private ServerMessage srvMsg;
 
     ServerThread(Socket inSoc) {
         this.socket = inSoc;
@@ -32,7 +32,7 @@ public class ServerThread extends Thread {
 
         try {
             MsgSession logMsg = (MsgSession) inStream.readObject();
-            srvMsg = ServerMessage.getInstance();
+            srvMsg = new ServerMessage();
             enviaMsg(srvMsg.startSession(logMsg));
         }
         catch (ClassNotFoundException e1) {
