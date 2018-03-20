@@ -1,5 +1,13 @@
 package message;
 
 public enum MsgError {
+    WRONGPASSWORD,
+    NOTFOLLOWING,
+    NOSUCHUSER,
+    NOSUCHPHOTO,
+    ALREADYFOLLOWING,
+    DUPLICATEPHOTO,
+    ALREADYLIKED,
+    ALREADYDISLIKED,
 
 }
