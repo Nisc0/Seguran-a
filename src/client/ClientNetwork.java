@@ -7,7 +7,11 @@ import domain.Message;
 public class ClientNetwork {
  
 	public boolean sendReceive(Message msg) {
+
 		//Socket sock = new Socket(add, port);
+
+
+
 		return true;
 	}
 }

@@ -10,7 +10,8 @@ public class PhotoShare {
 	
 	public static void main(String[] args) throws NotValidAddressException {
 
-	    //TODO: falta o login
+	    //TODO: falta o login - e meter numa variavel o userID
+        String currUser;
 		//ClientMessage login = new ClientMessage(args[1], args[2], args[3]);
 
         if(args.length < 4){
@@ -30,7 +31,7 @@ public class PhotoShare {
         }
 
 
-		ClientMessage cm = new ClientMessage(serverPort[0], port);
+		ClientMessage cm = new ClientMessage(currUser, serverPort[0], port);
 
 		int ola;
 		if(args.length > 4){
@@ -40,7 +41,10 @@ public class PhotoShare {
                     if(args.length > 5){
                         int i;
                         for(i = 5; i < args.length; i++){
-                            cm.addPhoto(args[i]);
+                            if(!cm.addPhoto(currUser, args[i])){
+                                //TODO: Limpar fotos que devem ter dado bem
+                                //TODO: Retornar alguma excepcao?!?!?!
+                            };
                         }
                     } else {
                         System.out.println("Por favor, siga a forma: <localUserId> <password> <serverAddress> -a " +
@@ -50,7 +54,7 @@ public class PhotoShare {
                     break;
                 case 'l':
                     if(args.length == 6){
-                        cm.getPhotoData(args[5]);
+                        cm.getAllPhotosData(args[5]);
                     } else {
                         System.out.println("Por favor, siga a forma: <localUserId> <password> <serverAddress> -l " +
                                 "<userID>");
@@ -59,6 +63,9 @@ public class PhotoShare {
                     break;
                 case 'i':
                     ola = 3;
+                    if(args.length == 7){
+                        cm.getPhotoOpinion(args[5], args[6]);
+                    }
                     break;
                 case 'g':
                     ola = 4;
