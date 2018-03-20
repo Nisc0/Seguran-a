@@ -1,5 +1,6 @@
 package server;
 
+import catalogs.CatalogoUser;
 import domain.Photo;
 import domain.User;
 import exceptions.DuplicatePhotoException;
@@ -12,25 +13,27 @@ import handlers.PhotoHandler;
 import message.*;
 
 import java.io.IOException;
-
+se
 public class ServerMessage {
 
-    private  ServerMessage instance;
-    private  FollowerHandler fllwrhdlr;
-    private  OpinionHandler opnhdlr;
-    private  PhotoHandler phthdlr;
+    private CatalogoUser catUser;
+    private ServerMessage instance;
+    private FollowerHandler fllwrhdlr;
+    private OpinionHandler opnhdlr;
+    private PhotoHandler phthdlr;
 
     public ServerMessage(){
         sshdlr = new SessionHandler();
+        this.catUser = CatalogoUser.getCatalogo();
     }
 
 
     public MsgSession startSession(MsgSession msgS){
         try {
             String user = msgS.getUser();
-            fllwrhdlr = new FollowerHandler(user);
-            opnhdlr = new OpinionHandler(user);
-            phthdlr = new PhotoHandler(user);
+            fllwrhdlr = new FollowerHandler(catUser.getUser(user));
+            opnhdlr = new OpinionHandler(catUser.getUser(user));
+            phthdlr = new PhotoHandler(catUser.getUser(user));
         }
         catch (){
 

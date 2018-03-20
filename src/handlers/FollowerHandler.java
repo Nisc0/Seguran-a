@@ -4,6 +4,8 @@ import domain.*;
 import catalogs.*;
 import exceptions.*;
 
+// alterar o nome das variaveis
+
 public class FollowerHandler extends GodHandler{
 
     private static CatalogoUser catUser;
