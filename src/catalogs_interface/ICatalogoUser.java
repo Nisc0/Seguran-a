@@ -2,14 +2,17 @@ package catalogs_interface;
 
 import domain.User;
 
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+
 public interface ICatalogoUser {
 
     /**
      * Adiciona um utilizador ao sistema
-     * @param userID - o ID do utilizador a adicionar
+     * @param u - o utilizador a adicionar
      * @return true se adicionado com sucesso, false caso contrario
      */
-    boolean addUser(String userID);
+    boolean addUser(User u) throws FileNotFoundException, UnsupportedEncodingException;
 
     /**
      * verifica se um utilizador está registado

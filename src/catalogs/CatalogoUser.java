@@ -2,7 +2,11 @@ package catalogs;
 
 import catalogs_interface.ICatalogoUser;
 import domain.User;
+import java.io.File;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,12 +38,19 @@ public class CatalogoUser implements ICatalogoUser {
     }
 
     @Override
-    public boolean addUser(String userID) {
+    public boolean addUser(User u) throws FileNotFoundException, UnsupportedEncodingException {
 
-        if(containsUser(userID))
+        if(this.containsUser(u.getID()))
             return false;
         else {
-            users.put(userID, new User(userID));
+            users.put(u.getID(), u);
+            File fl = new File("File/" + u.getID());
+            fl.mkdirs();
+            PrintWriter writer = new PrintWriter("info", "UTF-8");
+            writer.println("User: " + u.getID() + "/");
+            writer.println("Pass: " + u.getPass());
+            writer.close();
+
             return true;
         }
     }
