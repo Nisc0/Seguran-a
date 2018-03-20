@@ -1,12 +1,11 @@
 package server;
 
-import domain.Message;
+import message.MsgSession;
 
-import java.net.Socket;
 import java.io.IOException;
-import java.net.Socket;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 
 //Threads utilizadas para comunicacao com os clientes
@@ -32,7 +31,7 @@ public class ServerThread extends Thread {
         }
 
         try {
-            Msg_Session logMsg = (Msg_Session) inStream.readObject();
+            MsgSession logMsg = (MsgSession) inStream.readObject();
             srvMsg = ServerMessage.getInstance();
             enviaMsg(srvMsg.startSession(logMsg));
         }
@@ -53,7 +52,7 @@ public class ServerThread extends Thread {
 
     }
 
-    private void enviaMsg(Msg_Session msg) throws java.io.IOException{
+    private void enviaMsg(MsgSession msg) throws java.io.IOException{
         outStream.writeObject(msg);
     }
 }
