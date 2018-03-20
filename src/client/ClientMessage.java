@@ -13,7 +13,7 @@ import handlers.PhotoHandler;
 public class ClientMessage{
 
     private ClientNetwork cl;
-    private String currUser;
+    //private String currUser;
     private String server;
     private int port;
 
@@ -26,24 +26,50 @@ public class ClientMessage{
 */
     }
 
-    public boolean addPhoto(String currUser, String photoID){
+    public Message addPhoto(String currUser, String photoID){
         Message msg = new MsgPhoto(MsgType.ADDPHOTO, null, currUser, null, photoID);
         return cl.sendReceive(msg);
     }
 
-    public boolean getAllPhotosData(String currUser){
-        Message msg = new MsgPhoto(MsgType.ALLPHOTOSDATA, null, currUser, null, null);
+    public Message getAllPhotosData(String currUser, String userID){
+        Message msg = new MsgPhoto(MsgType.ALLPHOTOSDATA, null, currUser, userID, null);
         return cl.sendReceive(msg);
     }
 
-    public void getPhotoOpinion(String userID, String photoID){
-
+    public Message getPhotoOpinion(String currUser, String userID, String photoID){
+        Message msg = new MsgOpinion(MsgType.PHOTOOPINION, null, currUser, userID, photoID);
+        return cl.sendReceive(msg);
     }
 
-    public void copyPhotos(String userID){
+    public Message copyPhotos(String currUser, String userID){
+        Message msg = new MsgPhoto(MsgType.ALLPHOTOS, null, currUser, userID, null);
+        return cl.sendReceive(msg);
+    }
 
+    public Message commentPhoto(String currUser, String comment, String userID, String photoID){
+        Message msg = new MsgOpinion(MsgType.COMMENTPHOTO, null, currUser, userID, photoID, comment);
+        return cl.sendReceive(msg);
+    }
+
+    public Message likePhoto(String currUser, String userID, String photoID){
+        Message msg = new MsgOpinion(MsgType.LIKEPHOTO, null, currUser, userID, photoID, null);
+        return cl.sendReceive(msg);
     }
 
 
+    public Message dislikePhoto(String currUser, String userID, String photoID){
+        Message msg = new MsgOpinion(MsgType.DISLIKEPHOTO, null, currUser, userID, photoID, null);
+        return cl.sendReceive(msg);
+    }
+
+    public Message followUser(String currUser, String userID){
+        Message msg = new MsgFollower(MsgType.FOLLOWUSER, null, currUser, userID);
+        return cl.sendReceive(msg);
+    }
+
+    public Message unfollowUser(String currUser, String userID){
+        Message msg = new MsgFollower(MsgType.UNFOLLOWUSER, null, currUser, userID);
+        return cl.sendReceive(msg);
+    }
 
 }
