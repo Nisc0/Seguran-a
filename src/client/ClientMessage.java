@@ -1,10 +1,8 @@
 package client;
 
 import domain.Message;
-import message.MsgFollower;
-import message.MsgOpinion;
-import message.MsgPhoto;
-import message.MsgType;
+import exceptions.*;
+import message.*;
 
 import java.io.IOException;
 
@@ -23,9 +21,9 @@ public class ClientMessage{
         //TODO: verificar exception do clientnetwork
     }
 
-    public Message addPhoto(String currUser, String photoID) throws IOException, ClassNotFoundException {
-        MsgPhoto msg = new MsgPhoto(MsgType.ADDPHOTO, null, currUser, null, photoID);
-        return cl.sendReceive(msg);
+    public boolean addPhoto(String currUser, String photoID) throws IOException, ClassNotFoundException {
+        MsgPhoto res = cl.sendReceive(new MsgPhoto(MsgType.ADDPHOTO, null, currUser, null, photoID));
+        findException(res.getC_err());
     }
 
     public <T extends Message> Message getAllPhotosData(String currUser, String userID) throws IOException {
@@ -66,6 +64,31 @@ public class ClientMessage{
     public Message unfollowUser(String currUser, String userID) throws IOException {
         Message msg = new MsgFollower(MsgType.UNFOLLOWUSER, null, currUser, userID);
         return cl.sendReceive(msg);
+    }
+
+    private void findException(MsgError err) throws WrongUserPasswordException, NotFollowingException,
+            NoSuchUserException, NoSuchPhotoException, AlreadyFollowingException, DuplicatePhotoException,
+            AlreadyLikedException, AlreadyDislikedException {
+        switch (err) {
+            case WRONGPASSWORD:
+                throw new WrongUserPasswordException();
+            case NOTFOLLOWING:
+                throw new NotFollowingException();
+            case NOSUCHUSER:
+                throw new NoSuchUserException();
+            case NOSUCHPHOTO:
+                throw new NoSuchPhotoException();
+            case ALREADYFOLLOWING:
+                throw new AlreadyFollowingException();
+            case DUPLICATEPHOTO:
+                throw new DuplicatePhotoException();
+            case ALREADYLIKED:
+                throw new AlreadyLikedException();
+            case ALREADYDISLIKED:
+                throw new AlreadyDislikedException();
+            default:
+                break;
+        }
     }
 
 }
