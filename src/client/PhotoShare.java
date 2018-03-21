@@ -40,7 +40,7 @@ public class PhotoShare {
                     if (args.length > 5) {
                         int i;
                         for (i = 5; i < args.length; i++) {
-                            if (!cm.addPhoto(currUser, args[i])) {
+                            if (cm.addPhoto(currUser, args[i])) {
                                 //TODO: Limpar fotos que devem ter dado bem
                                 //TODO: Retornar alguma excepcao?!?!?!
                             }

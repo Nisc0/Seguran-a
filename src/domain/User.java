@@ -34,7 +34,7 @@ public class User implements IUser {
     }
 
     @Override
-    public String getPass() { return password; }
+    public boolean isSamePwd(String pwd) { return password.equals(pwd); }
 
     //////////////    FOLLOWS    /////////////////////
 

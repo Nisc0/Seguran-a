@@ -21,7 +21,7 @@ public class SessionHandler extends GodHandler {
             return false;
         }
         //VVV estamos a dar a pass a este handler VVV
-        if (u.getPass().equals(pass))
+        if (u.isSamePwd(pass))
             return true;
 
         throw new WrongUserPasswordException();

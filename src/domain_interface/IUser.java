@@ -14,10 +14,10 @@ public interface IUser {
     String getID();
 
     /**
-     * Obtem a pass do utilizador
-     * @return a pass do utilizador
+     * Verifica se a pass dada eh igual ah do utilizador
+     * @return true se a pass dada eh igual ah do utilizador
      */
-    String getPass();
+    boolean isSamePwd(String pwd);
 
     /**
      * Adiciona um utilizador à lista de pessoas que se está a seguir
