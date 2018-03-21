@@ -18,28 +18,33 @@ public class FollowerHandler extends GodHandler{
     }
 
 
-    public boolean addFollow(String userID) throws NoSuchUserException, AlreadyFollowingException {
+    public void addFollow(String userID) throws NoSuchUserException, AlreadyFollowingException {
 
         User u = catUser.getUser(userID);
+
         if(u == null)
             throw new NoSuchUserException();
+
         if (u == currUser.getFollow(userID))
             throw new AlreadyFollowingException();
 
         currUser.addFollow(u);
-        return true;
 
     }
 
 
-    public boolean removeFollow(String userID) throws  NoSuchUserException {
+    public void removeFollow(String userID) throws NoSuchUserException, AlreadyNotFollowingException {
 
         User u = catUser.getUser(userID);
+
         if(u == null)
             throw new NoSuchUserException();
 
+        if(null == currUser.getFollow(userID)){
+            throw new AlreadyNotFollowingException();
+        }
+
         currUser.removeFollow(userID);
-        return true;
 
     }
 

@@ -31,6 +31,9 @@ public class ServerThread extends Thread {
         }
 
         try {
+
+            //todo - serializar a mensagem
+
             MsgSession logMsg = (MsgSession) inStream.readObject();
             srvMsg = new ServerMessage();
             enviaMsg(srvMsg.startSession(logMsg));
@@ -41,6 +44,7 @@ public class ServerThread extends Thread {
         catch (IOException e) {
             e.printStackTrace();
         }
+
         try {
             outStream.close();
             inStream.close();

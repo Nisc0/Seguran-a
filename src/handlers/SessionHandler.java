@@ -8,8 +8,8 @@ public class SessionHandler extends GodHandler {
 
     private static CatalogoUser catUser;
 
-    public SessionHandler() {
-        this.curr = curr;
+    public SessionHandler(User curr) {
+        this.currUser = curr;
         catUser = CatalogoUser.getCatalogo();
     }
 

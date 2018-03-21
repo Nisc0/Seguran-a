@@ -8,12 +8,14 @@ public abstract class Message implements Serializable {
     private MsgError c_err; // tipo de erro
     private String user; // o curr user
     private String followID; //o outro user
+    private boolean success; //a operaçao teve sucesso ou nao
 
-    public Message(MsgType c_type, MsgError c_err, String user, String followID) {
+    public Message(MsgType c_type, MsgError c_err, String user, String followID, boolean success) {
         this.c_type = c_type;
         this.c_err = c_err;
         this.user = user;
         this.followID = followID;
+        this.success = success;
     }
 
     public MsgType getC_type() {
@@ -28,7 +30,12 @@ public abstract class Message implements Serializable {
         return user;
     }
 
-    public String getfollowID(){ return followID; }
+    public String getFollowID(){
+        return followID;
+    }
 
+    public boolean getSuccess() {
+        return success;
+    }
 }
 
