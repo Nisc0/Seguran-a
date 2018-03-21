@@ -41,7 +41,7 @@ public class OpinionHandler extends  GodHandler {
 
     }
 
-    public boolean addDisLike(String userID, String photoID) throws NotFollowingException, NoSuchPhotoException, AlreadyDisLikedException{
+    public boolean addDisLike(String userID, String photoID) throws NotFollowingException, NoSuchPhotoException, AlreadyDislikedException {
 
         User uID = currUser.getFollow(userID);
         if (uID == null)
@@ -52,7 +52,7 @@ public class OpinionHandler extends  GodHandler {
             throw new NoSuchPhotoException();
 
         if (!pID.addOpinion(uID.getID(), false))
-            throw new  AlreadyDisLikedException();
+            throw new AlreadyDislikedException();
 
         return true;
 
