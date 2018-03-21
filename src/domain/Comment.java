@@ -39,4 +39,9 @@ public class Comment implements IComment {
     public Date getDataPub() {
         return dataPub;
     }
+
+    @Override
+    public String toString(){
+        return ("userID: " + userID + ", " + comment);
+    }
 }

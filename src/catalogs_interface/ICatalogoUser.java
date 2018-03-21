@@ -6,10 +6,10 @@ public interface ICatalogoUser {
 
     /**
      * Adiciona um utilizador ao sistema
-     * @param userID - o ID do utilizador a adicionar
+     * @param u - o utilizador a adicionar
      * @return true se adicionado com sucesso, false caso contrario
      */
-    boolean addUser(String userID);
+    boolean addUser(User u);
 
     /**
      * verifica se um utilizador está registado

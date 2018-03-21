@@ -34,12 +34,12 @@ public class CatalogoUser implements ICatalogoUser {
     }
 
     @Override
-    public boolean addUser(String userID) {
+    public boolean addUser(User u) {
 
-        if(containsUser(userID))
+        if(this.containsUser(u.getID()))
             return false;
         else {
-            users.put(userID, new User(userID));
+            users.put(u.getID(), u);
             return true;
         }
     }
