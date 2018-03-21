@@ -2,11 +2,10 @@ package catalogs;
 
 import catalogs_interface.ICatalogoUser;
 import domain.User;
-import java.io.File;
+import handlers.RecoveryManeger;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,17 +21,17 @@ public class CatalogoUser implements ICatalogoUser {
 
     private static CatalogoUser instance;
     private Map<String,User> users;
-    private PrintWriter pw;
+    private RecoveryManeger recov;
 
     /**
      * Construtor
      */
-    private CatalogoUser() throws FileNotFoundException, UnsupportedEncodingException {
+    private CatalogoUser() throws IOException {
         users = new HashMap<>();
-        pw = new PrintWriter("infos.txt", "UTF-8");
+        recov = new RecoveryManeger();
     }
 
-    public static CatalogoUser getCatalogo() throws FileNotFoundException, UnsupportedEncodingException {
+    public static CatalogoUser getCatalogo() throws IOException {
         if (CatalogoUser.instance == null){
             CatalogoUser.instance = new CatalogoUser();
         }
@@ -40,18 +39,13 @@ public class CatalogoUser implements ICatalogoUser {
     }
 
     @Override
-    public boolean addUser(User u) throws FileNotFoundException, UnsupportedEncodingException {
+    public boolean addUser(User u) throws IOException {
 
         if(this.containsUser(u.getID()))
             return false;
         else {
+            recov.writeFile(u.getID(), u.getPass());
             users.put(u.getID(), u);
-            File fl = new File("Files/" + u.getID());
-            fl.mkdirs();
-            PrintWriter writer = new PrintWriter("info.txt", "UTF-8");
-            writer.println("User: " + u.getID() + "/");
-            writer.println("Pass: " + u.getPass());
-            writer.close();
 
             return true;
         }
