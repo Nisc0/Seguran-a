@@ -2,6 +2,9 @@ package catalogs;
 
 import catalogs_interface.ICatalogoUser;
 import domain.User;
+import handlers.RecoveryManeger;
+
+import java.io.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,15 +21,17 @@ public class CatalogoUser implements ICatalogoUser {
 
     private static CatalogoUser instance;
     private Map<String,User> users;
+    private RecoveryManeger recov;
 
     /**
      * Construtor
      */
-    private CatalogoUser() {
+    private CatalogoUser() throws IOException {
         users = new HashMap<>();
+        recov = new RecoveryManeger();
     }
 
-    public static CatalogoUser getCatalogo() {
+    public static CatalogoUser getCatalogo() throws IOException {
         if (CatalogoUser.instance == null){
             CatalogoUser.instance = new CatalogoUser();
         }
@@ -34,12 +39,14 @@ public class CatalogoUser implements ICatalogoUser {
     }
 
     @Override
-    public boolean addUser(User u) {
+    public boolean addUser(User u) throws IOException {
 
         if(this.containsUser(u.getID()))
             return false;
         else {
+            recov.writeFile(u.getID(), u.getPass());
             users.put(u.getID(), u);
+
             return true;
         }
     }

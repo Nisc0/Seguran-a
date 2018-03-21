@@ -2,6 +2,10 @@ package catalogs_interface;
 
 import domain.User;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
 public interface ICatalogoUser {
 
     /**
@@ -9,7 +13,7 @@ public interface ICatalogoUser {
      * @param u - o utilizador a adicionar
      * @return true se adicionado com sucesso, false caso contrario
      */
-    boolean addUser(User u);
+    boolean addUser(User u) throws IOException;
 
     /**
      * verifica se um utilizador está registado
