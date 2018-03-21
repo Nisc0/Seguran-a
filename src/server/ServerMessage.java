@@ -12,7 +12,7 @@ import message.*;
 
 import java.io.IOException;
 import java.util.Iterator;
-se
+
 public class ServerMessage {
 
     private CatalogoUser catUser;
@@ -167,7 +167,7 @@ public class ServerMessage {
 
 
     public Message unpackAndTreatMsg (Message m) throws DuplicatePhotoException {
-        Message msg;
+        Message msgresult = null;
         MsgType tpMsg = m.getC_type();
         MsgFollower mFollower;
         MsgOpinion mOpinion;
@@ -181,26 +181,26 @@ public class ServerMessage {
 
             case ADDPHOTO:
                 mPhoto = (MsgPhoto) m;
-                msg = addPhoto(mPhoto.getPhoto());
+                msgresult = addPhoto(mPhoto.getPhoto());
                 break;
 
             case ALLPHOTOSDATA:
                 mPhoto = (MsgPhoto) m;
                 Iterable<PhotoData> list = allPhotoData(mPhoto.getUser());
                 mPhoto.addPhotoDataList(list);
-                msg = mPhoto;
+                msgresult = mPhoto;
                 break;
 
             case PHOTOOPINION:
                 mPhoto = (MsgPhoto) m;
-                msg = photoOpinion(mPhoto.getfollowID(),mPhoto.getPhotoID());
+                msgresult = photoOpinion(mPhoto.getfollowID(),mPhoto.getPhotoID());
                 break;
 
             case ALLPHOTOS:
                 mPhoto = (MsgPhoto) m;
                 Iterable<Photo> listPhoto = allPhotos(mPhoto.getUser());
                 mPhoto.addPhotoList(listPhoto);
-                msg = mPhoto;
+                msgresult = mPhoto;
                 break;
 
             case COMMENTPHOTO:
@@ -210,28 +210,28 @@ public class ServerMessage {
 
             case LIKEPHOTO:
                 mOpinion = (MsgOpinion) m;
-                msg = likePhoto(mOpinion.getfollowID(),mOpinion.getPhotoID());
+                msgresult = likePhoto(mOpinion.getfollowID(),mOpinion.getPhotoID());
                 break;
 
             case DISLIKEPHOTO:
                 mOpinion = (MsgOpinion)m;
-                msg = dislikePhoto(mOpinion.getfollowID(),mOpinion.getPhotoID());
+                msgresult = dislikePhoto(mOpinion.getfollowID(),mOpinion.getPhotoID());
                 break;
 
             case FOLLOWUSER:
                 mFollower = (MsgFollower) m;
-                msg = followUser(mFollower.getfollowID());
+                msgresult = followUser(mFollower.getfollowID());
                 break;
 
             case UNFOLLOWUSER:
                 mFollower= (MsgFollower) m;
-                msg = unfollowUser(mFollower.getfollowID());
+                msgresult = unfollowUser(mFollower.getfollowID());
                 break;
 
             default:
                 break;
         }
-        return msg;
+        return msgresult;
 
     }
 }
