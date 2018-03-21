@@ -2,17 +2,16 @@ package server;
 
 import catalogs.CatalogoUser;
 import domain.Photo;
+import domain.PhotoData;
 import domain.User;
-import exceptions.DuplicatePhotoException;
-import exceptions.NoSuchPhotoException;
-import exceptions.NoSuchUserException;
-import exceptions.NotFollowingException;
+import exceptions.*;
 import handlers.FollowerHandler;
 import handlers.OpinionHandler;
 import handlers.PhotoHandler;
 import message.*;
 
 import java.io.IOException;
+import java.util.Iterator;
 se
 public class ServerMessage {
 
@@ -21,39 +20,57 @@ public class ServerMessage {
     private FollowerHandler fllwrhdlr;
     private OpinionHandler opnhdlr;
     private PhotoHandler phthdlr;
+    private SessionHandler sshdlr;
 
     public ServerMessage(){
-        sshdlr = new SessionHandler();
         this.catUser = CatalogoUser.getCatalogo();
     }
 
 
     public MsgSession startSession(MsgSession msgS){
+        sshdlr = new SessionHandler();
+
+        //todo
         try {
-            String user = msgS.getUser();
-            fllwrhdlr = new FollowerHandler(catUser.getUser(user));
-            opnhdlr = new OpinionHandler(catUser.getUser(user));
-            phthdlr = new PhotoHandler(catUser.getUser(user));
+            if (sshdlr.startSession(msgS.getUser(),msgS.getPass())) {
+
+                String user = msgS.getUser();
+                fllwrhdlr = new FollowerHandler(catUser.getUser(user));
+                opnhdlr = new OpinionHandler(catUser.getUser(user));
+                phthdlr = new PhotoHandler(catUser.getUser(user));
+            }
         }
-        catch (){
+        catch (WrongUserPasswordException e){
 
         }
         return null;
     }
 
-
-    public MsgPhoto addPhoto(Photo photo) throws DuplicatePhotoException {
-        phthdlr.addPhoto(photo);
+    //todo
+    public MsgPhoto addPhoto(Photo photo) {
+        try {
+            phthdlr.addPhoto(photo);
+        } catch (DuplicatePhotoException e) {
+            e.printStackTrace();
+        }
         return null;
 
     }
 
-    public MsgPhoto allPhotoData(MsgPhoto m){
+    //todo
+    public Iterable<PhotoData> allPhotoData(String userID){
+        try {
+            Iterable<PhotoData> list = phthdlr.getPhotosData(userID);
+        } catch (NotFollowingException e) {
+            e.printStackTrace();
+        }
         return null;
 
     }
 
+    //todo
     public MsgPhoto photoOpinion(String userID, String photoID){
+        MsgPhoto result;
         try {
             phthdlr.getPhotoOpinion(userID, photoID);
         }
@@ -63,37 +80,86 @@ public class ServerMessage {
         catch (NoSuchPhotoException f){
 
         }
+        return null;
 
+    }
+
+    //todo
+    public Iterable<Photo> allPhotos(String userID) {
+        Iterable<Photo> result = null;
+        try {
+            result = phthdlr.getAllUserPhotos(userID);
+        } catch (NotFollowingException e) {
+
+        }
+        return result;
+
+    }
+
+    //todo
+    public MsgOpinion commentPhoto(String comment, String userID, String photoID){
+        try {
+            opnhdlr.makeComment(comment, userID, photoID);
+        } catch (NotFollowingException e) {
+            e.printStackTrace();
+        } catch (NoSuchPhotoException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    //todo
+    public MsgOpinion likePhoto(String userID, String photoID){
+        try {
+            opnhdlr.addLike(userID, photoID);
+        } catch (NotFollowingException e) {
+            e.printStackTrace();
+        } catch (NoSuchPhotoException e) {
+            e.printStackTrace();
+        } catch (AlreadyLikedException e) {
+            e.printStackTrace();
+        }
 
         return null;
 
     }
 
-    public MsgPhoto allPhotos(MsgPhoto m){
+    //todo
+    public MsgOpinion dislikePhoto(String userID, String photoID){
+        try {
+            opnhdlr.addDisLike(userID, photoID);
+        } catch (NotFollowingException e) {
+            e.printStackTrace();
+        } catch (NoSuchPhotoException e) {
+            e.printStackTrace();
+        } catch (AlreadyDisLikedException e) {
+            e.printStackTrace();
+        }
+
         return null;
 
     }
 
-    public MsgOpinion commentPhoto(MsgOpinion m){
-        return null;
+    //todo
+    public MsgFollower followUser(String userID) {
+        try {
+            fllwrhdlr.addFollow(userID);
+        } catch (NoSuchUserException e) {
+            e.printStackTrace();
+        } catch (AlreadyFollowingException e) {
 
-    }
-
-    public MsgOpinion likePhoto(MsgOpinion m){
-        return null;
-
-    }
-
-    public MsgOpinion dislikePhoto(MsgOpinion m){
-        return null;
-
-    }
-
-    public MsgFollower followUser(MsgFollower m) {
+        }
         return null;
     }
 
-    public MsgFollower unfollowUser(MsgFollower m){
+    //todo
+    public MsgFollower unfollowUser(String userID){
+        try {
+            fllwrhdlr.removeFollow(userID);
+        } catch (NoSuchUserException e) {
+            e.printStackTrace();
+        }
         return null;
 
     }
@@ -110,41 +176,56 @@ public class ServerMessage {
 
         switch (tpMsg) {
 
+            case STARTSESSION:
+                break;
+
             case ADDPHOTO:
                 mPhoto = (MsgPhoto) m;
                 msg = addPhoto(mPhoto.getPhoto());
                 break;
+
             case ALLPHOTOSDATA:
                 mPhoto = (MsgPhoto) m;
-                msg = allPhotoData(mPhoto);
+                Iterable<PhotoData> list = allPhotoData(mPhoto.getUser());
+                mPhoto.addPhotoDataList(list);
+                msg = mPhoto;
                 break;
+
             case PHOTOOPINION:
                 mPhoto = (MsgPhoto) m;
-                msg = photoOpinion(mPhoto);
+                msg = photoOpinion(mPhoto.getfollowID(),mPhoto.getPhotoID());
                 break;
+
             case ALLPHOTOS:
                 mPhoto = (MsgPhoto) m;
-                msg = allPhotos(mPhoto);
+                Iterable<Photo> listPhoto = allPhotos(mPhoto.getUser());
+                mPhoto.addPhotoList(listPhoto);
+                msg = mPhoto;
                 break;
+
             case COMMENTPHOTO:
                 mOpinion = (MsgOpinion) m;
-                commentPhoto(mOpinion);
+                commentPhoto(mOpinion.getComment(),mOpinion.getfollowID(),mOpinion.getPhotoID());
                 break;
+
             case LIKEPHOTO:
                 mOpinion = (MsgOpinion) m;
-                msg = likePhoto(mOpinion);
+                msg = likePhoto(mOpinion.getfollowID(),mOpinion.getPhotoID());
                 break;
+
             case DISLIKEPHOTO:
                 mOpinion = (MsgOpinion)m;
-                msg = dislikePhoto(mOpinion);
+                msg = dislikePhoto(mOpinion.getfollowID(),mOpinion.getPhotoID());
                 break;
+
             case FOLLOWUSER:
                 mFollower = (MsgFollower) m;
-                msg = followUser(mFollower);
+                msg = followUser(mFollower.getfollowID());
                 break;
+
             case UNFOLLOWUSER:
                 mFollower= (MsgFollower) m;
-                msg = unfollowUser(mFollower);
+                msg = unfollowUser(mFollower.getfollowID());
                 break;
 
             default:
