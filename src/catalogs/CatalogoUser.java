@@ -22,15 +22,17 @@ public class CatalogoUser implements ICatalogoUser {
 
     private static CatalogoUser instance;
     private Map<String,User> users;
+    private PrintWriter pw;
 
     /**
      * Construtor
      */
-    private CatalogoUser() {
+    private CatalogoUser() throws FileNotFoundException, UnsupportedEncodingException {
         users = new HashMap<>();
+        pw = new PrintWriter("infos.txt", "UTF-8");
     }
 
-    public static CatalogoUser getCatalogo() {
+    public static CatalogoUser getCatalogo() throws FileNotFoundException, UnsupportedEncodingException {
         if (CatalogoUser.instance == null){
             CatalogoUser.instance = new CatalogoUser();
         }
@@ -44,9 +46,9 @@ public class CatalogoUser implements ICatalogoUser {
             return false;
         else {
             users.put(u.getID(), u);
-            File fl = new File("File/" + u.getID());
+            File fl = new File("Files/" + u.getID());
             fl.mkdirs();
-            PrintWriter writer = new PrintWriter("info", "UTF-8");
+            PrintWriter writer = new PrintWriter("info.txt", "UTF-8");
             writer.println("User: " + u.getID() + "/");
             writer.println("Pass: " + u.getPass());
             writer.close();
