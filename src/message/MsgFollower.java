@@ -9,7 +9,6 @@ public class MsgFollower extends Message {
         super(c_type, c_err, user);
         this.followID = followID;
         this.photoID = photoID;
-
     }
 
     public String getFollowID() {

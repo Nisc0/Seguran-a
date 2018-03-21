@@ -8,7 +8,7 @@ public class PhotoShare {
 	
 //Cliente mais fortinho que cria uma clientMessage
 	
-	public static void main(String[] args) throws NotValidAddressException {
+	public static void main(String[] args) throws NotValidAddressException, IOException {
 
         //TODO: falta o login - e meter numa variavel o userID
         String currUser;
@@ -31,6 +31,7 @@ public class PhotoShare {
 
 
         ClientMessage cm = new ClientMessage(serverPort[0], port);
+        //TODO: verificar exception do clientmessage
 
         if (args.length > 4) {
             char op = args[4].charAt(1);
