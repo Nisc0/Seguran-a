@@ -4,13 +4,14 @@ import domain.*;
 import catalogs.*;
 import exceptions.*;
 
+import java.io.IOException;
+
 public class FollowerHandler extends GodHandler{
 
     private static CatalogoUser catUser;
 
-    public FollowerHandler(User curr) {
+    public FollowerHandler(User curr) throws IOException {
 
-        this.curr = curr;
         catUser = CatalogoUser.getCatalogo();
 
     }
@@ -21,10 +22,10 @@ public class FollowerHandler extends GodHandler{
         User u = catUser.getUser(userID);
         if(u == null)
             throw new NoSuchUserException();
-        if (u == curr.getFollow(userID))
+        if (u == getCurr().getFollow(userID))
             throw new AlreadyFollowingException();
 
-        curr.addFollow(u);
+        getCurr().addFollow(u);
         return true;
 
     }
@@ -36,7 +37,7 @@ public class FollowerHandler extends GodHandler{
         if(u == null)
             throw new NoSuchUserException();
 
-        curr.removeFollow(userID);
+        getCurr().removeFollow(userID);
         return true;
 
     }

@@ -1,6 +1,7 @@
 package handlers;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -10,7 +11,9 @@ public class RecoveryManeger {
 
 
     public RecoveryManeger() throws IOException {
-        fw = new FileWriter("Files/users", true);
+        File fl = new File("Files");
+        fl.mkdirs();
+        fw = new FileWriter(new File(fl, "users.txt"), true);
     }
 
     public FileWriter getFW() {
@@ -24,7 +27,7 @@ public class RecoveryManeger {
     public void writeFile (String user, String pass) throws IOException {
         BufferedWriter writer = new BufferedWriter(fw);
         writer.append(user + ":" + pass + "\n");
-        writer.close();
+        writer.flush();
 
     }
 

@@ -4,16 +4,17 @@ import catalogs.CatalogoUser;
 import domain.*;
 import exceptions.WrongUserPasswordException;
 
+import java.io.IOException;
+
 public class SessionHandler extends GodHandler {
 
     private static CatalogoUser catUser;
 
-    public SessionHandler() {
-        this.curr = curr;
+    public SessionHandler() throws IOException {
         catUser = CatalogoUser.getCatalogo();
     }
 
-    public boolean startSession(String userID, String pass) throws WrongUserPasswordException {
+    public boolean startSession(String userID, String pass) throws WrongUserPasswordException, IOException {
 
         User u = catUser.getUser(userID);
         if (u == null) {

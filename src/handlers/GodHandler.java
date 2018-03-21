@@ -5,7 +5,7 @@ import domain.*;
 
 public abstract class  GodHandler {
 
-    protected User curr;
+    private User curr;
 
 
     protected User getCurr() {
