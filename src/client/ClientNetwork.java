@@ -19,7 +19,7 @@ public class ClientNetwork {
         out = new ObjectOutputStream(bufOut);
 	}
 
-	public Message sendReceive(Message msg) throws IOException {
+	public Message sendReceive(Message msg) throws IOException, ClassNotFoundException {
         send(msg);
 		return receive();
 	}
