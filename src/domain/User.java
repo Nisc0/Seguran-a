@@ -2,6 +2,7 @@ package domain;
 
 import domain_interface.IUser;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -12,12 +13,13 @@ import java.util.*;
  * @author 47840
  */
 
-public class User implements IUser {
+public class User implements IUser, Serializable {
 
     private String userID;
     private String password;
     private Map<String, User> follows;
     private Map<String, Photo> photos;
+
 
 
     public User(String id, String pass) {

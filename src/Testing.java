@@ -2,6 +2,8 @@ import catalogs.CatalogoUser;
 import domain.Photo;
 import domain.PhotoData;
 import domain.User;
+import exceptions.WrongUserPasswordException;
+import handlers.*;
 
 import java.io.IOException;
 
@@ -16,16 +18,15 @@ public class Testing {
             cat.addUser(u);
             cat.addUser(new User("Bruno", "piroquia"));
 
-            u.addPhoto(new Photo("a"));
-            u.addPhoto(new Photo("b"));
-            u.addPhoto(new Photo("c"));
+            SessionHandler sh = new SessionHandler(u);
+            sh.startSession("Diogo", "ola");
+            System.out.println("sessao iniciada");
 
-            u.makeComment("noob", "Bruno", "a");
-            u.getPhoto("a").addOpinion("Bruno", true);
-            System.out.println(u.getPhotoOpinion("a"));
-            u.makeComment("wow", u.getID(), "a");
-            u.getPhoto("a").addOpinion("Bruno", false);
-            System.out.println(u.getPhotoOpinion("a"));
+            OpinionHandler oh = new OpinionHandler(u);
+            FollowerHandler fh = new FollowerHandler(u);
+            PhotoHandler ph = new PhotoHandler(u);
+            RecoveryManeger rm = new RecoveryManeger();
+
 
 
 
@@ -35,10 +36,9 @@ public class Testing {
         }
         catch (IOException e) {
             e.printStackTrace();
+        } catch (WrongUserPasswordException e) {
+            e.printStackTrace();
         }
-
-
-
 
 
     }
