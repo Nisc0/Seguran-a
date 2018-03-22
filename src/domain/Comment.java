@@ -2,6 +2,7 @@ package domain;
 
 import domain_interface.IComment;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -13,7 +14,7 @@ import java.util.Date;
  * @author 47840
  */
 
-public class Comment implements IComment {
+public class Comment implements IComment, Serializable {
     private String userID;
     private String comment;
     private Date dataPub;
@@ -43,5 +44,16 @@ public class Comment implements IComment {
     @Override
     public String toString(){
         return ("userID: " + userID + ", " + comment);
+    }
+
+    private void setDate(Date dt) {
+        this.dataPub = dt;
+    }
+
+    @Override
+    public Comment clone() {
+        Comment res = new Comment(this.userID, this.comment);
+        res.setDate(this.dataPub);
+        return res;
     }
 }

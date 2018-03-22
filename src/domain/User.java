@@ -2,6 +2,7 @@ package domain;
 
 import domain_interface.IUser;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -12,12 +13,13 @@ import java.util.*;
  * @author 47840
  */
 
-public class User implements IUser {
+public class User implements IUser, Serializable {
 
     private String userID;
     private String password;
-    private Map<String, User> follows;
+    private transient Map<String, User> follows;
     private Map<String, Photo> photos;
+    private Set<String> rec_follows;
 
 
     public User(String id, String pass) {
@@ -25,6 +27,7 @@ public class User implements IUser {
         password = pass;
         follows = new HashMap<>();
         photos = new HashMap<>();
+        rec_follows = new HashSet<>();
 
     }
 
@@ -45,11 +48,13 @@ public class User implements IUser {
 
     @Override
     public void addFollow(User u) {
+        rec_follows.add(u.getID());
         follows.put(u.getID(), u);
     }
 
     @Override
     public void removeFollow(String userID) {
+        rec_follows.remove(userID);
         follows.remove(userID);
     }
 
@@ -91,7 +96,11 @@ public class User implements IUser {
 
     @Override
     public Iterable<Photo> getAllPhotos() {
-        return photos.values();
+        ArrayList<Photo> res = new ArrayList<>();
+        for(Photo ph : photos.values()){
+            res.add(ph.clone());
+        }
+        return res;
     }
 
     /* mt possivelmente nao preciso
