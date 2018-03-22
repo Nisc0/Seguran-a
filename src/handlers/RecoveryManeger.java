@@ -60,13 +60,6 @@ public class RecoveryManeger {
         }
     }
 
-    public void backPhoto(User u, Photo ph) {
-
-        File fl = new File(file_users, u.getID());
-        FileOutputStream fout = null;
-        ObjectOutputStream oos = null;
-        fl.mkdir();
-    }
 
     public void simpleRecovery() {
 

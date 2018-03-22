@@ -16,12 +16,13 @@ public class PhotoHandler extends GodHandler{
         catUser = CatalogoUser.getCatalogo();
     }
 
-    public void addPhoto(Photo photo) throws DuplicatePhotoException {
+    public void addPhoto(Photo photo) throws DuplicatePhotoException, IOException {
 
         if (currUser.getPhoto(photo.getPhotoID()) != null)
             throw new DuplicatePhotoException();
 
         currUser.addPhoto(photo);
+        catUser.updateUser(currUser);
     }
 
     public Iterable<PhotoData> getPhotosData(String userID) throws NoSuchUserException, NotFollowingException {
