@@ -1,19 +1,18 @@
 package handlers;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class RecoveryManeger {
 
     private FileWriter fw;
+    private FileReader fr;
 
 
     public RecoveryManeger() throws IOException {
         File fl = new File("Files");
         fl.mkdirs();
         fw = new FileWriter(new File(fl, "users.txt"), true);
+        fr = new FileReader(new File(fl, "users.txt"));
     }
 
     public FileWriter getFW() {
@@ -28,6 +27,12 @@ public class RecoveryManeger {
         BufferedWriter writer = new BufferedWriter(fw);
         writer.append(user + ":" + pass + "\n");
         writer.flush();
+
+    }
+
+    public void simpleRecovery () {
+
+        BufferedReader reader = new BufferedReader(fr);
 
     }
 

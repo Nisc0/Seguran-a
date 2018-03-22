@@ -29,6 +29,7 @@ public class CatalogoUser implements ICatalogoUser {
     private CatalogoUser() throws IOException {
         users = new HashMap<>();
         recov = new RecoveryManeger();
+        recov.simpleRecovery();
     }
 
     public static CatalogoUser getCatalogo() throws IOException {

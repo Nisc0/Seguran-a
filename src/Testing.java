@@ -20,11 +20,18 @@ public class Testing {
             u.addPhoto(new Photo("b"));
             u.addPhoto(new Photo("c"));
 
-            System.out.println(cat.getUser("Diogo").getID());
+            u.makeComment("noob", "Bruno", "a");
+            u.getPhoto("a").addOpinion("Bruno", true);
+            System.out.println(u.getPhotoOpinion("a"));
+            u.makeComment("wow", u.getID(), "a");
+            u.getPhoto("a").addOpinion("Bruno", false);
+            System.out.println(u.getPhotoOpinion("a"));
+
+
+
+
             Iterable<PhotoData> ite = u.getAllPhotosData();
-            for(PhotoData st : ite) {
-                System.out.println(st.getPhotoID() + ":" + st.getDate());
-            }
+
         }
         catch (IOException e) {
             e.printStackTrace();
