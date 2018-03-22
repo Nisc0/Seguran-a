@@ -236,7 +236,6 @@ public class ServerMessage {
 
         catch (AlreadyNotFollowingException e) {
             result = new MsgFollower(UNFOLLOWUSER, ALREADYNOTFOLLING, user, follower, true);
-            e.printStackTrace();
         }
 
         return result;
