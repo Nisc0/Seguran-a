@@ -33,22 +33,18 @@ public class MsgPhoto extends Message {
     }
 
     public String getPhotoID() {
-        //todo check param
-        return photoID;
+        return (photoID != null)?photoID:null;
     }
 
     public Photo getPhoto() {
-        //todo check param
-        return photo;
+        return (photo != null)?photo:null;
     }
 
     public Iterable<Photo> getPhotoList() {
-        //todo check param
-        return photoList;
+        return (photoList != null)?photoList:null;
     }
 
     public PhotoOpinion getOpinion() {
-        //todo check param
-        return opinion;
+        return (opinion != null)? opinion:null;
     }
 }

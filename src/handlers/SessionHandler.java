@@ -28,4 +28,5 @@ public class SessionHandler extends GodHandler {
         throw new WrongUserPasswordException();
 
     }
+
 }

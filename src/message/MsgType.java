@@ -2,6 +2,7 @@ package message;
 
 public enum MsgType {
     STARTSESSION,
+    ENDSESSION,
     ADDPHOTO,
     ALLPHOTOSDATA,
     PHOTOOPINION,
