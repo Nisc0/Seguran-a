@@ -26,13 +26,18 @@ public class CatalogoUser implements ICatalogoUser {
     /**
      * Construtor
      */
-    private CatalogoUser() throws IOException {
+    private CatalogoUser() {
         users = new HashMap<>();
-        recov = new RecoveryManeger();
-        recov.simpleRecovery();
+        try {
+            recov = new RecoveryManeger();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            System.out.print("Sistema não conseguiu recuperar");
+        }
     }
 
-    public static CatalogoUser getCatalogo() throws IOException {
+    public static CatalogoUser getCatalogo(){
         if (CatalogoUser.instance == null){
             CatalogoUser.instance = new CatalogoUser();
         }
