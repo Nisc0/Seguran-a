@@ -22,17 +22,14 @@ public class MsgOpinion extends Message {
     }
 
     public String getPhotoID() {
-    //todo check param
-        return photoID;
+        return (photoID != null) ?photoID:null;
     }
 
     public String getComment() {
-        //todo check param
-        return comment;
+        return (comment != null) ?comment:null;
     }
 
     public boolean getOpinion(){
-        //todo check param
         return opinion;
     }
 }

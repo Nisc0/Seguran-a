@@ -38,6 +38,7 @@ public class OpinionHandler extends  GodHandler {
             throw new NotFollowingException();
 
         Photo pID = uID.getPhoto(photoID);
+
         if (pID == null)
             throw new NoSuchPhotoException();
 
