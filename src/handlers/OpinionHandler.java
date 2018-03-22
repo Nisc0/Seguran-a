@@ -1,32 +1,39 @@
 package handlers;
 
+import catalogs.CatalogoUser;
 import domain.*;
 import exceptions.*;
 
 public class OpinionHandler extends  GodHandler {
 
+    private static CatalogoUser catUser;
 
-    public OpinionHandler() {
-
+    public OpinionHandler(User curr) {
+        this.currUser = curr;
+        catUser = CatalogoUser.getCatalogo();
     }
 
-    public boolean makeComment(String comment, String userID, String photoID) throws NotFollowingException, NoSuchPhotoException {
+    public void makeComment(String comment, String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException {
 
-        User uID = getCurr().getFollow(userID);
+        User uID = currUser.getFollow(userID);
+
+        if(catUser.getUser(userID) == null)
+            throw new NoSuchUserException();
+
         if(uID == null)
             throw new NotFollowingException();
 
         if (!uID.makeComment(comment, userID, photoID))
             throw new NoSuchPhotoException();
-
-        return true;
-
-
     }
 
-    public boolean addLike(String userID, String photoID) throws NotFollowingException, NoSuchPhotoException, AlreadyLikedException{
+    public void addLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, AlreadyLikedException {
 
-        User uID = getCurr().getFollow(userID);
+        User uID = currUser.getFollow(userID);
+
+        if(catUser.getUser(userID) == null)
+            throw new NoSuchUserException();
+
         if (uID == null)
             throw new NotFollowingException();
 
@@ -36,14 +43,15 @@ public class OpinionHandler extends  GodHandler {
 
         if (!pID.addOpinion(uID.getID(), true))
             throw new  AlreadyLikedException();
-
-        return true;
-
     }
 
-    public boolean addDisLike(String userID, String photoID) throws NotFollowingException, NoSuchPhotoException, AlreadyDislikedException {
+    public void addDisLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, AlreadyDislikedException {
 
-        User uID = getCurr().getFollow(userID);
+        User uID = currUser.getFollow(userID);
+
+        if(catUser.getUser(userID) == null)
+            throw new NoSuchUserException();
+
         if (uID == null)
             throw new NotFollowingException();
 
@@ -53,9 +61,6 @@ public class OpinionHandler extends  GodHandler {
 
         if (!pID.addOpinion(uID.getID(), false))
             throw new AlreadyDislikedException();
-
-        return true;
-
-
     }
+
 }
