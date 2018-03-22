@@ -94,18 +94,6 @@ public class User implements IUser {
         return photos.values();
     }
 
-    /* mt possivelmente nao preciso
-    @Override
-    public Iterable<PhotoOpinion> getAllPhotoOpinion() {
-
-        List<PhotoOpinion> res = new ArrayList<>();
-        for (Photo ph : photos.values()) {
-            res.add(ph.makePhotoOpinion());
-        }
-        return res;
-    }
-    */
-
     //////////////    TRATAMENTO DE OPINIIONS    /////////////////////
 
     @Override

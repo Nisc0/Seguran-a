@@ -8,8 +8,8 @@ public class SessionHandler extends GodHandler {
 
     private static CatalogoUser catUser;
 
-    public SessionHandler() {
-        this.curr = curr;
+    public SessionHandler(User curr) {
+        this.currUser = curr;
         catUser = CatalogoUser.getCatalogo();
     }
 
@@ -20,7 +20,7 @@ public class SessionHandler extends GodHandler {
             catUser.addUser(new User(userID, pass));
             return false;
         }
-        //VVV estamos a dar a pass a este handler VVV
+
         if (u.isSamePwd(pass))
             return true;
 

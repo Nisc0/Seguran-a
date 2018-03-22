@@ -75,7 +75,7 @@ public class PhotoShare {
                     break;
                 case 'g':
                     if (args.length == 6) {
-                        if (!cm.copyPhotos(currUser, args[5])) {
+                        if (!cm.getAllPhotos(currUser, args[5])) {
                             //TODO: Retornar alguma excepcao ou soh texto!?!?!
                         }
                     } else {

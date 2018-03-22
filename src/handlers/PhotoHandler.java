@@ -1,37 +1,47 @@
 package handlers;
 
+import catalogs.CatalogoUser;
 import domain.*;
 import exceptions.*;
-import java.util.ArrayList;
+
 
 public class PhotoHandler extends GodHandler{
 
+    private static CatalogoUser catUser;
+
     public PhotoHandler(User curr) {
-        this.curr = curr;
+        this.currUser = curr;
+        catUser = CatalogoUser.getCatalogo();
     }
 
     public void addPhoto(Photo photo) throws DuplicatePhotoException {
 
-        if (curr.getPhoto(photo.getPhotoID()) != null)
+        if (currUser.getPhoto(photo.getPhotoID()) != null)
             throw new DuplicatePhotoException();
 
-        curr.addPhoto(photo);
-
+        currUser.addPhoto(photo);
     }
 
-    public Iterable<PhotoData> getPhotosData(String userID) throws NotFollowingException {
+    public Iterable<PhotoData> getPhotosData(String userID) throws NoSuchUserException, NotFollowingException {
 
-        User uID = curr.getFollow(userID);
+        User uID = currUser.getFollow(userID);
+
+        if(catUser.getUser(userID) == null)
+            throw new NoSuchUserException();
+
         if (uID == null)
             throw new NotFollowingException();
 
         return uID.getAllPhotosData();
-
     }
 
-    public PhotoOpinion getPhotoOpinion(String userID, String photoID) throws NotFollowingException, NoSuchPhotoException {
+    public PhotoOpinion getPhotoOpinion(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException {
 
-        User uID = curr.getFollow(userID);
+        User uID = currUser.getFollow(userID);
+
+        if(catUser.getUser(userID) == null)
+            throw new NoSuchUserException();
+
         if (uID == null)
             throw new NotFollowingException();
 
@@ -40,20 +50,21 @@ public class PhotoHandler extends GodHandler{
             throw new NoSuchPhotoException();
 
         return phO;
-
     }
 
 
-    public Iterable<Photo> getAllUserPhotos(String userID) throws NotFollowingException {
+    public Iterable<Photo> getAllUserPhotos(String userID) throws NoSuchUserException, NotFollowingException {
 
-        User uID = curr.getFollow(userID);
+        User uID = currUser.getFollow(userID);
+
+        if(catUser.getUser(userID) == null)
+            throw new NoSuchUserException();
+
         if(uID == null)
             throw new NotFollowingException();
 
         return uID.getAllPhotos();
-
     }
-
 
 
 }
