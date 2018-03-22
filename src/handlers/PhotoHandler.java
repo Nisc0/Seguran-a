@@ -4,6 +4,8 @@ import catalogs.CatalogoUser;
 import domain.*;
 import exceptions.*;
 
+import java.io.IOException;
+
 
 public class PhotoHandler extends GodHandler{
 
@@ -53,7 +55,7 @@ public class PhotoHandler extends GodHandler{
     }
 
 
-    public Iterable<Photo> getAllUserPhotos(String userID) throws NoSuchUserException, NotFollowingException {
+    public Iterable<Photo> getAllUserPhotos(String userID) throws NoSuchUserException, NotFollowingException, IOException {
 
         User uID = currUser.getFollow(userID);
 
@@ -63,7 +65,11 @@ public class PhotoHandler extends GodHandler{
         if(uID == null)
             throw new NotFollowingException();
 
-        return uID.getAllPhotos();
+        Iterable<Photo> uPh = uID.getAllPhotos();
+
+        catUser.getUserPhotos(userID, uPh);
+
+        return uPh;
     }
 
 

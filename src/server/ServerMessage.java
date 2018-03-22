@@ -24,14 +24,13 @@ public class ServerMessage {
         this.catUser = CatalogoUser.getCatalogo();
     }
 
-
     public MsgSession startSession(MsgSession m){
         String user = m.getUser();
         String pass = m.getPass();
         sessionHandler = new SessionHandler(catUser.getUser(user));
         MsgSession result;
 
-        //todo
+
         try {
             if (sessionHandler.startSession(user, pass)) {
                 followerHandler = new FollowerHandler(catUser.getUser(user));
@@ -51,7 +50,17 @@ public class ServerMessage {
         return result;
     }
 
-    //todo
+
+    private MsgSession endSession(String user){
+        MsgSession result;
+        result = new MsgSession(ENDSESSION, null, user, true);
+        photoHandler = null;
+        followerHandler = null;
+        opinionHandler = null;
+        sessionHandler = null;
+        return result;
+    }
+
     private MsgPhoto addPhoto(String user, String follower, Photo photo) {
         MsgPhoto result;
         try {
@@ -66,7 +75,6 @@ public class ServerMessage {
         return result;
     }
 
-    //todo
     private MsgPhotoData allPhotoData(String user, String follower){
         MsgPhotoData result;
         try {
@@ -85,7 +93,6 @@ public class ServerMessage {
         return result;
     }
 
-    //fixme
     private MsgPhoto photoOpinion(String user, String follower, String photoID){
         MsgPhoto result;
         try {
@@ -108,7 +115,6 @@ public class ServerMessage {
         return result;
     }
 
-    //todo
     private MsgPhoto allPhotos(String user, String follower) {
         MsgPhoto result;
         try {
@@ -125,7 +131,6 @@ public class ServerMessage {
         return result;
     }
 
-    //fixme
     private MsgOpinion commentPhoto(String comment,String user, String follower, String photoID){
         MsgOpinion result;
         try {
@@ -148,7 +153,6 @@ public class ServerMessage {
         return result;
     }
 
-    //fixme
     private MsgOpinion likePhoto(String user, String follower, String photoID){
         MsgOpinion result;
         try {
@@ -169,13 +173,12 @@ public class ServerMessage {
         }
 
         catch (AlreadyLikedException e) {
-            result = new MsgOpinion(LIKEPHOTO, ALREADYLIKED, user, follower, true);
+            result = new MsgOpinion(LIKEPHOTO, ALREADYLIKED, user, follower, false);
         }
 
         return result;
     }
 
-    //fixme
     private MsgOpinion dislikePhoto(String user, String follower, String photoID){
         MsgOpinion result;
         try {
@@ -196,13 +199,12 @@ public class ServerMessage {
         }
 
         catch (AlreadyDislikedException e) {
-            result = new MsgOpinion(DISLIKEPHOTO, ALREADYDISLIKED, user, follower, true);
+            result = new MsgOpinion(DISLIKEPHOTO, ALREADYDISLIKED, user, follower, false);
         }
 
         return result;
     }
 
-    //fixme
     private MsgFollower followUser(String user, String follower) {
         MsgFollower result;
         try {
@@ -215,15 +217,12 @@ public class ServerMessage {
         }
 
         catch (AlreadyFollowingException e) {
-            result = new MsgFollower(FOLLOWUSER, ALREADYFOLLOWING, user, follower,true);
+            result = new MsgFollower(FOLLOWUSER, ALREADYFOLLOWING, user, follower,false);
         }
 
         return result;
-
     }
 
-
-    //fixme
     private MsgFollower unfollowUser(String user, String follower){
         MsgFollower result;
         try {
@@ -236,12 +235,11 @@ public class ServerMessage {
         }
 
         catch (AlreadyNotFollowingException e) {
-            result = new MsgFollower(UNFOLLOWUSER, ALREADYNOTFOLLING, user, follower, true);
+            result = new MsgFollower(UNFOLLOWUSER, ALREADYNOTFOLLOWING, user, follower, false);
         }
 
         return result;
     }
-
 
 
     public Message unpackAndTreatMsg (Message m) {
@@ -250,10 +248,16 @@ public class ServerMessage {
         MsgFollower mFollower;
         MsgOpinion mOpinion;
         MsgPhoto mPhoto;
+        MsgSession mSession;
 
         switch (tpMsg) {
 
             case STARTSESSION:
+                break;
+
+            case ENDSESSION:
+                mSession = (MsgSession) m;
+                msgResult = endSession(mSession.getUser());
                 break;
 
             case ADDPHOTO:

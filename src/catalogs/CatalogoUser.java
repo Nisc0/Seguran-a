@@ -1,6 +1,7 @@
 package catalogs;
 
 import catalogs_interface.ICatalogoUser;
+import domain.Photo;
 import domain.User;
 import handlers.RecoveryManeger;
 
@@ -34,6 +35,10 @@ public class CatalogoUser implements ICatalogoUser {
         catch (IOException e) {
             e.printStackTrace();
             System.out.print("Sistema não conseguiu recuperar");
+        }
+
+        for (User u: recov.recUsers()) {
+            this.users.put(u.getID(), u);
         }
     }
 
@@ -73,4 +78,7 @@ public class CatalogoUser implements ICatalogoUser {
         return users.keySet();
     }
 
+    public void getUserPhotos(String userID, Iterable<Photo> uPh) throws IOException {
+        recov.recPhotos(userID, uPh);
+    }
 }
