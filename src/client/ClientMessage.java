@@ -27,7 +27,7 @@ public class ClientMessage {
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
             AlreadyNotFollowingException {
         MsgPhoto msg = (MsgPhoto) cl.sendReceive(new MsgPhoto(MsgType.ADDPHOTO, null, currUser, null, true, photoID, photo));
-        findException(msg.getC_err(), msg.getSuccess());
+        findException(msg.getC_err());
         return msg.getSuccess();
     }
 
@@ -36,7 +36,7 @@ public class ClientMessage {
             NoSuchUserException, AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException,
             WrongUserPasswordException, AlreadyNotFollowingException {
         MsgPhotoData msg = (MsgPhotoData) cl.sendReceive(new MsgPhotoData(MsgType.ALLPHOTOSDATA, null, currUser, userID, true, null));
-        findException(msg.getC_err(), msg.getSuccess());
+        findException(msg.getC_err());
         return msg.getPhotoDataList();
     }
 
@@ -45,7 +45,7 @@ public class ClientMessage {
             NoSuchUserException, AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException,
             WrongUserPasswordException, AlreadyNotFollowingException {
         MsgPhoto msg = (MsgPhoto) cl.sendReceive(new MsgPhoto(MsgType.PHOTOOPINION, null, currUser, userID, true, photoID));
-        findException(msg.getC_err(), msg.getSuccess());
+        findException(msg.getC_err());
         return msg.getOpinion();
     }
 
@@ -54,7 +54,7 @@ public class ClientMessage {
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
             AlreadyNotFollowingException {
         MsgPhoto msg = (MsgPhoto) cl.sendReceive(new MsgPhoto(MsgType.ALLPHOTOS, null, currUser, userID, true));
-        findException(msg.getC_err(), msg.getSuccess());
+        findException(msg.getC_err());
         return msg.getPhotoList();
     }
 
@@ -63,7 +63,7 @@ public class ClientMessage {
             NoSuchUserException, AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException,
             WrongUserPasswordException, AlreadyNotFollowingException {
         MsgOpinion msg = (MsgOpinion) cl.sendReceive(new MsgOpinion(MsgType.COMMENTPHOTO, null, currUser, userID, true, photoID, comment));
-        findException(msg.getC_err(), msg.getSuccess());
+        findException(msg.getC_err());
         return msg.getSuccess();
     }
 
@@ -72,7 +72,7 @@ public class ClientMessage {
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
             AlreadyNotFollowingException {
         MsgOpinion msg = (MsgOpinion) cl.sendReceive(new MsgOpinion(MsgType.LIKEPHOTO, null, currUser, userID, true, photoID, true));
-        findException(msg.getC_err(), msg.getSuccess());
+        findException(msg.getC_err());
         return msg.getSuccess();
     }
 
@@ -81,7 +81,7 @@ public class ClientMessage {
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
             AlreadyNotFollowingException {
         MsgOpinion msg = (MsgOpinion) cl.sendReceive(new MsgOpinion(MsgType.DISLIKEPHOTO, null, currUser, userID, true, photoID, false));
-        findException(msg.getC_err(), msg.getSuccess());
+        findException(msg.getC_err());
         return msg.getSuccess();
     }
 
@@ -90,7 +90,7 @@ public class ClientMessage {
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
             AlreadyNotFollowingException {
         MsgFollower msg = (MsgFollower) cl.sendReceive(new MsgFollower(MsgType.FOLLOWUSER, null, currUser, userID, true));
-        findException(msg.getC_err(), msg.getSuccess());
+        findException(msg.getC_err());
         return msg.getSuccess();
     }
 
@@ -98,39 +98,33 @@ public class ClientMessage {
             DuplicatePhotoException, AlreadyFollowingException, NotFollowingException, NoSuchUserException,
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException, AlreadyNotFollowingException {
         MsgFollower msg = (MsgFollower) cl.sendReceive(new MsgFollower(MsgType.UNFOLLOWUSER, null, currUser, userID, true));
-        findException(msg.getC_err(), msg.getSuccess());
+        findException(msg.getC_err());
         return msg.getSuccess();
     }
 
-    private void findException(MsgError err, boolean success) throws WrongUserPasswordException, NotFollowingException,
+    private void findException(MsgError err) throws WrongUserPasswordException, NotFollowingException,
             NoSuchUserException, NoSuchPhotoException, AlreadyFollowingException, DuplicatePhotoException,
             AlreadyLikedException, AlreadyDislikedException, AlreadyNotFollowingException {
 
-        if (success)
             switch (err) {
                 case ALREADYLIKED:
-                    throw new AlreadyLikedException();
+                    throw new AlreadyLikedException("Photo already liked!");
                 case ALREADYDISLIKED:
-                    throw new AlreadyDislikedException();
+                    throw new AlreadyDislikedException("Photo already disliked!");
                 case ALREADYFOLLOWING:
-                    throw new AlreadyFollowingException();
+                    throw new AlreadyFollowingException("Already following given user!");
                 case ALREADYNOTFOLLOWING:
-                    throw new AlreadyNotFollowingException();
-                default:
-                    break;
-            }
-        else
-            switch (err) {
+                    throw new AlreadyNotFollowingException("Already not following given user!");
                 case WRONGPASSWORD:
-                    throw new WrongUserPasswordException();
+                    throw new WrongUserPasswordException("Wrong username/password combination!");
                 case NOTFOLLOWING:
-                    throw new NotFollowingException();
+                    throw new NotFollowingException("Not allowed to do that! You must be following that user!");
                 case NOSUCHUSER:
-                    throw new NoSuchUserException();
+                    throw new NoSuchUserException("Given username doesn't exist!");
                 case NOSUCHPHOTO:
-                    throw new NoSuchPhotoException();
+                    throw new NoSuchPhotoException("Given photo tag doesn't exist!");
                 case DUPLICATEPHOTO:
-                    throw new DuplicatePhotoException();
+                    throw new DuplicatePhotoException("Given photo already exists!");
                 default:
                     break;
             }

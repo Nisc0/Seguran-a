@@ -169,7 +169,7 @@ public class ServerMessage {
         }
 
         catch (AlreadyLikedException e) {
-            result = new MsgOpinion(LIKEPHOTO, ALREADYLIKED, user, follower, true);
+            result = new MsgOpinion(LIKEPHOTO, ALREADYLIKED, user, follower, false);
         }
 
         return result;
@@ -196,7 +196,7 @@ public class ServerMessage {
         }
 
         catch (AlreadyDislikedException e) {
-            result = new MsgOpinion(DISLIKEPHOTO, ALREADYDISLIKED, user, follower, true);
+            result = new MsgOpinion(DISLIKEPHOTO, ALREADYDISLIKED, user, follower, false);
         }
 
         return result;
@@ -215,7 +215,7 @@ public class ServerMessage {
         }
 
         catch (AlreadyFollowingException e) {
-            result = new MsgFollower(FOLLOWUSER, ALREADYFOLLOWING, user, follower,true);
+            result = new MsgFollower(FOLLOWUSER, ALREADYFOLLOWING, user, follower,false);
         }
 
         return result;
@@ -235,7 +235,7 @@ public class ServerMessage {
         }
 
         catch (AlreadyNotFollowingException e) {
-            result = new MsgFollower(UNFOLLOWUSER, ALREADYNOTFOLLOWING, user, follower, true);
+            result = new MsgFollower(UNFOLLOWUSER, ALREADYNOTFOLLOWING, user, follower, false);
             e.printStackTrace();
         }
 
