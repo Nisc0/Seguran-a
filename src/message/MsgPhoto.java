@@ -11,6 +11,9 @@ public class MsgPhoto extends Message {
     private Iterable<Photo> photoList;
     private PhotoOpinion opinion;
 
+    public MsgPhoto(MsgType c_type, MsgError c_err, String user, String followID, boolean success) {
+        super(c_type, c_err, user, followID, success);
+    }
 
     public MsgPhoto(MsgType c_type, MsgError c_err, String user, String followID, boolean success, String photoID, Photo photo) {
         super(c_type, c_err, user, followID, success);
@@ -30,10 +33,12 @@ public class MsgPhoto extends Message {
     }
 
     public String getPhotoID() {
+        //todo check param
         return photoID;
     }
 
     public Photo getPhoto() {
+        //todo check param
         return photo;
     }
 

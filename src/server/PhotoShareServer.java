@@ -9,6 +9,4 @@ public class PhotoShareServer {
 		server.startServer(port);
 	}
 
-
->>>>>>> server
 }
