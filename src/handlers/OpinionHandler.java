@@ -6,7 +6,7 @@ import exceptions.*;
 
 import java.io.IOException;
 
-public class OpinionHandler extends  GodHandler {
+public class OpinionHandler extends  GodHandler implements handlers.Interface.IOpinionHandler {
 
     private static CatalogoUser catUser;
 
@@ -14,6 +14,7 @@ public class OpinionHandler extends  GodHandler {
         catUser = CatalogoUser.getCatalogo();
     }
 
+    @Override
     public void makeComment(String comment, String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException {
 
         User uID = catUser.getUser(userID);
@@ -31,6 +32,7 @@ public class OpinionHandler extends  GodHandler {
         catUser.updateUser(uID);
     }
 
+    @Override
     public void addLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, AlreadyLikedException {
 
         User uID = catUser.getUser(userID);
@@ -52,6 +54,7 @@ public class OpinionHandler extends  GodHandler {
         catUser.updateUser(uID);
     }
 
+    @Override
     public void addDisLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, AlreadyDislikedException {
 
         User uID = catUser.getUser(userID);

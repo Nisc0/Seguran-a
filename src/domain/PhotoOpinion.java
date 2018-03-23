@@ -1,6 +1,6 @@
 package domain;
 
-import domain_interface.IPhotoOpinion;
+import domain.Interface.IPhotoOpinion;
 
 import java.util.List;
 

@@ -8,7 +8,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class RecoveryManeger {
+public class RecoveryManeger implements handlers.Interface.IRecoveryManeger {
 
     private FileWriter fw;
     private FileReader fr;
@@ -23,20 +23,14 @@ public class RecoveryManeger {
         file_users.mkdir();
     }
 
-    public FileWriter getFW() {
-        return fw;
-    }
-
-    public void setFile(String path) throws IOException {
-        this.fw = new FileWriter(path, true);
-    }
-
+    @Override
     public void writeFile(String user, String pass) throws IOException {
         BufferedWriter writer = new BufferedWriter(fw);
         writer.append(user + ":" + pass + "\n");
         writer.flush();
     }
 
+    @Override
     public void backupUser(User u) throws IOException {
 
         File fl = new File(file_users, u.getID());
@@ -64,12 +58,14 @@ public class RecoveryManeger {
     }
 
 
+    @Override
     public void simpleRecovery() {
 
         BufferedReader reader = new BufferedReader(fr);
 
     }
 
+    @Override
     public Iterable<User> recUsers() {
         File[] fls = file_users.listFiles();
         ArrayList<User> users = new ArrayList<>();
@@ -93,6 +89,7 @@ public class RecoveryManeger {
     }
 
 
+    @Override
     public void recPhotos(String userID, Iterable<Photo> uPh) throws IOException {
         File fl = new File(file_users, userID + "/");
         for (Photo p : uPh) {
@@ -101,6 +98,7 @@ public class RecoveryManeger {
         }
     }
 
+    @Override
     public void saveImage(BufferedImage image, User u, String photoID, String extension) {
         File fl = new File(file_users, u.getID());
         File file = new File(fl, photoID + "." + extension);

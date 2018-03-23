@@ -8,7 +8,7 @@ import java.io.IOException;
 
 // alterar o nome das variaveis
 
-public class FollowerHandler extends GodHandler{
+public class FollowerHandler extends GodHandler implements handlers.Interface.IFollowerHandler {
 
     private static CatalogoUser catUser;
 
@@ -16,6 +16,7 @@ public class FollowerHandler extends GodHandler{
         catUser = CatalogoUser.getCatalogo();
     }
 
+    @Override
     public void addFollow(String userID) throws NoSuchUserException, AlreadyFollowingException {
 
         User u = catUser.getUser(userID);
@@ -30,6 +31,7 @@ public class FollowerHandler extends GodHandler{
         catUser.updateUser(currUser);
     }
 
+    @Override
     public void removeFollow(String userID) throws NoSuchUserException, AlreadyNotFollowingException {
 
         User u = catUser.getUser(userID);

@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 
-public class PhotoHandler extends GodHandler{
+public class PhotoHandler extends GodHandler implements handlers.Interface.IPhotoHandler {
 
     private static CatalogoUser catUser;
 
@@ -19,6 +19,7 @@ public class PhotoHandler extends GodHandler{
         catUser = CatalogoUser.getCatalogo();
     }
 
+    @Override
     public void addPhoto(Photo photo, BufferedImage image) throws DuplicatePhotoException {
 
         if (currUser.getPhoto(photo.getPhotoID()) != null)
@@ -30,6 +31,7 @@ public class PhotoHandler extends GodHandler{
 
     }
 
+    @Override
     public Iterable<PhotoData> getPhotosData(String userID) throws NoSuchUserException, NotFollowingException {
 
         User uID = catUser.getUser(userID);
@@ -45,6 +47,7 @@ public class PhotoHandler extends GodHandler{
         return uID.getAllPhotosData();
     }
 
+    @Override
     public PhotoOpinion getPhotoOpinion(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException {
 
         User uID = catUser.getUser(userID);
@@ -65,6 +68,7 @@ public class PhotoHandler extends GodHandler{
     }
 
 
+    @Override
     public Iterable<Photo> getAllUserPhotos(String userID) throws NoSuchUserException, NotFollowingException {
 
         User uID = catUser.getUser(userID);
