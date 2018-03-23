@@ -1,6 +1,5 @@
 package domain;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import domain_interface.IPhoto;
 
 import java.awt.image.BufferedImage;
@@ -35,9 +34,6 @@ public class Photo implements IPhoto, Serializable {
         datePub = cal.getTime();
         likes = 0;
         dislikes = 0;
-        setImage(image);
-
-
     }
 
     public void setImage(BufferedImage image) {
@@ -46,6 +42,14 @@ public class Photo implements IPhoto, Serializable {
 
     public String getPhotoID() {
         return photoID;
+    }
+
+    public String getExtension() {
+        return extension;
+    }
+
+    public BufferedImage getImage() {
+        return image;
     }
 
     public void addComment(String user, String comm) {
@@ -59,12 +63,12 @@ public class Photo implements IPhoto, Serializable {
             return false;
 
         if (opi) {
-            if(lastOpi != null) {
+            if (lastOpi != null) {
                 dislikes--;
             }
             likes++;
         } else {
-            if(lastOpi != null) {
+            if (lastOpi != null) {
                 likes--;
             }
             dislikes++;
@@ -101,11 +105,11 @@ public class Photo implements IPhoto, Serializable {
         return res;
     }
 
-    public String getExtension() {
-        return extension;
-    }
-
-    public BufferedImage getImage() {
-        return image;
+    public String toString() {
+        return "photoID: " + photoID + ", " +
+                datePub.toString() + ", " +
+                "likes: " + likes + ", " +
+                "dislikes: " + dislikes + ", " +
+                "comments: " + comments;
     }
 }

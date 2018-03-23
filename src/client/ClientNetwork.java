@@ -1,8 +1,7 @@
 package client;
 import java.io.*;
 import java.net.Socket;
-
-import domain.Message;
+import message.Message;
 
 //Classe com o metodo send_receive, onde cria a Socket
 public class ClientNetwork {
@@ -13,10 +12,13 @@ public class ClientNetwork {
 
 	public ClientNetwork(String ip, int port) throws IOException {
 	    socket = new Socket(ip, port);
+	    //TODO: verificar exception da socket
 	    BufferedInputStream bufIn = new BufferedInputStream(socket.getInputStream());
 	    BufferedOutputStream bufOut = new BufferedOutputStream(socket.getOutputStream());
+	    //TODO: verificar exception do buffer
         in = new ObjectInputStream(bufIn);
         out = new ObjectOutputStream(bufOut);
+        //TODO: verificar exception do objectstream
 	}
 
 	public Message sendReceive(Message msg) throws IOException, ClassNotFoundException {

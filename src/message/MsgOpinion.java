@@ -16,8 +16,9 @@ public class MsgOpinion extends Message {
         this.comment = comment;
     }
 
-    public MsgOpinion(MsgType c_type, MsgError c_err, String user, String followID, boolean success, boolean opinion) {
+    public MsgOpinion(MsgType c_type, MsgError c_err, String user, String followID, boolean success, String photoID, boolean opinion) {
         super(c_type, c_err, user, followID, success);
+        this.photoID = photoID;
         this.opinion = opinion;
     }
 

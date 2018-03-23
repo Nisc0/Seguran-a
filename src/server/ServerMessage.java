@@ -9,6 +9,7 @@ import handlers.*;
 import message.*;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -24,13 +25,13 @@ public class ServerMessage {
     private PhotoHandler photoHandler;
     private SessionHandler sessionHandler;
 
-    public ServerMessage(){
+    public ServerMessage() {
         this.catUser = CatalogoUser.getCatalogo();
     }
 
-    public MsgSession startSession(MsgSession m){
+    public MsgSession startSession(MsgSession m) {
         String user = m.getUser();
-        String pass = m.getPass();
+        String pass = m.getPwd();
         sessionHandler = new SessionHandler(catUser.getUser(user));
         MsgSession result;
 
@@ -40,22 +41,19 @@ public class ServerMessage {
                 followerHandler = new FollowerHandler(catUser.getUser(user));
                 opinionHandler = new OpinionHandler(catUser.getUser(user));
                 photoHandler = new PhotoHandler(catUser.getUser(user));
-                result = new MsgSession(STARTSESSION , null, user, true);
+                result = new MsgSession(STARTSESSION, null, user, true);
+            } else {
+                result = new MsgSession(STARTSESSION, USERCREATED, user, false);
             }
-            else{
-                result = new MsgSession(STARTSESSION , USERCREATED, user, false);
-            }
-        }
-
-        catch (WrongUserPasswordException e){
-            result = new MsgSession(STARTSESSION , WRONGPASSWORD, user, false);
+        } catch (WrongUserPasswordException e) {
+            result = new MsgSession(STARTSESSION, WRONGPASSWORD, user, false);
         }
 
         return result;
     }
 
 
-    private MsgSession endSession(String user){
+    private MsgSession endSession(String user) {
         MsgSession result;
         result = new MsgSession(ENDSESSION, null, user, true);
         photoHandler = null;
@@ -70,49 +68,37 @@ public class ServerMessage {
         try {
             photoHandler.addPhoto(photo, img);
             result = new MsgPhoto(ADDPHOTO, null, user, follower, true);
-        }
-
-        catch (DuplicatePhotoException e) {
+        } catch (DuplicatePhotoException e) {
             result = new MsgPhoto(ADDPHOTO, DUPLICATEPHOTO, user, follower, false);
         }
 
         return result;
     }
 
-    private MsgPhotoData allPhotoData(String user, String follower){
+    private MsgPhotoData allPhotoData(String user, String follower) {
         MsgPhotoData result;
         try {
             Iterable<PhotoData> photoDataList = photoHandler.getPhotosData(user);
             result = new MsgPhotoData(ALLPHOTOSDATA, null, user, follower, true, photoDataList);
-        }
-
-        catch (NoSuchUserException e) {
+        } catch (NoSuchUserException e) {
             result = new MsgPhotoData(ALLPHOTOSDATA, NOSUCHUSER, user, follower, false);
-        }
-
-        catch (NotFollowingException e) {
+        } catch (NotFollowingException e) {
             result = new MsgPhotoData(ALLPHOTOSDATA, NOTFOLLOWING, user, follower, false);
         }
 
         return result;
     }
 
-    private MsgPhoto photoOpinion(String user, String follower, String photoID){
+    private MsgPhoto photoOpinion(String user, String follower, String photoID) {
         MsgPhoto result;
         try {
             PhotoOpinion opinion = photoHandler.getPhotoOpinion(follower, photoID);
-            result = new MsgPhoto(PHOTOOPINION, null, user, follower, true, opinion);
-        }
-
-        catch (NoSuchUserException e) {
+            result = new MsgPhoto(PHOTOOPINION, null, user, follower, true, photoID, opinion);
+        } catch (NoSuchUserException e) {
             result = new MsgPhoto(PHOTOOPINION, NOSUCHUSER, user, follower, false);
-        }
-
-        catch (NotFollowingException e) {
+        } catch (NotFollowingException e) {
             result = new MsgPhoto(PHOTOOPINION, NOTFOLLOWING, user, follower, false);
-        }
-
-        catch (NoSuchPhotoException e) {
+        } catch (NoSuchPhotoException e) {
             result = new MsgPhoto(PHOTOOPINION, NOSUCHPHOTO, user, follower, false);
         }
 
@@ -120,90 +106,66 @@ public class ServerMessage {
     }
 
     private MsgPhoto allPhotos(String user, String follower) {
-        MsgPhoto result = null;
+        MsgPhoto result;
         ArrayList<Photo> photoList;
         try {
             photoList = (ArrayList<Photo>) photoHandler.getAllUserPhotos(user);
             result = new MsgPhoto(ALLPHOTOS, null, user, follower, true, photoList);
-        }
-        catch (NoSuchUserException e) {
+        } catch (NoSuchUserException e) {
             result = new MsgPhoto(ALLPHOTOS, NOSUCHUSER, user, follower, false);
-        }
-        catch (NotFollowingException e) {
+        } catch (NotFollowingException e) {
             result = new MsgPhoto(ALLPHOTOS, NOTFOLLOWING, user, follower, false);
         }
 
         return result;
     }
 
-    private MsgOpinion commentPhoto(String comment,String user, String follower, String photoID){
+    private MsgOpinion commentPhoto(String comment, String user, String follower, String photoID) {
         MsgOpinion result;
         try {
             opinionHandler.makeComment(comment, follower, photoID);
             result = new MsgOpinion(COMMENTPHOTO, null, user, follower, true);
-        }
-
-        catch (NoSuchUserException e) {
+        } catch (NoSuchUserException e) {
             result = new MsgOpinion(COMMENTPHOTO, NOSUCHUSER, user, follower, false);
-        }
-
-        catch (NotFollowingException e) {
+        } catch (NotFollowingException e) {
             result = new MsgOpinion(COMMENTPHOTO, NOTFOLLOWING, user, follower, false);
-        }
-
-        catch (NoSuchPhotoException e) {
+        } catch (NoSuchPhotoException e) {
             result = new MsgOpinion(COMMENTPHOTO, NOSUCHPHOTO, user, follower, false);
         }
 
         return result;
     }
 
-    private MsgOpinion likePhoto(String user, String follower, String photoID){
+    private MsgOpinion likePhoto(String user, String follower, String photoID) {
         MsgOpinion result;
         try {
             opinionHandler.addLike(follower, photoID);
             result = new MsgOpinion(LIKEPHOTO, null, user, follower, true);
-        }
-
-        catch (NoSuchUserException e) {
+        } catch (NoSuchUserException e) {
             result = new MsgOpinion(LIKEPHOTO, NOSUCHUSER, user, follower, false);
-        }
-
-        catch (NotFollowingException e) {
+        } catch (NotFollowingException e) {
             result = new MsgOpinion(LIKEPHOTO, NOTFOLLOWING, user, follower, false);
-        }
-
-        catch (NoSuchPhotoException e) {
+        } catch (NoSuchPhotoException e) {
             result = new MsgOpinion(LIKEPHOTO, NOSUCHPHOTO, user, follower, false);
-        }
-
-        catch (AlreadyLikedException e) {
+        } catch (AlreadyLikedException e) {
             result = new MsgOpinion(LIKEPHOTO, ALREADYLIKED, user, follower, false);
         }
 
         return result;
     }
 
-    private MsgOpinion dislikePhoto(String user, String follower, String photoID){
+    private MsgOpinion dislikePhoto(String user, String follower, String photoID) {
         MsgOpinion result;
         try {
             opinionHandler.addDisLike(follower, photoID);
             result = new MsgOpinion(DISLIKEPHOTO, null, user, follower, true);
-        }
-
-        catch (NoSuchUserException e) {
+        } catch (NoSuchUserException e) {
             result = new MsgOpinion(DISLIKEPHOTO, NOSUCHUSER, user, follower, false);
-        }
-
-        catch (NotFollowingException e) {
+        } catch (NotFollowingException e) {
             result = new MsgOpinion(DISLIKEPHOTO, NOTFOLLOWING, user, follower, false);
-        }
-
-        catch (NoSuchPhotoException e) {
+        } catch (NoSuchPhotoException e) {
             result = new MsgOpinion(DISLIKEPHOTO, NOSUCHPHOTO, user, follower, false);
-        }
-
-        catch (AlreadyDislikedException e) {
+        } catch (AlreadyDislikedException e) {
             result = new MsgOpinion(DISLIKEPHOTO, ALREADYDISLIKED, user, follower, false);
         }
 
@@ -214,40 +176,31 @@ public class ServerMessage {
         MsgFollower result;
         try {
             followerHandler.addFollow(follower);
-            result= new MsgFollower(FOLLOWUSER,null, user, follower,true);
-        }
-
-        catch (NoSuchUserException e) {
-            result = new MsgFollower(FOLLOWUSER, NOSUCHUSER, user, follower,false);
-        }
-
-        catch (AlreadyFollowingException e) {
-            result = new MsgFollower(FOLLOWUSER, ALREADYFOLLOWING, user, follower,false);
+            result = new MsgFollower(FOLLOWUSER, null, user, follower, true);
+        } catch (NoSuchUserException e) {
+            result = new MsgFollower(FOLLOWUSER, NOSUCHUSER, user, follower, false);
+        } catch (AlreadyFollowingException e) {
+            result = new MsgFollower(FOLLOWUSER, ALREADYFOLLOWING, user, follower, false);
         }
 
         return result;
     }
 
-    private MsgFollower unfollowUser(String user, String follower){
+    private MsgFollower unfollowUser(String user, String follower) {
         MsgFollower result;
         try {
             followerHandler.removeFollow(follower);
-            result = new MsgFollower(UNFOLLOWUSER,null, user, follower,true);
-        }
-
-        catch (NoSuchUserException e) {
+            result = new MsgFollower(UNFOLLOWUSER, null, user, follower, true);
+        } catch (NoSuchUserException e) {
             result = new MsgFollower(UNFOLLOWUSER, NOSUCHUSER, user, follower, false);
-        }
-
-        catch (AlreadyNotFollowingException e) {
+        } catch (AlreadyNotFollowingException e) {
             result = new MsgFollower(UNFOLLOWUSER, ALREADYNOTFOLLOWING, user, follower, false);
         }
 
         return result;
     }
 
-
-    public Message unpackAndTreatMsg (Message m) {
+    public Message unpackAndTreatMsg(Message m) throws IOException {
         Message msgResult = null;
         MsgType tpMsg = m.getC_type();
         MsgFollower mFollower;
@@ -267,32 +220,33 @@ public class ServerMessage {
 
             case ADDPHOTO:
                 mPhoto = (MsgPhoto) m;
-                msgResult = addPhoto(mPhoto.getUser(),mPhoto.getFollowID(),mPhoto.getPhoto(),mPhoto.getBufferedImage());
+                msgResult = addPhoto(mPhoto.getUser(), mPhoto.getFollowID(), mPhoto.getPhoto(), mPhoto.getBufferedImage());
+                //TODO: verificar ioexception getbufferedimage
                 break;
 
             case ALLPHOTOSDATA:
                 mPhoto = (MsgPhoto) m;
-                msgResult = allPhotoData(mPhoto.getUser(),mPhoto.getFollowID());
+                msgResult = allPhotoData(mPhoto.getUser(), mPhoto.getFollowID());
                 break;
 
             case PHOTOOPINION:
                 mPhoto = (MsgPhoto) m;
-                msgResult = photoOpinion(mPhoto.getUser(),mPhoto.getFollowID(),mPhoto.getPhotoID());
+                msgResult = photoOpinion(mPhoto.getUser(), mPhoto.getFollowID(), mPhoto.getPhotoID());
                 break;
 
             case ALLPHOTOS:
                 mPhoto = (MsgPhoto) m;
-                msgResult = allPhotos(mPhoto.getUser(),mPhoto.getFollowID());
+                msgResult = allPhotos(mPhoto.getUser(), mPhoto.getFollowID());
                 break;
 
             case COMMENTPHOTO:
                 mOpinion = (MsgOpinion) m;
-                msgResult = commentPhoto(mOpinion.getComment(),mOpinion.getUser(),mOpinion.getFollowID(),mOpinion.getPhotoID());
+                msgResult = commentPhoto(mOpinion.getComment(), mOpinion.getUser(), mOpinion.getFollowID(), mOpinion.getPhotoID());
                 break;
 
             case LIKEPHOTO:
                 mOpinion = (MsgOpinion) m;
-                msgResult = likePhoto(mOpinion.getUser(),mOpinion.getFollowID(),mOpinion.getPhotoID());
+                msgResult = likePhoto(mOpinion.getUser(), mOpinion.getFollowID(), mOpinion.getPhotoID());
                 break;
 
             case DISLIKEPHOTO:
@@ -302,12 +256,12 @@ public class ServerMessage {
 
             case FOLLOWUSER:
                 mFollower = (MsgFollower) m;
-                msgResult = followUser(mFollower.getUser(),mFollower.getFollowID());
+                msgResult = followUser(mFollower.getUser(), mFollower.getFollowID());
                 break;
 
             case UNFOLLOWUSER:
                 mFollower = (MsgFollower) m;
-                msgResult = unfollowUser(mFollower.getUser(),mFollower.getFollowID());
+                msgResult = unfollowUser(mFollower.getUser(), mFollower.getFollowID());
                 break;
 
             default:

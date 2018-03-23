@@ -37,7 +37,9 @@ public class User implements IUser, Serializable {
     }
 
     @Override
-    public String getPass() { return password; }
+    public boolean isSamePwd(String pwd) {
+        return password.equals(pwd);
+    }
 
     //////////////    FOLLOWS    /////////////////////
 
@@ -57,7 +59,6 @@ public class User implements IUser, Serializable {
         rec_follows.remove(userID);
         follows.remove(userID);
     }
-
 
     //////////////    PHOTOS    /////////////////////
 
@@ -97,12 +98,13 @@ public class User implements IUser, Serializable {
     @Override
     public Iterable<Photo> getAllPhotos() {
         ArrayList<Photo> res = new ArrayList<>();
-        for(Photo ph : photos.values()){
+        for (Photo ph : photos.values()) {
             res.add(ph.clone());
         }
         return res;
     }
 
+    //////////////    TRATAMENTO DE OPINIONS    /////////////////////
 
     @Override
     public boolean makeComment(String com, String uID, String phID) {

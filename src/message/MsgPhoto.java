@@ -3,13 +3,12 @@ package message;
 import domain.Photo;
 import domain.PhotoOpinion;
 
-import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.List;
 
 public class MsgPhoto extends Message {
 
@@ -19,77 +18,105 @@ public class MsgPhoto extends Message {
     private PhotoOpinion opinion;
     private byte[] photoBytes;
     private byte[][] photoListBytes;
+    //TODO: img!??!?
     private BufferedImage img;
 
     public MsgPhoto(MsgType c_type, MsgError c_err, String user, String followID, boolean success) {
         super(c_type, c_err, user, followID, success);
     }
 
-    public MsgPhoto(MsgType c_type, MsgError c_err, String user, String followID, boolean success, String photoID, Photo photo) {
+    //para o metodo getPhotoOpinion - client
+    public MsgPhoto(MsgType c_type, MsgError c_err, String user, String followID, boolean success, String photoID) {
+        super(c_type, c_err, user, followID, success);
+        this.photoID = photoID;
+    }
+
+    //para o metodo addPhoto
+    public MsgPhoto(MsgType c_type, MsgError c_err, String user, String followID, boolean success, String photoID,
+                    Photo photo, BufferedImage img) {
         super(c_type, c_err, user, followID, success);
         this.photoID = photoID;
         this.photo = photo;
+        this.img = img;
+
+        byte[] photoBytes = null;
+        try {
+            photoBytes = serializeImage(img, photo);
+        } catch (IOException e) {
+            System.out.println("Serialization of photo failed!");
+        }
+
+        this.photoBytes = photoBytes;
     }
 
+    //para o metodo copyPhotos
     public MsgPhoto(MsgType c_type, MsgError c_err, String user, String followID, boolean success, Iterable<Photo> photoList) {
         super(c_type, c_err, user, followID, success);
-        ArrayList<Photo> list =  (ArrayList) photoList;
+        List<Photo> list = (List<Photo>) photoList;
         photoListBytes = new byte[list.size()][];
-        int j = 0;
 
-        for(Photo ph: photoList){
-            photoListBytes[j] = serializePhoto(ph.getImage());
-            j++;
+        int i = 0;
+        for (Photo ph : photoList) {
+            try {
+                photoListBytes[i] = serializeImage(ph.getImage(), ph);
+            } catch (IOException e) {
+                System.out.println("Serialization of photo failed!");
+            }
+            i++;
         }
         this.photoList = photoList;
     }
 
-
-    public MsgPhoto(MsgType c_type, MsgError c_err, String user, String followID, boolean success, PhotoOpinion opinion) {
+    //para o metodo getPhotoOpinion - server
+    public MsgPhoto(MsgType c_type, MsgError c_err, String user, String followID, boolean success, String photoID, PhotoOpinion opinion) {
         super(c_type, c_err, user, followID, success);
+        this.photoID = photoID;
         this.opinion = opinion;
     }
 
     public String getPhotoID() {
-        return (photoID != null)?photoID:null;
+        return photoID;
     }
 
     public Photo getPhoto() {
-        return (photo != null)?photo:null;
-    }
-
-    public Iterable<Photo> getPhotoList() {
-        return (photoList != null)?photoList:null;
+        return photo;
     }
 
     public PhotoOpinion getOpinion() {
-        return (opinion != null)? opinion:null;
+        return opinion;
     }
 
-    public BufferedImage getBufferedImage(){
-        return deserializePhoto(photoBytes);
+    public Iterable<Photo> getPhotoList() {
+        Iterable<Photo> photoL = photoList;
+        byte[][] imagesSerialized = photoListBytes;
+        int i = 0;
+        for (Photo ph : photoL) {
+            try {
+                ph.setImage(deserializeImage(imagesSerialized[i]));
+            } catch (IOException e) {
+                System.out.println("Deserialization of photo failed!");
+            }
+            i++;
+        }
+        return photoList;
     }
 
+    public BufferedImage getBufferedImage() throws IOException {
+        return deserializeImage(photoBytes);
+    }
 
-    private  byte[] serializePhoto(BufferedImage image){
+    private byte[] serializeImage(BufferedImage img, Photo photo) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try {
-            ImageIO.write(image, "png", baos);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return baos.toByteArray();
+        ImageIO.write(img, photo.getExtension(), baos);
+        baos.flush();
+        byte[] imageInByte = baos.toByteArray();
+        baos.close();
+        return imageInByte;
     }
 
-
-    private  BufferedImage deserializePhoto(byte[] imageBytes){
-        InputStream baos = new ByteArrayInputStream(imageBytes);
-        BufferedImage image = null;
-        try {
-            image = ImageIO.read(baos);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private BufferedImage deserializeImage(byte[] img) throws IOException {
+        ByteArrayInputStream bais = new ByteArrayInputStream(img);
+        BufferedImage image = ImageIO.read(bais);
         return image;
     }
 }

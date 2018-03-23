@@ -47,4 +47,5 @@ public interface IPhoto {
     PhotoOpinion makePhotoOpinion();
 
 
+    String getExtension();
 }

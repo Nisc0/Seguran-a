@@ -10,6 +10,7 @@ public class MsgPhotoData extends Message {
         super(c_type, c_err, user, followID, success);
     }
 
+    //para o metodo getAllPhotosData
     public MsgPhotoData(MsgType c_type, MsgError c_err, String user, String followID, boolean success, Iterable<PhotoData> photoDataList) {
         super(c_type, c_err, user, followID, success);
         this.photoDataList = photoDataList;
