@@ -16,10 +16,11 @@ public class RecoveryManeger {
 
     public RecoveryManeger() throws IOException {
         File fl = new File("Files");
+        fl.mkdir();
         fw = new FileWriter(new File(fl, "users.txt"), true);
         fr = new FileReader(new File(fl, "users.txt"));
         this.file_users = new File(fl, "Users");
-        file_users.mkdirs();
+        file_users.mkdir();
     }
 
     public FileWriter getFW() {
@@ -40,13 +41,15 @@ public class RecoveryManeger {
     public void backupUser(User u) throws IOException {
 
         File fl = new File(file_users, u.getID());
+        System.out.println(fl.toString()); //debug
         FileOutputStream fout = null;
         ObjectOutputStream oos = null;
         fl.mkdir();
+        File fu = new File(fl, u.getID() + ".u");
 
         try {
 
-            fout = new FileOutputStream(fl);
+            fout = new FileOutputStream(fu);
             oos = new ObjectOutputStream(fout);
             oos.writeObject(u);
 
@@ -71,10 +74,14 @@ public class RecoveryManeger {
     public Iterable<User> recUsers() {
         File[] fls = file_users.listFiles();
         ArrayList<User> users = new ArrayList<>();
-
+        File fu;
+        String userFile;
         for (File f : fls) {
             try {
-
+                userFile = fu.toString().split("/");
+                userFile = userFile
+                fu = new File(f, f.toString())
+                System.out.println(f.toString()); //debug
                 FileInputStream fin = new FileInputStream(f);
                 ObjectInputStream ois = new ObjectInputStream(fin);
                 User u = (User) ois.readObject();

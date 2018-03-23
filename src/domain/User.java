@@ -129,4 +129,12 @@ public class User implements IUser, Serializable {
         return false;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("userID: " + userID + ", ");
+        sb.append("pass: " + password + ", ");
+        return sb.toString();
+    }
+
 }

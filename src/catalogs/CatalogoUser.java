@@ -37,7 +37,7 @@ public class CatalogoUser implements ICatalogoUser {
             e.printStackTrace();
             System.out.print("Sistema não conseguiu recuperar");
         }
-
+        System.out.println("começar recuperacao");
         for (User u: recov.recUsers()) {
             this.users.put(u.getID(), u);
         }
