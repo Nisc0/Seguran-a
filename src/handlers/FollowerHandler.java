@@ -17,7 +17,7 @@ public class FollowerHandler extends GodHandler{
         catUser = CatalogoUser.getCatalogo();
     }
 
-    public void addFollow(String userID) throws NoSuchUserException, AlreadyFollowingException, IOException {
+    public void addFollow(String userID) throws NoSuchUserException, AlreadyFollowingException {
 
         User u = catUser.getUser(userID);
 
@@ -31,7 +31,7 @@ public class FollowerHandler extends GodHandler{
         catUser.updateUser(currUser);
     }
 
-    public void removeFollow(String userID) throws NoSuchUserException, AlreadyNotFollowingException, IOException {
+    public void removeFollow(String userID) throws NoSuchUserException, AlreadyNotFollowingException {
 
         User u = catUser.getUser(userID);
 

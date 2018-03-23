@@ -85,12 +85,21 @@ public class CatalogoUser implements ICatalogoUser {
         return users.keySet();
     }
 
-    public void getUserPhotos(String userID, Iterable<Photo> uPh) throws IOException {
-        recov.recPhotos(userID, uPh);
+    public void getUserPhotos(String userID, Iterable<Photo> uPh) {
+        try {
+            recov.recPhotos(userID, uPh);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void updateUser(User u) throws IOException {
-        recov.backupUser(u);
+    public void updateUser(User u) {
+        try {
+            recov.backupUser(u);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

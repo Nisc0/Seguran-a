@@ -15,7 +15,7 @@ public class OpinionHandler extends  GodHandler {
         catUser = CatalogoUser.getCatalogo();
     }
 
-    public void makeComment(String comment, String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, IOException {
+    public void makeComment(String comment, String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException {
 
         User uID = currUser.getFollow(userID);
 
@@ -31,7 +31,7 @@ public class OpinionHandler extends  GodHandler {
         catUser.updateUser(currUser);
     }
 
-    public void addLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, AlreadyLikedException, IOException {
+    public void addLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, AlreadyLikedException {
 
         User uID = currUser.getFollow(userID);
 
@@ -52,7 +52,7 @@ public class OpinionHandler extends  GodHandler {
         catUser.updateUser(currUser);
     }
 
-    public void addDisLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, AlreadyDislikedException, IOException {
+    public void addDisLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, AlreadyDislikedException {
 
         User uID = currUser.getFollow(userID);
 

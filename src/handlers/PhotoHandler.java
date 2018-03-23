@@ -62,7 +62,7 @@ public class PhotoHandler extends GodHandler{
     }
 
 
-    public Iterable<Photo> getAllUserPhotos(String userID) throws NoSuchUserException, NotFollowingException, IOException {
+    public Iterable<Photo> getAllUserPhotos(String userID) throws NoSuchUserException, NotFollowingException {
 
         User uID = currUser.getFollow(userID);
 
