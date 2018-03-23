@@ -35,7 +35,6 @@ public class ServerMessage {
         sessionHandler = new SessionHandler();
         MsgSession result;
 
-
         try {
             if (sessionHandler.startSession(user, pass)) {
                 followerHandler = new FollowerHandler();
@@ -51,7 +50,7 @@ public class ServerMessage {
         } catch (WrongUserPasswordException e) {
             result = new MsgSession(STARTSESSION, WRONGPASSWORD, user, false);
         }
-        System.out.println("start session func!");
+        System.out.println("startSession completed!");
 
         return result;
     }
@@ -64,7 +63,7 @@ public class ServerMessage {
         followerHandler = null;
         opinionHandler = null;
         sessionHandler = null;
-        System.out.println("end session func!");
+        System.out.println("endSession completed!");
 
         return result;
     }
@@ -77,7 +76,7 @@ public class ServerMessage {
         } catch (DuplicatePhotoException e) {
             result = new MsgPhoto(ADDPHOTO, DUPLICATEPHOTO, user, follower, false);
         }
-        System.out.println("addphoto session func!");
+        System.out.println("addPhoto completed!");
 
         return result;
     }
@@ -92,6 +91,7 @@ public class ServerMessage {
         } catch (NotFollowingException e) {
             result = new MsgPhotoData(ALLPHOTOSDATA, NOTFOLLOWING, user, follower, false);
         }
+        System.out.println("getAllPhotoData completed!");
 
         return result;
     }
@@ -108,6 +108,7 @@ public class ServerMessage {
         } catch (NoSuchPhotoException e) {
             result = new MsgPhoto(PHOTOOPINION, NOSUCHPHOTO, user, follower, false);
         }
+        System.out.println("getPhotoOpinion completed!");
 
         return result;
     }
@@ -123,6 +124,7 @@ public class ServerMessage {
         } catch (NotFollowingException e) {
             result = new MsgPhoto(ALLPHOTOS, NOTFOLLOWING, user, follower, false);
         }
+        System.out.println("getAllPhotos completed!");
 
         return result;
     }
@@ -139,6 +141,7 @@ public class ServerMessage {
         } catch (NoSuchPhotoException e) {
             result = new MsgOpinion(COMMENTPHOTO, NOSUCHPHOTO, user, follower, false);
         }
+        System.out.println("commentPhoto completed!");
 
         return result;
     }
@@ -157,6 +160,7 @@ public class ServerMessage {
         } catch (AlreadyLikedException e) {
             result = new MsgOpinion(LIKEPHOTO, ALREADYLIKED, user, follower, false);
         }
+        System.out.println("likePhoto completed!");
 
         return result;
     }
@@ -175,6 +179,7 @@ public class ServerMessage {
         } catch (AlreadyDislikedException e) {
             result = new MsgOpinion(DISLIKEPHOTO, ALREADYDISLIKED, user, follower, false);
         }
+        System.out.println("dislikePhoto completed!");
 
         return result;
     }
@@ -189,6 +194,7 @@ public class ServerMessage {
         } catch (AlreadyFollowingException e) {
             result = new MsgFollower(FOLLOWUSER, ALREADYFOLLOWING, user, follower, false);
         }
+        System.out.println("followUser completed!");
 
         return result;
     }
@@ -203,6 +209,7 @@ public class ServerMessage {
         } catch (AlreadyNotFollowingException e) {
             result = new MsgFollower(UNFOLLOWUSER, ALREADYNOTFOLLOWING, user, follower, false);
         }
+        System.out.println("unfollowUser completed!");
 
         return result;
     }

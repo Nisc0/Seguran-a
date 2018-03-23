@@ -39,7 +39,7 @@ public class ServerNetwork{
 
             }
             catch (IOException e) {
-                System.err.println("Erro ao conectar o cliente!");
+                System.err.println("Couldn't connect to client!");
             }
 
         }
@@ -49,7 +49,7 @@ public class ServerNetwork{
             serverOnline = false;
         }
         catch (IOException e){
-            System.err.println("Erro ao fechar o servidor!");
+            System.err.println("Couldn't close server!");
         }
 
     }
