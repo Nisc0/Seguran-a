@@ -1,4 +1,4 @@
-import catalogs.CatalogoUser;
+import catalogs.CatalogUser;
 import domain.Photo;
 import exceptions.*;
 import handlers.FollowerHandler;
@@ -6,17 +6,14 @@ import handlers.OpinionHandler;
 import handlers.PhotoHandler;
 import handlers.SessionHandler;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 public class test_recov {
     public static void main(String[] args) {
 
         System.out.println("yoho");
 
-        CatalogoUser cat = CatalogoUser.getCatalogo();
+        CatalogUser cat = CatalogUser.getCatalogo();
 
         System.out.println("Catalogo aberto");
 

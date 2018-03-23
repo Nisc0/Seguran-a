@@ -1,6 +1,6 @@
 package server;
 
-import catalogs.CatalogoUser;
+import catalogs.CatalogUser;
 import domain.Photo;
 import domain.PhotoData;
 import domain.PhotoOpinion;
@@ -19,14 +19,14 @@ import static message.MsgType.*;
 
 public class ServerMessage {
 
-    private CatalogoUser catUser;
+    private CatalogUser catUser;
     private FollowerHandler followerHandler;
     private OpinionHandler opinionHandler;
     private PhotoHandler photoHandler;
     private SessionHandler sessionHandler;
 
     public ServerMessage() {
-        this.catUser = CatalogoUser.getCatalogo();
+        this.catUser = CatalogUser.getCatalogo();
     }
 
     public MsgSession startSession(MsgSession m) {

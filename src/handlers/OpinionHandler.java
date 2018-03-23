@@ -1,17 +1,15 @@
 package handlers;
 
-import catalogs.CatalogoUser;
+import catalogs.CatalogUser;
 import domain.*;
 import exceptions.*;
 
-import java.io.IOException;
-
 public class OpinionHandler extends  GodHandler {
 
-    private static CatalogoUser catUser;
+    private static CatalogUser catUser;
 
     public OpinionHandler() {
-        catUser = CatalogoUser.getCatalogo();
+        catUser = CatalogUser.getCatalogo();
     }
 
     public void makeComment(String comment, String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException {

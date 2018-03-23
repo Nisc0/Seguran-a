@@ -38,6 +38,7 @@ public class PhotoShare {
         boolean isSessionOpen = false;
 
         try {
+            System.out.println("Let's begin!");
             isSessionOpen = cm.startSession(currUser, args[1]);
         } catch (WrongUserPasswordException | NotFollowingException | NoSuchUserException e) {
             System.out.println("Something went wrong! " + e.getMessage());
@@ -194,7 +195,7 @@ public class PhotoShare {
                             }
                             break;
                         default:
-                            System.out.println("Please, only use: -a, -l, -i, -g, -c, -L, -D, -f or -r");
+                            System.out.println("Please, only use: -a, -l, -i, -g, -c, -L, -D, -f, -r, quit");
                             break;
                     }
                 }
