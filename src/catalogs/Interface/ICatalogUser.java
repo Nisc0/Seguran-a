@@ -6,7 +6,7 @@ import domain.User;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public interface ICatalogoUser {
+public interface ICatalogUser {
 
     /**
      * Add user to the System

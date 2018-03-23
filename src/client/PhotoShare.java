@@ -33,7 +33,6 @@ public class PhotoShare {
             throw new NotValidAddressException();
 
         ClientMessage cm = new ClientMessage(serverPort[0], port);
-        //TODO: verificar exception do clientmessage
 
         boolean isSessionOpen = false;
 

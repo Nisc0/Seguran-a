@@ -11,11 +11,18 @@ public class ServerNetwork{
     private ServerNetwork(){
     }
 
+    /**
+     * ServerNetwork's Singleton
+     * @return the ServerNetwork instance
+     */
     public static ServerNetwork getInstance(){
         return (instance == null)? instance = new ServerNetwork() : instance;
     }
 
-
+    /**
+     * Starts the Server
+     * @param port number (in String) on which the the port is created
+     */
     public void startServer (String port){
         ServerSocket sSoc = null;
         boolean serverOnline = true;

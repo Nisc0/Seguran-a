@@ -19,13 +19,35 @@ public class ClientMessage {
     private String server;
     private int port;
 
+    /**
+     * Client Message Construtor
+     * @param server server
+     * @param port server port
+     * @throws IOException
+     */
     public ClientMessage(String server, int port) throws IOException {
         this.server = server;
         this.port = port;
         this.cl = new ClientNetwork(server, port);
-        //TODO: verificar exception do clientnetwork
     }
 
+    /**
+     * Starts a session in the server
+     * @param currUser name of the user
+     * @param pwd user's password
+     * @return
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws DuplicatePhotoException
+     * @throws AlreadyFollowingException
+     * @throws NotFollowingException
+     * @throws NoSuchUserException
+     * @throws AlreadyLikedException
+     * @throws NoSuchPhotoException
+     * @throws AlreadyDislikedException
+     * @throws WrongUserPasswordException
+     * @throws AlreadyNotFollowingException
+     */
     public boolean startSession(String currUser, String pwd) throws IOException, ClassNotFoundException,
             DuplicatePhotoException, AlreadyFollowingException, NotFollowingException, NoSuchUserException,
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
@@ -35,6 +57,22 @@ public class ClientMessage {
         return msg.getSuccess();
     }
 
+    /**
+     * Ends the session for the user.
+     * @param currUser user to terminate session
+     * @return true if success, false othewise
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws DuplicatePhotoException
+     * @throws AlreadyFollowingException
+     * @throws NotFollowingException
+     * @throws NoSuchUserException
+     * @throws AlreadyLikedException
+     * @throws NoSuchPhotoException
+     * @throws AlreadyDislikedException
+     * @throws WrongUserPasswordException
+     * @throws AlreadyNotFollowingException
+     */
     public boolean endSession(String currUser) throws IOException, ClassNotFoundException,
             DuplicatePhotoException, AlreadyFollowingException, NotFollowingException, NoSuchUserException,
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
@@ -44,6 +82,25 @@ public class ClientMessage {
         return msg.getSuccess();
     }
 
+    /**
+     * Adds a photo to the client in the server
+     * @param currUser user to add photo
+     * @param photoID id (name) of the photo
+     * @param photo photo to add
+     * @param img bufferimage
+     * @return true if success, false othewise
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws DuplicatePhotoException
+     * @throws AlreadyFollowingException
+     * @throws NotFollowingException
+     * @throws NoSuchUserException
+     * @throws AlreadyLikedException
+     * @throws NoSuchPhotoException
+     * @throws AlreadyDislikedException
+     * @throws WrongUserPasswordException
+     * @throws AlreadyNotFollowingException
+     */
     public boolean addPhoto(String currUser, String photoID, Photo photo, BufferedImage img) throws IOException, ClassNotFoundException,
             DuplicatePhotoException, AlreadyFollowingException, NotFollowingException, NoSuchUserException,
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
@@ -54,6 +111,23 @@ public class ClientMessage {
         return msg.getSuccess();
     }
 
+    /**
+     * Retrives all users photo
+     * @param currUser current user
+     * @param userID client to retrive all photos
+     * @return a list with all photodata from the user
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws DuplicatePhotoException
+     * @throws AlreadyFollowingException
+     * @throws NotFollowingException
+     * @throws NoSuchUserException
+     * @throws AlreadyLikedException
+     * @throws NoSuchPhotoException
+     * @throws AlreadyDislikedException
+     * @throws WrongUserPasswordException
+     * @throws AlreadyNotFollowingException
+     */
     public Iterable<PhotoData> getAllPhotosData(String currUser, String userID) throws IOException,
             ClassNotFoundException, DuplicatePhotoException, AlreadyFollowingException, NotFollowingException,
             NoSuchUserException, AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException,
@@ -63,6 +137,24 @@ public class ClientMessage {
         return msg.getPhotoDataList();
     }
 
+    /**
+     * Retrives all opinions from a photo
+     * @param currUser current user
+     * @param userID the user that the photo belongs
+     * @param photoID name of the photo to get the opinion
+     * @return the photo opinion
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws DuplicatePhotoException
+     * @throws AlreadyFollowingException
+     * @throws NotFollowingException
+     * @throws NoSuchUserException
+     * @throws AlreadyLikedException
+     * @throws NoSuchPhotoException
+     * @throws AlreadyDislikedException
+     * @throws WrongUserPasswordException
+     * @throws AlreadyNotFollowingException
+     */
     public PhotoOpinion getPhotoOpinion(String currUser, String userID, String photoID) throws IOException,
             ClassNotFoundException, DuplicatePhotoException, AlreadyFollowingException, NotFollowingException,
             NoSuchUserException, AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException,
@@ -72,6 +164,23 @@ public class ClientMessage {
         return msg.getOpinion();
     }
 
+    /**
+     *
+     * @param currUser
+     * @param userID
+     * @return
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws DuplicatePhotoException
+     * @throws AlreadyFollowingException
+     * @throws NotFollowingException
+     * @throws NoSuchUserException
+     * @throws AlreadyLikedException
+     * @throws NoSuchPhotoException
+     * @throws AlreadyDislikedException
+     * @throws WrongUserPasswordException
+     * @throws AlreadyNotFollowingException
+     */
     public Iterable<Photo> getAllPhotos(String currUser, String userID) throws IOException, ClassNotFoundException,
             DuplicatePhotoException, AlreadyFollowingException, NotFollowingException, NoSuchUserException,
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
@@ -81,6 +190,25 @@ public class ClientMessage {
         return msg.getPhotoList();
     }
 
+    /**
+     *
+     * @param currUser
+     * @param comment
+     * @param userID
+     * @param photoID
+     * @return
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws DuplicatePhotoException
+     * @throws AlreadyFollowingException
+     * @throws NotFollowingException
+     * @throws NoSuchUserException
+     * @throws AlreadyLikedException
+     * @throws NoSuchPhotoException
+     * @throws AlreadyDislikedException
+     * @throws WrongUserPasswordException
+     * @throws AlreadyNotFollowingException
+     */
     public boolean commentPhoto(String currUser, String comment, String userID, String photoID) throws IOException,
             ClassNotFoundException, DuplicatePhotoException, AlreadyFollowingException, NotFollowingException,
             NoSuchUserException, AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException,
@@ -90,6 +218,24 @@ public class ClientMessage {
         return msg.getSuccess();
     }
 
+    /**
+     *
+     * @param currUser
+     * @param userID
+     * @param photoID
+     * @return
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws DuplicatePhotoException
+     * @throws AlreadyFollowingException
+     * @throws NotFollowingException
+     * @throws NoSuchUserException
+     * @throws AlreadyLikedException
+     * @throws NoSuchPhotoException
+     * @throws AlreadyDislikedException
+     * @throws WrongUserPasswordException
+     * @throws AlreadyNotFollowingException
+     */
     public boolean likePhoto(String currUser, String userID, String photoID) throws IOException, ClassNotFoundException,
             DuplicatePhotoException, AlreadyFollowingException, NotFollowingException, NoSuchUserException,
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
@@ -99,6 +245,24 @@ public class ClientMessage {
         return msg.getSuccess();
     }
 
+    /**
+     *
+     * @param currUser
+     * @param userID
+     * @param photoID
+     * @return
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws DuplicatePhotoException
+     * @throws AlreadyFollowingException
+     * @throws NotFollowingException
+     * @throws NoSuchUserException
+     * @throws AlreadyLikedException
+     * @throws NoSuchPhotoException
+     * @throws AlreadyDislikedException
+     * @throws WrongUserPasswordException
+     * @throws AlreadyNotFollowingException
+     */
     public boolean dislikePhoto(String currUser, String userID, String photoID) throws IOException, ClassNotFoundException,
             DuplicatePhotoException, AlreadyFollowingException, NotFollowingException, NoSuchUserException,
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
@@ -108,6 +272,23 @@ public class ClientMessage {
         return msg.getSuccess();
     }
 
+    /**
+     *
+     * @param currUser
+     * @param userID
+     * @return
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws DuplicatePhotoException
+     * @throws AlreadyFollowingException
+     * @throws NotFollowingException
+     * @throws NoSuchUserException
+     * @throws AlreadyLikedException
+     * @throws NoSuchPhotoException
+     * @throws AlreadyDislikedException
+     * @throws WrongUserPasswordException
+     * @throws AlreadyNotFollowingException
+     */
     public boolean followUser(String currUser, String userID) throws IOException, ClassNotFoundException,
             DuplicatePhotoException, AlreadyFollowingException, NotFollowingException, NoSuchUserException,
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
@@ -117,6 +298,23 @@ public class ClientMessage {
         return msg.getSuccess();
     }
 
+    /**
+     *
+     * @param currUser
+     * @param userID
+     * @return
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws DuplicatePhotoException
+     * @throws AlreadyFollowingException
+     * @throws NotFollowingException
+     * @throws NoSuchUserException
+     * @throws AlreadyLikedException
+     * @throws NoSuchPhotoException
+     * @throws AlreadyDislikedException
+     * @throws WrongUserPasswordException
+     * @throws AlreadyNotFollowingException
+     */
     public boolean unfollowUser(String currUser, String userID) throws IOException, ClassNotFoundException,
             DuplicatePhotoException, AlreadyFollowingException, NotFollowingException, NoSuchUserException,
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException, AlreadyNotFollowingException {
@@ -125,6 +323,19 @@ public class ClientMessage {
         return msg.getSuccess();
     }
 
+    /**
+     *
+     * @param err
+     * @throws WrongUserPasswordException
+     * @throws NotFollowingException
+     * @throws NoSuchUserException
+     * @throws NoSuchPhotoException
+     * @throws AlreadyFollowingException
+     * @throws DuplicatePhotoException
+     * @throws AlreadyLikedException
+     * @throws AlreadyDislikedException
+     * @throws AlreadyNotFollowingException
+     */
     private void findException(MsgError err) throws WrongUserPasswordException, NotFollowingException,
             NoSuchUserException, NoSuchPhotoException, AlreadyFollowingException, DuplicatePhotoException,
             AlreadyLikedException, AlreadyDislikedException, AlreadyNotFollowingException {
@@ -155,11 +366,5 @@ public class ClientMessage {
         }
     }
 
-    private byte[] serialize(Message msg) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ObjectOutputStream os = new ObjectOutputStream(out);
-        os.writeObject(msg);
-        return out.toByteArray();
-    }
 
 }

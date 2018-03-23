@@ -11,6 +11,12 @@ public class ClientNetwork {
     private ObjectInputStream in;
     private ObjectOutputStream out;
 
+    /**
+     * Creates a network to communicate with the server
+     * @param ip Server ip
+     * @param port server port
+     * @throws IOException
+     */
     public ClientNetwork(String ip, int port) throws IOException {
         socket = new Socket(ip, port);
         //TODO: verificar exception da socket
@@ -19,11 +25,23 @@ public class ClientNetwork {
         //TODO: verificar exception do buffer
     }
 
+    /**
+     * Cummunicates with the server
+     * @param msg Message to send the server
+     * @return Message recieve from the server
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public Message sendReceive(Message msg) throws IOException, ClassNotFoundException {
         send(msg);
         return receive();
     }
 
+    /**
+     *
+     * @param msg
+     * @throws IOException
+     */
     private void send(Message msg) throws IOException {
         /*byte[] msgS = serialize(msg);
         int size = msgS.length;
@@ -44,6 +62,12 @@ public class ClientNetwork {
         out.flush();
     }
 
+    /**
+     *
+     * @return
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     private Message receive() throws IOException, ClassNotFoundException {
         /*int size = in.readInt();
         System.out.println("sai do read do receive!");
@@ -59,6 +83,12 @@ public class ClientNetwork {
        return (Message) in.readObject();
     }
 
+    /**
+     *
+     * @param msg
+     * @return
+     * @throws IOException
+     */
     private byte[] serialize(Message msg) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ObjectOutputStream os = new ObjectOutputStream(out);
@@ -66,6 +96,13 @@ public class ClientNetwork {
         return out.toByteArray();
     }
 
+    /**
+     *
+     * @param msg
+     * @return
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     private Message deserialize(byte[] msg) throws IOException, ClassNotFoundException {
         ByteArrayInputStream in = new ByteArrayInputStream(msg);
         ObjectInputStream is = new ObjectInputStream(in);

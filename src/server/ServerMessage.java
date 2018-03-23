@@ -25,10 +25,18 @@ public class ServerMessage {
     private PhotoHandler photoHandler;
     private SessionHandler sessionHandler;
 
+    /**
+     * Create the ServerMessage to communicate.
+     */
     public ServerMessage() {
         this.catUser = CatalogUser.getCatalogo();
     }
 
+    /**
+     * Logs client to server.
+     * @param m Login Message
+     * @return abstract Message with result of the login.
+     */
     public MsgSession startSession(MsgSession m) {
         String user = m.getUser();
         String pass = m.getPwd();
@@ -55,7 +63,11 @@ public class ServerMessage {
         return result;
     }
 
-
+    /**
+     *
+     * @param user
+     * @return
+     */
     private MsgSession endSession(String user) {
         MsgSession result;
         result = new MsgSession(ENDSESSION, null, user, true);
@@ -68,6 +80,14 @@ public class ServerMessage {
         return result;
     }
 
+    /**
+     *
+     * @param user
+     * @param follower
+     * @param photo
+     * @param img
+     * @return
+     */
     private MsgPhoto addPhoto(String user, String follower, Photo photo, BufferedImage img) {
         MsgPhoto result;
         try {
@@ -81,10 +101,16 @@ public class ServerMessage {
         return result;
     }
 
+    /**
+     *
+     * @param user
+     * @param follower
+     * @return
+     */
     private MsgPhotoData allPhotoData(String user, String follower) {
         MsgPhotoData result;
         try {
-            Iterable<PhotoData> photoDataList = photoHandler.getPhotosData(user);
+            Iterable<PhotoData> photoDataList = photoHandler.getPhotosData(follower);
             result = new MsgPhotoData(ALLPHOTOSDATA, null, user, follower, true, photoDataList);
         } catch (NoSuchUserException e) {
             result = new MsgPhotoData(ALLPHOTOSDATA, NOSUCHUSER, user, follower, false);
@@ -96,6 +122,13 @@ public class ServerMessage {
         return result;
     }
 
+    /**
+     *
+     * @param user
+     * @param follower
+     * @param photoID
+     * @return
+     */
     private MsgPhoto photoOpinion(String user, String follower, String photoID) {
         MsgPhoto result;
         try {
@@ -113,11 +146,17 @@ public class ServerMessage {
         return result;
     }
 
+    /**
+     *
+     * @param user
+     * @param follower
+     * @return
+     */
     private MsgPhoto allPhotos(String user, String follower) {
         MsgPhoto result;
         ArrayList<Photo> photoList;
         try {
-            photoList = (ArrayList<Photo>) photoHandler.getAllUserPhotos(user);
+            photoList = (ArrayList<Photo>) photoHandler.getAllUserPhotos(follower);
             result = new MsgPhoto(ALLPHOTOS, null, user, follower, true, photoList);
         } catch (NoSuchUserException e) {
             result = new MsgPhoto(ALLPHOTOS, NOSUCHUSER, user, follower, false);
@@ -129,6 +168,14 @@ public class ServerMessage {
         return result;
     }
 
+    /**
+     *
+     * @param comment
+     * @param user
+     * @param follower
+     * @param photoID
+     * @return
+     */
     private MsgOpinion commentPhoto(String comment, String user, String follower, String photoID) {
         MsgOpinion result;
         try {
@@ -146,6 +193,13 @@ public class ServerMessage {
         return result;
     }
 
+    /**
+     *
+     * @param user
+     * @param follower
+     * @param photoID
+     * @return
+     */
     private MsgOpinion likePhoto(String user, String follower, String photoID) {
         MsgOpinion result;
         try {
@@ -165,6 +219,13 @@ public class ServerMessage {
         return result;
     }
 
+    /**
+     *
+     * @param user
+     * @param follower
+     * @param photoID
+     * @return
+     */
     private MsgOpinion dislikePhoto(String user, String follower, String photoID) {
         MsgOpinion result;
         try {
@@ -184,6 +245,12 @@ public class ServerMessage {
         return result;
     }
 
+    /**
+     *
+     * @param user
+     * @param follower
+     * @return
+     */
     private MsgFollower followUser(String user, String follower) {
         MsgFollower result;
         try {
@@ -199,6 +266,12 @@ public class ServerMessage {
         return result;
     }
 
+    /**
+     *
+     * @param user
+     * @param follower
+     * @return
+     */
     private MsgFollower unfollowUser(String user, String follower) {
         MsgFollower result;
         try {
@@ -214,6 +287,12 @@ public class ServerMessage {
         return result;
     }
 
+    /**
+     * This method recives the command message, unpack's it and treats it.
+     * @param m The command Message for the server to realize.
+     * @return The reply message for the client.
+     * @throws IOException
+     */
     public Message unpackAndTreatMsg(Message m) throws IOException {
         Message msgResult = null;
         MsgType tpMsg = m.getC_type();
@@ -236,7 +315,6 @@ public class ServerMessage {
             case ADDPHOTO:
                 mPhoto = (MsgPhoto) m;
                 msgResult = addPhoto(mPhoto.getUser(), mPhoto.getFollowID(), mPhoto.getPhoto(), mPhoto.getBufferedImage());
-                //TODO: verificar ioexception getbufferedimage
                 break;
 
             case ALLPHOTOSDATA:

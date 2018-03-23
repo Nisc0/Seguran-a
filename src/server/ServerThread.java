@@ -18,11 +18,18 @@ public class ServerThread extends Thread {
     private ObjectInputStream inStream;
     private ServerMessage srvMsg;
 
+    /**
+     * Creates the thread to serve the client
+     * @param inSoc - communication socket
+     */
     ServerThread(Socket inSoc) {
         this.socket = inSoc;
         System.out.println("Client thread created!");
     }
 
+    /**
+     * Runs the thread.
+     */
     public void run(){
         System.out.println("ola!");
         try {
@@ -46,7 +53,7 @@ public class ServerThread extends Thread {
         boolean online = true;
 
         while (online) {
-            System.out.println("Awaiting orders!");
+            System.out.println("Awaiting orders...");
 
             Message message;
             Message result;
@@ -78,53 +85,24 @@ public class ServerThread extends Thread {
     }
 
 
+    /**
+     *
+     * @param msg
+     * @throws IOException
+     */
     private void sendMsg(Message msg) throws IOException {
-//        byte[] msgS = serialize(msg);
-//        int size = msgS.length;
-//        outStream.writeInt(size);
-//        outStream.flush();
-//        for(int i = 0; i < size/1024; i++){
-//            if(size-i*1024 < 1024)
-//                //quando o restante eh menor que 1024
-//                outStream.write(msgS,i*1024, size-i*1024);
-//
-//            else
-//                outStream.write(msgS, i*2014, 1024);
-//            outStream.flush();
-//        }
         outStream.writeObject(msg);
         outStream.flush();
-
     }
 
+    /**
+     *
+     * @return
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     private Message receiveMsg() throws IOException, ClassNotFoundException {
-//        int size = inStream.readInt();
-//        byte[] msg = new byte[size];
-//        int read;
-//        for(int i = 0; i < size/1024; i++){
-//            if(size-i*1024 < 1024)
-//                read = inStream.read(msg, i*1024, size-i*1024);
-//            else {
-//                read = inStream.read(msg,i * 1024, 1024);
-//            }
-//        }
-//        return deserialize(msg);
-
         return (Message) inStream.readObject();
-
-    }
-
-    private byte[] serialize(Message msg) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ObjectOutputStream os = new ObjectOutputStream(out);
-        os.writeObject(msg);
-        return out.toByteArray();
-    }
-
-    private Message deserialize(byte[] msg) throws IOException, ClassNotFoundException {
-        ByteArrayInputStream in = new ByteArrayInputStream(msg);
-        ObjectInputStream is = new ObjectInputStream(in);
-        return (Message) is.readObject();
     }
 }
 

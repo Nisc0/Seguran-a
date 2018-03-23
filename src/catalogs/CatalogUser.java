@@ -1,6 +1,6 @@
 package catalogs;
 
-import catalogs.Interface.ICatalogoUser;
+import catalogs.Interface.ICatalogUser;
 import domain.Photo;
 import domain.User;
 import handlers.RecoveryManager;
@@ -19,7 +19,7 @@ import java.util.Map;
  * @author 47840
  */
 
-public class CatalogUser implements ICatalogoUser {
+public class CatalogUser implements ICatalogUser {
 
     private static CatalogUser instance;
     private Map<String,User> users;
