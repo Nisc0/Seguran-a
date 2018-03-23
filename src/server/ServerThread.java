@@ -73,7 +73,7 @@ public class ServerThread extends Thread {
 
 
     private void sendMsg(Message msg) throws IOException {
-        byte[] msgS = serialize(msg);
+        /*byte[] msgS = serialize(msg);
         int size = msgS.length;
         outStream.write(size);
         for(int i = 0; i < size/1024; i++){
@@ -82,21 +82,24 @@ public class ServerThread extends Thread {
                 outStream.write(msgS,i*1024, size-i*1024);
             else
                 outStream.write(msgS, i*2014, 1024);
-        }
+        }*/
+        outStream.writeObject(msg);
+        outStream.flush();
     }
 
     private Message receiveMsg() throws IOException, ClassNotFoundException {
-        int size = inStream.read();
+        /*int size = inStream.read();
         byte[] msg = new byte[size];
         int read;
         for(int i = 0; i < size/1024; i++){
             if(size-i*1024 < 1024)
                 read = inStream.read(msg, i*1024, size-i*1024);
-            else {
-                read = inStream.read(msg,i * 1024, 1024);
-            }
+            else
+                read = inStream.read(msg, i * 1024, 1024);
         }
         return deserialize(msg);
+        */
+        return (Message) inStream.readObject();
     }
 
     private byte[] serialize(Message msg) throws IOException {
