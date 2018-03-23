@@ -13,6 +13,8 @@ import java.util.Scanner;
 
 public class PhotoShare {
 
+    private static Scanner scan = new Scanner(System.in);
+
     public static void main(String[] args) throws NotValidAddressException, IOException {
 
         String currUser = args[0];
@@ -38,7 +40,8 @@ public class PhotoShare {
         boolean isSessionOpen = false;
 
         try {
-            isSessionOpen = cm.startSession(currUser, args[2]);
+            isSessionOpen = cm.startSession(currUser, args[1]);
+            System.out.println("adeus");
         } catch (WrongUserPasswordException | NotFollowingException | NoSuchUserException e) {
             System.out.println("Something went wrong! " + e.getMessage());
         } catch (ClassNotFoundException e2) {
@@ -51,8 +54,7 @@ public class PhotoShare {
 
         while (isSessionOpen) {
 
-            Scanner sc = new Scanner(System.in);
-            String line = sc.nextLine();
+            String line = scan.nextLine();
             String[] in = line.split(" ");
 
             try {
@@ -74,6 +76,7 @@ public class PhotoShare {
                                     String photoID = null;
                                     try {
                                         File imgFile = new File(in[i]);
+                                        System.out.println(imgFile.toString());
                                         img = ImageIO.read(imgFile);
                                         photoID = imgFile.getName();
                                     } catch (IOException e) {
@@ -198,7 +201,7 @@ public class PhotoShare {
                     AlreadyLikedException | AlreadyDislikedException | AlreadyNotFollowingException e1) {
                 System.out.println("That didn't work! " + e1.getMessage());
             }
-            sc.close();
         }
+        scan.close();
     }
 }

@@ -37,7 +37,6 @@ public class MsgPhoto extends Message {
         super(c_type, c_err, user, followID, success);
         this.photoID = photoID;
         this.photo = photo;
-        this.img = img;
 
         byte[] photoBytes = null;
         try {

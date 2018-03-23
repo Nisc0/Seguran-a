@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 public class ClientMessage {
 
@@ -31,7 +32,8 @@ public class ClientMessage {
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
             AlreadyNotFollowingException {
         MsgSession msg = (MsgSession) cl.sendReceive(new MsgSession(MsgType.STARTSESSION, null, currUser, true, pwd));
-        findException(msg.getC_err());
+        System.out.println("oioi!");
+        if (msg.getC_err() != null) findException(msg.getC_err());
         return msg.getSuccess();
     }
 
@@ -40,7 +42,7 @@ public class ClientMessage {
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
             AlreadyNotFollowingException {
         MsgSession msg = (MsgSession) cl.sendReceive(new MsgSession(MsgType.ENDSESSION, null, currUser, true));
-        findException(msg.getC_err());
+        if (msg.getC_err() != null) findException(msg.getC_err());
         return msg.getSuccess();
     }
 
@@ -50,7 +52,7 @@ public class ClientMessage {
             AlreadyNotFollowingException {
 
         MsgPhoto msg = (MsgPhoto) cl.sendReceive(new MsgPhoto(MsgType.ADDPHOTO, null, currUser, null, true, photoID, photo, img));
-        findException(msg.getC_err());
+        if (msg.getC_err() != null) findException(msg.getC_err());
         return msg.getSuccess();
     }
 
@@ -59,7 +61,7 @@ public class ClientMessage {
             NoSuchUserException, AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException,
             WrongUserPasswordException, AlreadyNotFollowingException {
         MsgPhotoData msg = (MsgPhotoData) cl.sendReceive(new MsgPhotoData(MsgType.ALLPHOTOSDATA, null, currUser, userID, true, null));
-        findException(msg.getC_err());
+        if (msg.getC_err() != null) findException(msg.getC_err());
         return msg.getPhotoDataList();
     }
 
@@ -68,7 +70,7 @@ public class ClientMessage {
             NoSuchUserException, AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException,
             WrongUserPasswordException, AlreadyNotFollowingException {
         MsgPhoto msg = (MsgPhoto) cl.sendReceive(new MsgPhoto(MsgType.PHOTOOPINION, null, currUser, userID, true, photoID));
-        findException(msg.getC_err());
+        if (msg.getC_err() != null) findException(msg.getC_err());
         return msg.getOpinion();
     }
 
@@ -77,7 +79,7 @@ public class ClientMessage {
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
             AlreadyNotFollowingException {
         MsgPhoto msg = (MsgPhoto) cl.sendReceive(new MsgPhoto(MsgType.ALLPHOTOS, null, currUser, userID, true));
-        findException(msg.getC_err());
+        if (msg.getC_err() != null) findException(msg.getC_err());
         return msg.getPhotoList();
     }
 
@@ -86,7 +88,7 @@ public class ClientMessage {
             NoSuchUserException, AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException,
             WrongUserPasswordException, AlreadyNotFollowingException {
         MsgOpinion msg = (MsgOpinion) cl.sendReceive(new MsgOpinion(MsgType.COMMENTPHOTO, null, currUser, userID, true, photoID, comment));
-        findException(msg.getC_err());
+        if (msg.getC_err() != null) findException(msg.getC_err());
         return msg.getSuccess();
     }
 
@@ -95,7 +97,7 @@ public class ClientMessage {
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
             AlreadyNotFollowingException {
         MsgOpinion msg = (MsgOpinion) cl.sendReceive(new MsgOpinion(MsgType.LIKEPHOTO, null, currUser, userID, true, photoID, true));
-        findException(msg.getC_err());
+        if (msg.getC_err() != null) findException(msg.getC_err());
         return msg.getSuccess();
     }
 
@@ -104,7 +106,7 @@ public class ClientMessage {
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
             AlreadyNotFollowingException {
         MsgOpinion msg = (MsgOpinion) cl.sendReceive(new MsgOpinion(MsgType.DISLIKEPHOTO, null, currUser, userID, true, photoID, false));
-        findException(msg.getC_err());
+        if (msg.getC_err() != null) findException(msg.getC_err());
         return msg.getSuccess();
     }
 
@@ -113,7 +115,7 @@ public class ClientMessage {
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
             AlreadyNotFollowingException {
         MsgFollower msg = (MsgFollower) cl.sendReceive(new MsgFollower(MsgType.FOLLOWUSER, null, currUser, userID, true));
-        findException(msg.getC_err());
+        if (msg.getC_err() != null) findException(msg.getC_err());
         return msg.getSuccess();
     }
 
@@ -121,7 +123,7 @@ public class ClientMessage {
             DuplicatePhotoException, AlreadyFollowingException, NotFollowingException, NoSuchUserException,
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException, AlreadyNotFollowingException {
         MsgFollower msg = (MsgFollower) cl.sendReceive(new MsgFollower(MsgType.UNFOLLOWUSER, null, currUser, userID, true));
-        findException(msg.getC_err());
+        if (msg.getC_err() != null) findException(msg.getC_err());
         return msg.getSuccess();
     }
 
@@ -148,9 +150,18 @@ public class ClientMessage {
                 throw new NoSuchPhotoException("Given photo tag doesn't exist!");
             case DUPLICATEPHOTO:
                 throw new DuplicatePhotoException("Given photo already exists!");
+            case USERCREATED:
+                System.out.println("New user created!");
             default:
                 break;
         }
+    }
+
+    private byte[] serialize(Message msg) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ObjectOutputStream os = new ObjectOutputStream(out);
+        os.writeObject(msg);
+        return out.toByteArray();
     }
 
 }
