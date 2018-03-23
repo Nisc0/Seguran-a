@@ -1,5 +1,6 @@
 package server;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import message.Message;
 import message.MsgSession;
 
@@ -32,14 +33,11 @@ public class ServerThread extends Thread {
         }
 
         try {
-            MsgSession logMsg = (MsgSession) recebeMsg();
+            MsgSession logMsg = (MsgSession) receiveMsg();
             srvMsg = new ServerMessage();
-            enviaMsg(srvMsg.startSession(logMsg));
+            sendMsg(srvMsg.startSession(logMsg));
         }
-        catch (ClassNotFoundException e1) {
-            e1.printStackTrace();
-        }
-        catch (IOException e) {
+        catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
 
@@ -49,12 +47,12 @@ public class ServerThread extends Thread {
             Message message;
             Message result;
             try {
-                message = recebeMsg();
+                message = receiveMsg();
                 result = srvMsg.unpackAndTreatMsg(message);
 
                 if (result.getC_type() == ENDSESSION) {
                     online = false;
-                    enviaMsg(result);
+                    sendMsg(result);
                     try {
                         srvMsg = null;
                         outStream.close();
@@ -65,19 +63,16 @@ public class ServerThread extends Thread {
                     }
                 }
                 else {
-                    enviaMsg(result);
+                    sendMsg(result);
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            } catch (ClassNotFoundException | IOException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
 
-    private void enviaMsg(Message msg) throws IOException {
+    private void sendMsg(Message msg) throws IOException {
         byte[] msgS = serialize(msg);
         int size = msgS.length;
         outStream.write(size);
@@ -90,14 +85,16 @@ public class ServerThread extends Thread {
         }
     }
 
-    private Message recebeMsg() throws IOException, ClassNotFoundException {
+    private Message receiveMsg() throws IOException, ClassNotFoundException {
         int size = inStream.read();
         byte[] msg = new byte[size];
+        int read;
         for(int i = 0; i < size/1024; i++){
             if(size-i*1024 < 1024)
-                inStream.read(msg, i*1024, size-i*1024);
-            else
-                inStream.read(msg, i*1024, 1024);
+                read = inStream.read(msg, i*1024, size-i*1024);
+            else {
+                read = inStream.read(msg,i * 1024, 1024);
+            }
         }
         return deserialize(msg);
     }

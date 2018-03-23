@@ -13,6 +13,8 @@ public interface IUser {
      */
     String getID();
 
+    String getPass();
+
     /**
      * Verifica se a pass dada eh igual ah do utilizador
      * @return true se a pass dada eh igual ah do utilizador

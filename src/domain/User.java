@@ -37,6 +37,9 @@ public class User implements IUser, Serializable {
     }
 
     @Override
+    public String getPass(){return password;}
+
+    @Override
     public boolean isSamePwd(String pwd) {
         return password.equals(pwd);
     }

@@ -34,7 +34,6 @@ public class RecoveryManeger {
         BufferedWriter writer = new BufferedWriter(fw);
         writer.append(user + ":" + pass + "\n");
         writer.flush();
-
     }
 
     public void backupUser(User u) throws IOException {

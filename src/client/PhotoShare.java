@@ -15,15 +15,14 @@ public class PhotoShare {
 
     public static void main(String[] args) throws NotValidAddressException, IOException {
 
-        String currUser = args[1];
-
-        if (args.length != 4) {
-            System.out.println("Por favor siga a forma: <localUserId> <password> <serverAddress>");
+        String currUser = args[0];
+        if (args.length != 3) {
+            System.out.println("Please, call it like this: <localUserId> <password> <serverAddress>");
             return;
         }
 
         String[] serverPort;
-        String serverAdd = args[3];
+        String serverAdd = args[2];
         int port;
         if (IPCheck.isIPValid(serverAdd)) {
             serverPort = serverAdd.split(":");
@@ -35,6 +34,7 @@ public class PhotoShare {
         ClientMessage cm = new ClientMessage(serverPort[0], port);
         //TODO: verificar exception do clientmessage
 
+        System.out.println("oi");
         boolean isSessionOpen = false;
 
         try {
@@ -48,10 +48,13 @@ public class PhotoShare {
             System.out.println("That didn't work! " + e1.getMessage());
         }
 
+
         while (isSessionOpen) {
+
             Scanner sc = new Scanner(System.in);
             String line = sc.nextLine();
             String[] in = line.split(" ");
+
             try {
                 if (in.length > 0) {
                     if (in[0].equals("quit")) {
@@ -195,6 +198,7 @@ public class PhotoShare {
                     AlreadyLikedException | AlreadyDislikedException | AlreadyNotFollowingException e1) {
                 System.out.println("That didn't work! " + e1.getMessage());
             }
+            sc.close();
         }
     }
 }
