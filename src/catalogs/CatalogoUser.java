@@ -5,6 +5,7 @@ import domain.Photo;
 import domain.User;
 import handlers.RecoveryManeger;
 
+import java.awt.image.BufferedImage;
 import java.io.*;
 
 import java.util.HashMap;
@@ -50,13 +51,19 @@ public class CatalogoUser implements ICatalogoUser {
     }
 
     @Override
-    public boolean addUser(User u) throws IOException {
+    public boolean addUser(User u) {
 
         if(this.containsUser(u.getID()))
             return false;
         else {
-            recov.writeFile(u.getID(), u.getPass());
-            users.put(u.getID(), u);
+            try {
+                recov.writeFile(u.getID(), u.getPass());
+                users.put(u.getID(), u);
+                this.updateUser(u);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
 
             return true;
         }
@@ -80,5 +87,14 @@ public class CatalogoUser implements ICatalogoUser {
 
     public void getUserPhotos(String userID, Iterable<Photo> uPh) throws IOException {
         recov.recPhotos(userID, uPh);
+    }
+
+    public void updateUser(User u) throws IOException {
+        recov.backupUser(u);
+    }
+
+
+    public void saveImage(BufferedImage image, User u) {
+        recov.saveImage(image, u);
     }
 }
