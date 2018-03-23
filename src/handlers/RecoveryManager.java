@@ -8,13 +8,13 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class RecoveryManeger {
+public class RecoveryManager {
 
     private FileWriter fw;
     private FileReader fr;
     private File file_users;
 
-    public RecoveryManeger() throws IOException {
+    public RecoveryManager() throws IOException {
         File fl = new File("Files");
         fl.mkdir();
         fw = new FileWriter(new File(fl, "users.txt"), true);

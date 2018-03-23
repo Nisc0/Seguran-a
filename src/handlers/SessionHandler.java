@@ -1,15 +1,15 @@
 package handlers;
 
-import catalogs.CatalogoUser;
+import catalogs.CatalogUser;
 import domain.*;
 import exceptions.WrongUserPasswordException;
 
 public class SessionHandler extends GodHandler {
 
-    private static CatalogoUser catUser;
+    private static CatalogUser catUser;
 
     public SessionHandler() {
-        catUser = CatalogoUser.getCatalogo();
+        catUser = CatalogUser.getCatalogo();
     }
 
     public boolean startSession(String userID, String pass) throws WrongUserPasswordException {

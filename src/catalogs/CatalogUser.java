@@ -3,7 +3,7 @@ package catalogs;
 import catalogs.Interface.ICatalogoUser;
 import domain.Photo;
 import domain.User;
-import handlers.RecoveryManeger;
+import handlers.RecoveryManager;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -19,35 +19,35 @@ import java.util.Map;
  * @author 47840
  */
 
-public class CatalogoUser implements ICatalogoUser {
+public class CatalogUser implements ICatalogoUser {
 
-    private static CatalogoUser instance;
+    private static CatalogUser instance;
     private Map<String,User> users;
-    private RecoveryManeger recov;
+    private RecoveryManager recov;
 
     /**
      * Construtor
      */
-    private CatalogoUser() {
+    private CatalogUser() {
         users = new HashMap<>();
         try {
-            recov = new RecoveryManeger();
+            recov = new RecoveryManager();
         }
         catch (IOException e) {
             e.printStackTrace();
-            System.out.print("Sistema não conseguiu recuperar");
+            System.out.print("System couldn't recover!");
         }
-        System.out.println("começar recuperacao");
+        System.out.println("Start recovering!");
         for (User u: recov.recUsers()) {
             this.users.put(u.getID(), u);
         }
     }
 
-    public static CatalogoUser getCatalogo(){
-        if (CatalogoUser.instance == null){
-            CatalogoUser.instance = new CatalogoUser();
+    public static CatalogUser getCatalogo(){
+        if (CatalogUser.instance == null){
+            CatalogUser.instance = new CatalogUser();
         }
-        return CatalogoUser.instance;
+        return CatalogUser.instance;
     }
 
     @Override

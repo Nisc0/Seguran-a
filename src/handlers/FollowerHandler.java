@@ -4,16 +4,14 @@ import domain.*;
 import catalogs.*;
 import exceptions.*;
 
-import java.io.IOException;
-
 // alterar o nome das variaveis
 
 public class FollowerHandler extends GodHandler{
 
-    private static CatalogoUser catUser;
+    private static CatalogUser catUser;
 
     public FollowerHandler() {
-        catUser = CatalogoUser.getCatalogo();
+        catUser = CatalogUser.getCatalogo();
     }
 
     public void addFollow(String userID) throws NoSuchUserException, AlreadyFollowingException {

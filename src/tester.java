@@ -1,17 +1,12 @@
-import catalogs.CatalogoUser;
+import catalogs.CatalogUser;
 import domain.Photo;
-import domain.PhotoData;
-import domain.User;
 import exceptions.*;
 import handlers.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 
 public class tester {
 
@@ -21,7 +16,7 @@ public class tester {
 
         System.out.println("yoho");
 
-        CatalogoUser cat = CatalogoUser.getCatalogo();
+        CatalogUser cat = CatalogUser.getCatalogo();
 
         System.out.println("Catalogo aberto");
 
