@@ -20,7 +20,7 @@ public class PhotoHandler extends GodHandler{
         catUser = CatalogoUser.getCatalogo();
     }
 
-    public void addPhoto(Photo photo, BufferedImage image) throws DuplicatePhotoException, IOException {
+    public void addPhoto(Photo photo, BufferedImage image) throws DuplicatePhotoException {
 
         if (currUser.getPhoto(photo.getPhotoID()) != null)
             throw new DuplicatePhotoException();

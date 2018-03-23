@@ -76,7 +76,7 @@ public class User implements IUser, Serializable {
     @Override
     public Iterable<PhotoData> getAllPhotosData() {
 
-        List<PhotoData> res = new ArrayList<>();
+        ArrayList<PhotoData> res = new ArrayList<>();
         for (Photo ph : photos.values()) {
             res.add(ph.makePhotoData());
         }
@@ -103,19 +103,6 @@ public class User implements IUser, Serializable {
         return res;
     }
 
-    /* mt possivelmente nao preciso
-    @Override
-    public Iterable<PhotoOpinion> getAllPhotoOpinion() {
-
-        List<PhotoOpinion> res = new ArrayList<>();
-        for (Photo ph : photos.values()) {
-            res.add(ph.makePhotoOpinion());
-        }
-        return res;
-    }
-    */
-
-    //////////////    TRATAMENTO DE OPINIIONS    /////////////////////
 
     @Override
     public boolean makeComment(String com, String uID, String phID) {

@@ -1,10 +1,9 @@
 package message;
 
 import domain.Photo;
-import domain.PhotoData;
 import domain.PhotoOpinion;
 
-import java.util.List;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -16,9 +15,11 @@ public class MsgPhoto extends Message {
 
     private String photoID;
     private Photo photo;
-    private List<Photo> photoList;
+    private Iterable<Photo> photoList;
     private PhotoOpinion opinion;
+    private byte[] photoBytes;
     private byte[][] photoListBytes;
+    private BufferedImage img;
 
     public MsgPhoto(MsgType c_type, MsgError c_err, String user, String followID, boolean success) {
         super(c_type, c_err, user, followID, success);
@@ -30,10 +31,10 @@ public class MsgPhoto extends Message {
         this.photo = photo;
     }
 
-    public MsgPhoto(MsgType c_type, MsgError c_err, String user, String followID, boolean success, List<Photo> photoList) {
+    public MsgPhoto(MsgType c_type, MsgError c_err, String user, String followID, boolean success, Iterable<Photo> photoList) {
         super(c_type, c_err, user, followID, success);
-        List<Photo> list =  photoList;
-        photoListBytes = new byte[photoList.size()][];
+        ArrayList<Photo> list =  (ArrayList) photoList;
+        photoListBytes = new byte[list.size()][];
         int j = 0;
 
         for(Photo ph: photoList){
@@ -66,7 +67,7 @@ public class MsgPhoto extends Message {
     }
 
     public BufferedImage getBufferedImage(){
-        return deserializePhoto(img);
+        return deserializePhoto(photoBytes);
     }
 
 

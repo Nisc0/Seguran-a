@@ -7,11 +7,10 @@ import domain.PhotoOpinion;
 import exceptions.*;
 import handlers.*;
 import message.*;
-import sun.awt.image.BufferedImageDevice;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
+
 
 import static message.MsgError.*;
 import static message.MsgType.*;
@@ -122,9 +121,9 @@ public class ServerMessage {
 
     private MsgPhoto allPhotos(String user, String follower) {
         MsgPhoto result = null;
-        List<Photo> photoList;
+        ArrayList<Photo> photoList;
         try {
-            photoList = photoHandler.getAllUserPhotos(user);
+            photoList = (ArrayList<Photo>) photoHandler.getAllUserPhotos(user);
             result = new MsgPhoto(ALLPHOTOS, null, user, follower, true, photoList);
         }
         catch (NoSuchUserException e) {
@@ -132,9 +131,6 @@ public class ServerMessage {
         }
         catch (NotFollowingException e) {
             result = new MsgPhoto(ALLPHOTOS, NOTFOLLOWING, user, follower, false);
-        }
-        catch (IOException e){
-            e.printStackTrace();
         }
 
         return result;
