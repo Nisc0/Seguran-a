@@ -10,6 +10,7 @@ public class MsgPhoto extends Message {
     private Photo photo;
     private Iterable<Photo> photoList;
     private PhotoOpinion opinion;
+    private byte[] img;
 
     public MsgPhoto(MsgType c_type, MsgError c_err, String user, String followID, boolean success) {
         super(c_type, c_err, user, followID, success);
@@ -22,10 +23,12 @@ public class MsgPhoto extends Message {
     }
 
     //para o metodo addPhoto
-    public MsgPhoto(MsgType c_type, MsgError c_err, String user, String followID, boolean success, String photoID, Photo photo) {
+    public MsgPhoto(MsgType c_type, MsgError c_err, String user, String followID, boolean success, String photoID,
+                    Photo photo, byte[] img) {
         super(c_type, c_err, user, followID, success);
         this.photoID = photoID;
         this.photo = photo;
+        this.img = img;
     }
 
     //para o metodo copyPhotos

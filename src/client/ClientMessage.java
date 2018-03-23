@@ -6,6 +6,10 @@ import domain.PhotoOpinion;
 import exceptions.*;
 import message.*;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class ClientMessage {
@@ -22,11 +26,36 @@ public class ClientMessage {
         //TODO: verificar exception do clientnetwork
     }
 
-    public boolean addPhoto(String currUser, String photoID, Photo photo) throws IOException, ClassNotFoundException,
+    public boolean startSession(String currUser, String pwd) throws IOException, ClassNotFoundException,
+            DuplicatePhotoException, AlreadyFollowingException, NotFollowingException, NoSuchUserException,
+            AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
+            AlreadyNotFollowingException{
+        MsgSession msg = (MsgSession) cl.sendReceive(new MsgSession(MsgType.STARTSESSION, null, currUser, true, pwd));
+        findException(msg.getC_err());
+        return msg.getSuccess();
+    }
+
+    public boolean endSession(String currUser) throws IOException, ClassNotFoundException,
+            DuplicatePhotoException, AlreadyFollowingException, NotFollowingException, NoSuchUserException,
+            AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
+            AlreadyNotFollowingException{
+        MsgSession msg = (MsgSession) cl.sendReceive(new MsgSession(MsgType.ENDSESSION, null, currUser, true));
+        findException(msg.getC_err());
+        return msg.getSuccess();
+    }
+
+    public boolean addPhoto(String currUser, String photoID, Photo photo, BufferedImage img) throws IOException, ClassNotFoundException,
             DuplicatePhotoException, AlreadyFollowingException, NotFollowingException, NoSuchUserException,
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
             AlreadyNotFollowingException {
-        MsgPhoto msg = (MsgPhoto) cl.sendReceive(new MsgPhoto(MsgType.ADDPHOTO, null, currUser, null, true, photoID, photo));
+
+        byte[] imageToSend = null;
+        try {
+            imageToSend = serializeImage(img, photo);
+        } catch (IOException e) {
+            System.out.println("Serialization of photo failed!");
+        }
+        MsgPhoto msg = (MsgPhoto) cl.sendReceive(new MsgPhoto(MsgType.ADDPHOTO, null, currUser, null, true, photoID, photo, imageToSend));
         findException(msg.getC_err());
         return msg.getSuccess();
     }
@@ -106,27 +135,43 @@ public class ClientMessage {
             NoSuchUserException, NoSuchPhotoException, AlreadyFollowingException, DuplicatePhotoException,
             AlreadyLikedException, AlreadyDislikedException, AlreadyNotFollowingException {
 
-            switch (err) {
-                case ALREADYLIKED:
-                    throw new AlreadyLikedException("Photo already liked!");
-                case ALREADYDISLIKED:
-                    throw new AlreadyDislikedException("Photo already disliked!");
-                case ALREADYFOLLOWING:
-                    throw new AlreadyFollowingException("Already following given user!");
-                case ALREADYNOTFOLLOWING:
-                    throw new AlreadyNotFollowingException("Already not following given user!");
-                case WRONGPASSWORD:
-                    throw new WrongUserPasswordException("Wrong username/password combination!");
-                case NOTFOLLOWING:
-                    throw new NotFollowingException("Not allowed to do that! You must be following that user!");
-                case NOSUCHUSER:
-                    throw new NoSuchUserException("Given username doesn't exist!");
-                case NOSUCHPHOTO:
-                    throw new NoSuchPhotoException("Given photo tag doesn't exist!");
-                case DUPLICATEPHOTO:
-                    throw new DuplicatePhotoException("Given photo already exists!");
-                default:
-                    break;
-            }
+        switch (err) {
+            case ALREADYLIKED:
+                throw new AlreadyLikedException("Photo already liked!");
+            case ALREADYDISLIKED:
+                throw new AlreadyDislikedException("Photo already disliked!");
+            case ALREADYFOLLOWING:
+                throw new AlreadyFollowingException("Already following given user!");
+            case ALREADYNOTFOLLOWING:
+                throw new AlreadyNotFollowingException("Already not following given user!");
+            case WRONGPASSWORD:
+                throw new WrongUserPasswordException("Wrong username/password combination!");
+            case NOTFOLLOWING:
+                throw new NotFollowingException("Not allowed to do that! You must be following that user!");
+            case NOSUCHUSER:
+                throw new NoSuchUserException("Given username doesn't exist!");
+            case NOSUCHPHOTO:
+                throw new NoSuchPhotoException("Given photo tag doesn't exist!");
+            case DUPLICATEPHOTO:
+                throw new DuplicatePhotoException("Given photo already exists!");
+            default:
+                break;
+        }
     }
+
+    private byte[] serializeImage(BufferedImage img, Photo photo) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(img, photo.getExtension(), baos);
+        baos.flush();
+        byte[] imageInByte = baos.toByteArray();
+        baos.close();
+        return imageInByte;
+    }
+
+    private BufferedImage deserializeImage(byte[] img) throws IOException{
+        ByteArrayInputStream baos = new ByteArrayInputStream(img);
+        BufferedImage image = ImageIO.read(baos);
+        return image;
+    }
+
 }
