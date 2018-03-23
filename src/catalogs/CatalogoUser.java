@@ -103,7 +103,7 @@ public class CatalogoUser implements ICatalogoUser {
     }
 
 
-    public void saveImage(BufferedImage image, User u) {
-        recov.saveImage(image, u);
+    public void saveImage(BufferedImage image, User u, String photoID, String extension) {
+        recov.saveImage(image, u, photoID, extension);
     }
 }
