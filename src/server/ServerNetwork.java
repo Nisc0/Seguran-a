@@ -18,28 +18,28 @@ public class ServerNetwork{
 
     public void startServer (String port){
         ServerSocket sSoc = null;
+        boolean serverOnline = true;
 
         try {
             sSoc = new ServerSocket(Integer.parseInt(port));
-            System.err.println("thread criada starserver!");
+            System.out.println("serversocket criada starserver!");
 
         } catch (IOException e) {
             System.err.println(e.getMessage());
             System.exit(-1);
         }
 
-        boolean serverOnline = true;
 
         while(serverOnline) {
             try {
                 Socket inSoc = sSoc.accept();
                 ServerThread newServerThread = new ServerThread(inSoc);
                 newServerThread.start();
-                System.err.println("Thread Criada!");
+                System.out.println("Thread Criada!");
 
             }
             catch (IOException e) {
-                System.err.println("Couldn't connect to client!");
+                System.out.println("Couldn't connect to client!");
             }
 
         }
@@ -49,7 +49,7 @@ public class ServerNetwork{
             serverOnline = false;
         }
         catch (IOException e){
-            System.err.println("Couldn't close server!");
+            System.out.println("Couldn't close server!");
         }
 
     }
