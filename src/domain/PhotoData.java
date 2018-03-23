@@ -2,6 +2,7 @@ package domain;
 
 import domain_interface.IPhotoData;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Date;
  * @author 47840
  */
 
-public class PhotoData implements IPhotoData {
+public class PhotoData implements IPhotoData, Serializable {
 
     private String photoID;
     private Date date;

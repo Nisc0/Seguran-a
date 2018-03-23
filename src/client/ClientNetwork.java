@@ -20,9 +20,7 @@ public class ClientNetwork {
     }
 
     public Message sendReceive(Message msg) throws IOException, ClassNotFoundException {
-        System.out.println("vou pro send!");
         send(msg);
-        System.out.println("vou pro receive!");
         return receive();
     }
 
@@ -47,7 +45,6 @@ public class ClientNetwork {
     }
 
     private Message receive() throws IOException, ClassNotFoundException {
-        System.out.println("vou pro receive");
         /*int size = in.readInt();
         System.out.println("sai do read do receive!");
         byte[] msg = new byte[size];

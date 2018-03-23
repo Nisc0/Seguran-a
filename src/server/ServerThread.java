@@ -20,7 +20,7 @@ public class ServerThread extends Thread {
 
     ServerThread(Socket inSoc) {
         this.socket = inSoc;
-        System.out.println("Thread do cliente criada!");
+        System.out.println("Client thread created!");
     }
 
     public void run(){
@@ -34,11 +34,10 @@ public class ServerThread extends Thread {
         }
 
         try {
-            System.out.println("tentar msg de login!");
-
             MsgSession logMsg = (MsgSession) receiveMsg();
             srvMsg = new ServerMessage();
             sendMsg(srvMsg.startSession(logMsg));
+            System.out.println("Login done!");
         }
         catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
@@ -47,7 +46,7 @@ public class ServerThread extends Thread {
         boolean online = true;
 
         while (online) {
-            System.out.println("a espera de mensagens!");
+            System.out.println("Awaiting orders!");
 
             Message message;
             Message result;
@@ -58,7 +57,7 @@ public class ServerThread extends Thread {
                 if (result.getC_type() == ENDSESSION) {
                     online = false;
                     sendMsg(result);
-                    System.out.println("Thread do cliente fechada!");
+                    System.out.println("Client thread closed!");
                     try {
                         srvMsg = null;
                         outStream.close();

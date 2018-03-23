@@ -2,6 +2,7 @@ package domain;
 
 import domain_interface.IPhotoOpinion;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ import java.util.List;
  * @author 47840
  */
 
-public class PhotoOpinion implements IPhotoOpinion {
+public class PhotoOpinion implements IPhotoOpinion, Serializable {
 
     private String photoID;
     private int likes;

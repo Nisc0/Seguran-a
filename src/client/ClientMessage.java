@@ -16,7 +16,6 @@ import java.io.ObjectOutputStream;
 public class ClientMessage {
 
     private ClientNetwork cl;
-    //private String currUser;
     private String server;
     private int port;
 
@@ -32,7 +31,6 @@ public class ClientMessage {
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
             AlreadyNotFollowingException {
         MsgSession msg = (MsgSession) cl.sendReceive(new MsgSession(MsgType.STARTSESSION, null, currUser, true, pwd));
-        System.out.println("oioi!");
         if (msg.getC_err() != null) findException(msg.getC_err());
         return msg.getSuccess();
     }

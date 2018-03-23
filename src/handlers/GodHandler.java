@@ -7,7 +7,6 @@ public abstract class  GodHandler {
 
     protected static User currUser;
 
-
     public User getCurrUser() {
         return this.currUser;
     }

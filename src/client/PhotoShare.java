@@ -29,19 +29,16 @@ public class PhotoShare {
         if (IPCheck.isIPValid(serverAdd)) {
             serverPort = serverAdd.split(":");
             port = Integer.parseInt(serverPort[1]);
-        } else {
+        } else
             throw new NotValidAddressException();
-        }
 
         ClientMessage cm = new ClientMessage(serverPort[0], port);
         //TODO: verificar exception do clientmessage
 
-        System.out.println("oi");
         boolean isSessionOpen = false;
 
         try {
             isSessionOpen = cm.startSession(currUser, args[1]);
-            System.out.println("adeus");
         } catch (WrongUserPasswordException | NotFollowingException | NoSuchUserException e) {
             System.out.println("Something went wrong! " + e.getMessage());
         } catch (ClassNotFoundException e2) {
@@ -51,7 +48,7 @@ public class PhotoShare {
             System.out.println("That didn't work! " + e1.getMessage());
         }
 
-
+        System.out.println("Awaiting orders:");
         while (isSessionOpen) {
 
             String line = scan.nextLine();
@@ -83,6 +80,11 @@ public class PhotoShare {
                                         e.printStackTrace();
                                     }
 
+                                    if (photoID == null) {
+                                        System.out.println("Incorrect photoID!");
+                                        break;
+                                    }
+
                                     Photo ph = new Photo(photoID);
 
                                     if (cm.addPhoto(currUser, photoID, ph, img)) {
@@ -105,7 +107,7 @@ public class PhotoShare {
                             } else {
                                 System.out.println("Please, call it like this: -l " +
                                         "<userID>");
-                                return;
+                                break;
                             }
                             break;
                         case 'i':
@@ -115,7 +117,7 @@ public class PhotoShare {
                             } else {
                                 System.out.println("Please, call it like this: -i " +
                                         "<userID> <photo>");
-                                return;
+                                break;
                             }
                             break;
                         case 'g':
@@ -127,7 +129,7 @@ public class PhotoShare {
                             } else {
                                 System.out.println("Please, call it like this: -g " +
                                         "<userID>");
-                                return;
+                                break;
                             }
                             break;
                         case 'c':
@@ -138,7 +140,7 @@ public class PhotoShare {
                             } else {
                                 System.out.println("Please, call it like this: -c " +
                                         "<comment> <userID> <photo>");
-                                return;
+                                break;
                             }
                             break;
                         case 'L':
@@ -148,7 +150,7 @@ public class PhotoShare {
                             } else {
                                 System.out.println("Please, call it like this: -L " +
                                         "<userID> <photo>");
-                                return;
+                                break;
                             }
                             break;
                         case 'D':
@@ -158,7 +160,7 @@ public class PhotoShare {
                             } else {
                                 System.out.println("Please, call it like this: -D " +
                                         "<userID> <photo>");
-                                return;
+                                break;
                             }
                             break;
                         case 'f':
@@ -173,7 +175,7 @@ public class PhotoShare {
                             } else {
                                 System.out.println("Please, call it like this: -f " +
                                         "<followUserIds>");
-                                return;
+                                break;
                             }
                             break;
                         case 'r':
@@ -188,8 +190,11 @@ public class PhotoShare {
                             } else {
                                 System.out.println("Please, call it like this: -r " +
                                         "<followUserIds>");
-                                return;
+                                break;
                             }
+                            break;
+                        default:
+                            System.out.println("Please, only use: -a, -l, -i, -g, -c, -L, -D, -f or -r");
                             break;
                     }
                 }
