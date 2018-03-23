@@ -1,0 +1,11 @@
+/* AUTOMATICALLY GENERATED ON Fri Mar 23 23:10:04 WET 2018*/
+/* DO NOT EDIT */
+
+grant {
+  permission java.net.SocketPermission "localhost:23232", "listen, resolve";
+  permission java.net.SocketPermission "*:1024-", "accept, resolve";
+  permission java.io.FilePermission "Files/-", "read, write";
+  permission java.lang.RuntimePermission "stopThread";
+  permission java.util.PropertyPermission "*", "read, write";
+};
+

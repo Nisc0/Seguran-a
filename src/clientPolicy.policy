@@ -1,0 +1,6 @@
+grant {
+  permission java.net.SocketPermission "*:1024", "connect, resolve";
+  permission java.io.FilePermission "SavedPhotos/-", "read, write";
+  permission java.util.PropertyPermission "*", "read, write";
+};
+
