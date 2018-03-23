@@ -67,6 +67,14 @@ public class tester {
             e.printStackTrace();
         }
 
+        Photo p1 = new Photo("hooo.jpeg");
+        Photo p2 = new Photo("index.jpeg");
+        Photo p3 = new Photo("lalala.jpeg");
+
+        System.out.println("SessionHandler aberto");
+
+        System.out.println("adding Photo... " + pHandler.addPhoto(cruz, p1, dp));
+
 //        PhotoHandler pHandler = new PhotoHandler(u);
   //      OpinionHandler oHandler = new OpinionHandler(u);
     //    FollowerHandler fHandler = new FollowerHandler(u);

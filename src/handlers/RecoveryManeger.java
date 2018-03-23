@@ -74,18 +74,14 @@ public class RecoveryManeger {
     public Iterable<User> recUsers() {
         File[] fls = file_users.listFiles();
         ArrayList<User> users = new ArrayList<>();
-        File fu;
-        String userFile;
+
         for (File f : fls) {
             try {
-                userFile = fu.toString().split("/");
-                userFile = userFile
-                fu = new File(f, f.toString())
-                System.out.println(f.toString()); //debug
-                FileInputStream fin = new FileInputStream(f);
-                ObjectInputStream ois = new ObjectInputStream(fin);
+                File[] files = f.listFiles((file, s) -> s.toLowerCase().endsWith(".u"));
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(files[0]));
                 User u = (User) ois.readObject();
                 users.add(u);
+                ois.close();
 
             } catch (Exception ex) {
                 ex.printStackTrace();
