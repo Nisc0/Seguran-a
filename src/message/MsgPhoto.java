@@ -18,8 +18,6 @@ public class MsgPhoto extends Message {
     private PhotoOpinion opinion;
     private byte[] photoBytes;
     private byte[][] photoListBytes;
-    //TODO: img!??!?
-    private BufferedImage img;
 
     public MsgPhoto(MsgType c_type, MsgError c_err, String user, String followID, boolean success) {
         super(c_type, c_err, user, followID, success);

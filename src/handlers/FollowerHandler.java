@@ -4,8 +4,6 @@ import domain.*;
 import catalogs.*;
 import exceptions.*;
 
-// alterar o nome das variaveis
-
 public class FollowerHandler extends GodHandler implements handlers.Interface.IFollowerHandler {
 
     private static CatalogUser catUser;

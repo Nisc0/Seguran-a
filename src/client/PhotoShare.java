@@ -60,8 +60,15 @@ public class PhotoShare {
                         boolean toCloseSession = cm.endSession(currUser);
                         if (toCloseSession) {
                             isSessionOpen = false;
+                            break;
                         }
                     }
+
+                    if (in[0].length() < 2) {
+                        System.out.println("Please, only use: -a, -l, -i, -g, -c, -L, -D, -f, -r, quit");
+                        break;
+                    }
+
                     char op = in[0].charAt(1);
 
                     switch (op) {
@@ -78,6 +85,7 @@ public class PhotoShare {
                                         photoID = imgFile.getName();
                                     } catch (IOException e) {
                                         e.printStackTrace();
+                                        break;
                                     }
 
                                     if (photoID == null) {
@@ -95,7 +103,7 @@ public class PhotoShare {
                             } else {
                                 System.out.println("Please, call it like this: -a " +
                                         "<photos>");
-                                return;
+                                break;
                             }
                             break;
                         case 'l':
@@ -126,7 +134,14 @@ public class PhotoShare {
                                 for (Photo pd : list) {
                                     System.out.println(pd.toString());
                                 }
+                                File savedPhotos = new File("SavedPhotos");
+                                savedPhotos.mkdir();
+                                for (Photo p : list) {
+                                    File imgFile = new File(savedPhotos, p.getPhotoID());
+                                    ImageIO.write(p.getImage(), p.getExtension(), imgFile);
+                                }
                             } else {
+
                                 System.out.println("Please, call it like this: -g " +
                                         "<userID>");
                                 break;

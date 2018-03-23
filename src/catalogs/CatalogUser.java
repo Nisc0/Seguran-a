@@ -43,7 +43,7 @@ public class CatalogUser implements ICatalogUser {
         }
     }
 
-    public static CatalogUser getCatalogo(){
+    public static CatalogUser getCatalog(){
         if (CatalogUser.instance == null){
             CatalogUser.instance = new CatalogUser();
         }
