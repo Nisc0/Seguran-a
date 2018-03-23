@@ -37,7 +37,7 @@ public class User implements IUser, Serializable {
     }
 
     @Override
-    public String getPass(){return password;}
+    public String getPass() { return password; }
 
     @Override
     public boolean isSamePwd(String pwd) {
@@ -47,20 +47,17 @@ public class User implements IUser, Serializable {
     //////////////    FOLLOWS    /////////////////////
 
     @Override
-    public User getFollow(String userID) {
-        return follows.get(userID);
-    }
-
-    @Override
     public void addFollow(User u) {
         rec_follows.add(u.getID());
-        follows.put(u.getID(), u);
     }
 
     @Override
     public void removeFollow(String userID) {
         rec_follows.remove(userID);
-        follows.remove(userID);
+    }
+
+    public boolean isFollowing(String u) {
+        return rec_follows.contains(u) || u.equals(userID);
     }
 
     //////////////    PHOTOS    /////////////////////
@@ -80,7 +77,7 @@ public class User implements IUser, Serializable {
     @Override
     public Iterable<PhotoData> getAllPhotosData() {
 
-        ArrayList<PhotoData> res = new ArrayList<>();
+        List<PhotoData> res = new ArrayList<>();
         for (Photo ph : photos.values()) {
             res.add(ph.makePhotoData());
         }
@@ -116,6 +113,22 @@ public class User implements IUser, Serializable {
         if (photo != null) {
             photo.addComment(uID, com);
             return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return ("userID: " + userID + ", ") +
+                "pass: " + password + ", ";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof User) {
+            User u = (User) o;
+            if (this.userID == u.getID())
+                return true;
         }
         return false;
     }

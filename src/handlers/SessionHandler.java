@@ -8,8 +8,7 @@ public class SessionHandler extends GodHandler {
 
     private static CatalogoUser catUser;
 
-    public SessionHandler(User curr) {
-        this.currUser = curr;
+    public SessionHandler() {
         catUser = CatalogoUser.getCatalogo();
     }
 
@@ -17,12 +16,16 @@ public class SessionHandler extends GodHandler {
 
         User u = catUser.getUser(userID);
         if (u == null) {
-            catUser.addUser(new User(userID, pass));
+            u = new User(userID, pass);
+            catUser.addUser(u);
+            setCurrUser(u);
             return false;
         }
 
-        if (u.isSamePwd(pass))
+        if (u.isSamePwd(pass)) {
+            setCurrUser(u);
             return true;
+        }
 
         throw new WrongUserPasswordException();
 

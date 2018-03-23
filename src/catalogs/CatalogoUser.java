@@ -37,7 +37,7 @@ public class CatalogoUser implements ICatalogoUser {
             e.printStackTrace();
             System.out.print("Sistema não conseguiu recuperar");
         }
-
+        System.out.println("começar recuperacao");
         for (User u: recov.recUsers()) {
             this.users.put(u.getID(), u);
         }
@@ -103,7 +103,7 @@ public class CatalogoUser implements ICatalogoUser {
     }
 
 
-    public void saveImage(BufferedImage image, User u) {
-        recov.saveImage(image, u);
+    public void saveImage(BufferedImage image, User u, String photoID, String extension) {
+        recov.saveImage(image, u, photoID, extension);
     }
 }

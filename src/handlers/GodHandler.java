@@ -5,11 +5,15 @@ import domain.*;
 
 public abstract class  GodHandler {
 
-    protected User currUser;
+    protected static User currUser;
 
 
-    protected User getCurrUser() {
+    public User getCurrUser() {
         return this.currUser;
+    }
+
+    protected void setCurrUser(User u) {
+        currUser = u;
     }
 
 }

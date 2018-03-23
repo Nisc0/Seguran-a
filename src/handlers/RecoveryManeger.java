@@ -16,10 +16,11 @@ public class RecoveryManeger {
 
     public RecoveryManeger() throws IOException {
         File fl = new File("Files");
+        fl.mkdir();
         fw = new FileWriter(new File(fl, "users.txt"), true);
         fr = new FileReader(new File(fl, "users.txt"));
         this.file_users = new File(fl, "Users");
-        file_users.mkdirs();
+        file_users.mkdir();
     }
 
     public FileWriter getFW() {
@@ -39,13 +40,15 @@ public class RecoveryManeger {
     public void backupUser(User u) throws IOException {
 
         File fl = new File(file_users, u.getID());
+        System.out.println(fl.toString()); //debug
         FileOutputStream fout = null;
         ObjectOutputStream oos = null;
         fl.mkdir();
+        File fu = new File(fl, u.getID() + ".u");
 
         try {
 
-            fout = new FileOutputStream(fl);
+            fout = new FileOutputStream(fu);
             oos = new ObjectOutputStream(fout);
             oos.writeObject(u);
 
@@ -73,11 +76,11 @@ public class RecoveryManeger {
 
         for (File f : fls) {
             try {
-
-                FileInputStream fin = new FileInputStream(f);
-                ObjectInputStream ois = new ObjectInputStream(fin);
+                File[] files = f.listFiles((file, s) -> s.toLowerCase().endsWith(".u"));
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(files[0]));
                 User u = (User) ois.readObject();
                 users.add(u);
+                ois.close();
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -98,20 +101,11 @@ public class RecoveryManeger {
         }
     }
 
-    public void saveImage(BufferedImage image, User u) {
+    public void saveImage(BufferedImage image, User u, String photoID, String extension) {
         File fl = new File(file_users, u.getID());
-        FileOutputStream fout;
-        ObjectOutputStream oos;
-        fl.mkdir();
-
+        File file = new File(fl, photoID + "." + extension);
         try {
-
-            fout = new FileOutputStream(fl);
-            oos = new ObjectOutputStream(fout);
-            oos.writeObject(u);
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            ImageIO.write(image, extension, file);
         } catch (IOException e) {
             e.printStackTrace();
         }
