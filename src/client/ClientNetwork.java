@@ -13,11 +13,11 @@ public class ClientNetwork {
 	public ClientNetwork(String ip, int port) throws IOException {
 	    socket = new Socket(ip, port);
 	    //TODO: verificar exception da socket
+        BufferedOutputStream bufOut = new BufferedOutputStream(socket.getOutputStream());
 	    BufferedInputStream bufIn = new BufferedInputStream(socket.getInputStream());
-	    BufferedOutputStream bufOut = new BufferedOutputStream(socket.getOutputStream());
 	    //TODO: verificar exception do buffer
-        in = new ObjectInputStream(bufIn);
         out = new ObjectOutputStream(bufOut);
+        in = new ObjectInputStream(bufIn);
         //TODO: verificar exception do objectstream
 	}
 
@@ -27,28 +27,33 @@ public class ClientNetwork {
 	}
 
     private void send(Message msg) throws IOException {
-	    byte[] msgS = serialize(msg);
-	    int size = msgS.length;
-	    out.write(size);
-	    for(int i = 0; i < size/1024; i++){
-	        if(size-i*1024 < 1024)
-	            //quando o restante eh menor que 1024
-	            out.write(msgS,i*1024, size-i*1024);
-	        else
-	            out.write(msgS, i*2014, 1024);
-        }
+//	    byte[] msgS = serialize(msg);
+//	    int size = msgS.length;
+//	    out.write(size);
+//	    for(int i = 0; i < size/1024; i++){
+//	        if(size-i*1024 < 1024)
+//	            //quando o restante eh menor que 1024
+//	            out.write(msgS,i*1024, size-i*1024);
+//	        else
+//	            out.write(msgS, i*2014, 1024);
+//        }
+
+        out.writeObject(msg);
+        out.flush();
     }
 
     private Message receive() throws IOException, ClassNotFoundException {
-	    int size = in.read();
-        byte[] msg = new byte[size];
-        for(int i = 0; i < size/1024; i++){
-            if(size-i*1024 < 1024)
-                in.read(msg, i*1024, size-i*1024);
-            else
-                in.read(msg, i*1024, 1024);
-        }
-        return deserialize(msg);
+//	    int size = in.read();
+//        byte[] msg = new byte[size];
+//        for(int i = 0; i < size/1024; i++){
+//            if(size-i*1024 < 1024)
+//                in.read(msg, i*1024, size-i*1024);
+//            else
+//                in.read(msg, i*1024, 1024);
+//        }
+//        return deserialize(msg);
+
+        return  (Message) in.readObject();
     }
 
     private byte[] serialize(Message msg) throws IOException {

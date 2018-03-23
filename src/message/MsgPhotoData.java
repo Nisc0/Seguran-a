@@ -17,7 +17,7 @@ public class MsgPhotoData extends Message {
     }
 
     public Iterable<PhotoData> getPhotoDataList() {
-        return (photoDataList != null)? photoDataList:null;
+        return photoDataList;
     }
 
 }

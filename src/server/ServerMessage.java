@@ -43,11 +43,15 @@ public class ServerMessage {
                 photoHandler = new PhotoHandler();
                 result = new MsgSession(STARTSESSION, null, user, true);
             } else {
-                result = new MsgSession(STARTSESSION, USERCREATED, user, false);
+                followerHandler = new FollowerHandler();
+                opinionHandler = new OpinionHandler();
+                photoHandler = new PhotoHandler();
+                result = new MsgSession(STARTSESSION, USERCREATED, user, true);
             }
         } catch (WrongUserPasswordException e) {
             result = new MsgSession(STARTSESSION, WRONGPASSWORD, user, false);
         }
+        System.out.println("start session func!");
 
         return result;
     }
@@ -60,6 +64,8 @@ public class ServerMessage {
         followerHandler = null;
         opinionHandler = null;
         sessionHandler = null;
+        System.out.println("end session func!");
+
         return result;
     }
 
@@ -71,6 +77,7 @@ public class ServerMessage {
         } catch (DuplicatePhotoException e) {
             result = new MsgPhoto(ADDPHOTO, DUPLICATEPHOTO, user, follower, false);
         }
+        System.out.println("addphoto session func!");
 
         return result;
     }
@@ -206,6 +213,7 @@ public class ServerMessage {
         MsgFollower mFollower;
         MsgOpinion mOpinion;
         MsgPhoto mPhoto;
+        MsgPhotoData msgPhotoData;
         MsgSession mSession;
 
         switch (tpMsg) {
@@ -225,8 +233,8 @@ public class ServerMessage {
                 break;
 
             case ALLPHOTOSDATA:
-                mPhoto = (MsgPhoto) m;
-                msgResult = allPhotoData(mPhoto.getUser(), mPhoto.getFollowID());
+                msgPhotoData = (MsgPhotoData) m;
+                msgResult = allPhotoData(msgPhotoData.getUser(), msgPhotoData.getFollowID());
                 break;
 
             case PHOTOOPINION:

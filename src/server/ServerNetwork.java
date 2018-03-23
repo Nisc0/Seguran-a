@@ -42,6 +42,7 @@ public class ServerNetwork{
 
         try {
             sSoc.close();
+            serverOnline = false;
         }
         catch (IOException e){
             System.err.println("Erro ao fechar o servidor!");

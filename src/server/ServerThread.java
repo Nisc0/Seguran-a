@@ -24,6 +24,7 @@ public class ServerThread extends Thread {
     }
 
     public void run(){
+        System.out.println("ola!");
         try {
              outStream = new ObjectOutputStream(socket.getOutputStream());
              inStream = new ObjectInputStream(socket.getInputStream());
@@ -33,6 +34,8 @@ public class ServerThread extends Thread {
         }
 
         try {
+            System.out.println("tentar msg de login!");
+
             MsgSession logMsg = (MsgSession) receiveMsg();
             srvMsg = new ServerMessage();
             sendMsg(srvMsg.startSession(logMsg));
@@ -44,6 +47,8 @@ public class ServerThread extends Thread {
         boolean online = true;
 
         while (online) {
+            System.out.println("a espera de mensagens!");
+
             Message message;
             Message result;
             try {
@@ -53,6 +58,7 @@ public class ServerThread extends Thread {
                 if (result.getC_type() == ENDSESSION) {
                     online = false;
                     sendMsg(result);
+                    System.out.println("Thread do cliente fechada!");
                     try {
                         srvMsg = null;
                         outStream.close();
@@ -67,36 +73,46 @@ public class ServerThread extends Thread {
                 }
             } catch (ClassNotFoundException | IOException e) {
                 e.printStackTrace();
+                break;
             }
         }
     }
 
 
     private void sendMsg(Message msg) throws IOException {
-        byte[] msgS = serialize(msg);
-        int size = msgS.length;
-        outStream.write(size);
-        for(int i = 0; i < size/1024; i++){
-            if(size-i*1024 < 1024)
-                //quando o restante eh menor que 1024
-                outStream.write(msgS,i*1024, size-i*1024);
-            else
-                outStream.write(msgS, i*2014, 1024);
-        }
+//        byte[] msgS = serialize(msg);
+//        int size = msgS.length;
+//        outStream.writeInt(size);
+//        outStream.flush();
+//        for(int i = 0; i < size/1024; i++){
+//            if(size-i*1024 < 1024)
+//                //quando o restante eh menor que 1024
+//                outStream.write(msgS,i*1024, size-i*1024);
+//
+//            else
+//                outStream.write(msgS, i*2014, 1024);
+//            outStream.flush();
+//        }
+        outStream.writeObject(msg);
+        outStream.flush();
+
     }
 
     private Message receiveMsg() throws IOException, ClassNotFoundException {
-        int size = inStream.read();
-        byte[] msg = new byte[size];
-        int read;
-        for(int i = 0; i < size/1024; i++){
-            if(size-i*1024 < 1024)
-                read = inStream.read(msg, i*1024, size-i*1024);
-            else {
-                read = inStream.read(msg,i * 1024, 1024);
-            }
-        }
-        return deserialize(msg);
+//        int size = inStream.readInt();
+//        byte[] msg = new byte[size];
+//        int read;
+//        for(int i = 0; i < size/1024; i++){
+//            if(size-i*1024 < 1024)
+//                read = inStream.read(msg, i*1024, size-i*1024);
+//            else {
+//                read = inStream.read(msg,i * 1024, 1024);
+//            }
+//        }
+//        return deserialize(msg);
+
+        return (Message) inStream.readObject();
+
     }
 
     private byte[] serialize(Message msg) throws IOException {
