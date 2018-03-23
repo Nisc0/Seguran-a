@@ -32,15 +32,15 @@ public class ServerMessage {
     public MsgSession startSession(MsgSession m) {
         String user = m.getUser();
         String pass = m.getPwd();
-        sessionHandler = new SessionHandler(catUser.getUser(user));
+        sessionHandler = new SessionHandler();
         MsgSession result;
 
 
         try {
             if (sessionHandler.startSession(user, pass)) {
-                followerHandler = new FollowerHandler(catUser.getUser(user));
-                opinionHandler = new OpinionHandler(catUser.getUser(user));
-                photoHandler = new PhotoHandler(catUser.getUser(user));
+                followerHandler = new FollowerHandler();
+                opinionHandler = new OpinionHandler();
+                photoHandler = new PhotoHandler();
                 result = new MsgSession(STARTSESSION, null, user, true);
             } else {
                 result = new MsgSession(STARTSESSION, USERCREATED, user, false);
