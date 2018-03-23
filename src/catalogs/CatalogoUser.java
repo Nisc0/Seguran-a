@@ -5,6 +5,7 @@ import domain.Photo;
 import domain.User;
 import handlers.RecoveryManeger;
 
+import java.awt.image.BufferedImage;
 import java.io.*;
 
 import java.util.HashMap;
@@ -90,5 +91,10 @@ public class CatalogoUser implements ICatalogoUser {
 
     public void updateUser(User u) throws IOException {
         recov.backupUser(u);
+    }
+
+
+    public void saveImage(BufferedImage image, User u) {
+        recov.saveImage(image, u);
     }
 }

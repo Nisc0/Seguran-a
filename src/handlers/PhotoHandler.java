@@ -4,7 +4,11 @@ import catalogs.CatalogoUser;
 import domain.*;
 import exceptions.*;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 
 public class PhotoHandler extends GodHandler{
@@ -16,13 +20,15 @@ public class PhotoHandler extends GodHandler{
         catUser = CatalogoUser.getCatalogo();
     }
 
-    public void addPhoto(Photo photo) throws DuplicatePhotoException, IOException {
+    public void addPhoto(Photo photo, BufferedImage image) throws DuplicatePhotoException, IOException {
 
         if (currUser.getPhoto(photo.getPhotoID()) != null)
             throw new DuplicatePhotoException();
 
         currUser.addPhoto(photo);
         catUser.updateUser(currUser);
+        catUser.saveImage(image, currUser);
+
     }
 
     public Iterable<PhotoData> getPhotosData(String userID) throws NoSuchUserException, NotFollowingException {

@@ -3,6 +3,7 @@ package handlers;
 import domain.*;
 
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -95,6 +96,25 @@ public class RecoveryManeger {
         for (Photo p : uPh) {
             File flPh = new File(fl, p.getPhotoID() + "." + p.getExtension());
             p.setImage(ImageIO.read(flPh));
+        }
+    }
+
+    public void saveImage(BufferedImage image, User u) {
+        File fl = new File(file_users, u.getID());
+        FileOutputStream fout;
+        ObjectOutputStream oos;
+        fl.mkdir();
+
+        try {
+
+            fout = new FileOutputStream(fl);
+            oos = new ObjectOutputStream(fout);
+            oos.writeObject(u);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

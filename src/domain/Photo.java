@@ -18,7 +18,6 @@ import java.util.*;
 public class Photo implements IPhoto, Serializable {
     private String photoID;
     private String extension;
-    private int photoSize;
     private transient BufferedImage image; // é para mudar
     private Date datePub; //data de publicacao
     private Map<String, Boolean> opinion;
@@ -36,6 +35,9 @@ public class Photo implements IPhoto, Serializable {
         datePub = cal.getTime();
         likes = 0;
         dislikes = 0;
+        setImage(image);
+
+
     }
 
     public void setImage(BufferedImage image) {
@@ -94,7 +96,6 @@ public class Photo implements IPhoto, Serializable {
             res.opinion.put(s, this.opinion.get(s));
         }
 
-        res.photoSize = this.photoSize;
         res.datePub = this.getDatePub();
 
         return res;
