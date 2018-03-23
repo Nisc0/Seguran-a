@@ -4,6 +4,8 @@ import domain.*;
 import catalogs.*;
 import exceptions.*;
 
+import java.io.IOException;
+
 // alterar o nome das variaveis
 
 public class FollowerHandler extends GodHandler{
@@ -26,6 +28,7 @@ public class FollowerHandler extends GodHandler{
             throw new AlreadyFollowingException();
 
         currUser.addFollow(u);
+        catUser.updateUser(currUser);
     }
 
     public void removeFollow(String userID) throws NoSuchUserException, AlreadyNotFollowingException {
@@ -40,6 +43,7 @@ public class FollowerHandler extends GodHandler{
         }
 
         currUser.removeFollow(userID);
+        catUser.updateUser(currUser);
     }
 
 }
