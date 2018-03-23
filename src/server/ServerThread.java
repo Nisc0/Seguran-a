@@ -55,7 +55,6 @@ public class ServerThread extends Thread {
                 result = srvMsg.unpackAndTreatMsg(message);
 
                 if (result.getC_type() == ENDSESSION) {
-                    online = false;
                     sendMsg(result);
                     System.out.println("Client thread closed!");
                     try {
@@ -63,6 +62,7 @@ public class ServerThread extends Thread {
                         outStream.close();
                         inStream.close();
                         socket.close();
+                        online = false;
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
