@@ -7,6 +7,11 @@ import domain.PhotoOpinion;
 import exceptions.*;
 import handlers.*;
 import message.*;
+import sun.awt.image.BufferedImageDevice;
+
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.List;
 
 import static message.MsgError.*;
 import static message.MsgType.*;
@@ -61,10 +66,10 @@ public class ServerMessage {
         return result;
     }
 
-    private MsgPhoto addPhoto(String user, String follower, Photo photo) {
+    private MsgPhoto addPhoto(String user, String follower, Photo photo, BufferedImage img) {
         MsgPhoto result;
         try {
-            photoHandler.addPhoto(photo);
+            photoHandler.addPhoto(photo, img);
             result = new MsgPhoto(ADDPHOTO, null, user, follower, true);
         }
 
@@ -116,9 +121,10 @@ public class ServerMessage {
     }
 
     private MsgPhoto allPhotos(String user, String follower) {
-        MsgPhoto result;
+        MsgPhoto result = null;
+        List<Photo> photoList;
         try {
-            Iterable<Photo> photoList = photoHandler.getAllUserPhotos(user);
+            photoList = photoHandler.getAllUserPhotos(user);
             result = new MsgPhoto(ALLPHOTOS, null, user, follower, true, photoList);
         }
         catch (NoSuchUserException e) {
@@ -126,6 +132,9 @@ public class ServerMessage {
         }
         catch (NotFollowingException e) {
             result = new MsgPhoto(ALLPHOTOS, NOTFOLLOWING, user, follower, false);
+        }
+        catch (IOException e){
+            e.printStackTrace();
         }
 
         return result;
@@ -262,7 +271,7 @@ public class ServerMessage {
 
             case ADDPHOTO:
                 mPhoto = (MsgPhoto) m;
-                msgResult = addPhoto(mPhoto.getUser(),mPhoto.getFollowID(),mPhoto.getPhoto());
+                msgResult = addPhoto(mPhoto.getUser(),mPhoto.getFollowID(),mPhoto.getPhoto(),mPhoto.getBufferedImage());
                 break;
 
             case ALLPHOTOSDATA:

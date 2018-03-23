@@ -103,4 +103,8 @@ public class Photo implements IPhoto, Serializable {
     public String getExtension() {
         return extension;
     }
+
+    public BufferedImage getImage() {
+        return image;
+    }
 }
