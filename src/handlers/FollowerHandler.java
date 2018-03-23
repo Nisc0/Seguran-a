@@ -12,8 +12,7 @@ public class FollowerHandler extends GodHandler{
 
     private static CatalogoUser catUser;
 
-    public FollowerHandler(User curr) {
-        this.currUser = curr;
+    public FollowerHandler() {
         catUser = CatalogoUser.getCatalogo();
     }
 

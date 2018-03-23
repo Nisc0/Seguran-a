@@ -10,22 +10,23 @@ public class OpinionHandler extends  GodHandler {
 
     private static CatalogoUser catUser;
 
-    public OpinionHandler(User curr) {
-        this.currUser = curr;
+    public OpinionHandler() {
         catUser = CatalogoUser.getCatalogo();
     }
 
     public void makeComment(String comment, String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException {
 
-        User uID = currUser.getFollow(userID);
-
-        if(catUser.getUser(userID) == null)
-            throw new NoSuchUserException();
+        User uID = catUser.getUser(userID);
 
         if(uID == null)
-            throw new NotFollowingException();
+            throw new NoSuchUserException();
 
-        if (!uID.makeComment(comment, userID, photoID))
+        if (!uID.equals(currUser.getFollow(userID))) {
+            if (!uID.equals(currUser))
+                throw new NotFollowingException();
+        }
+
+        if (!uID.makeComment(comment, currUser.getID(), photoID))
             throw new NoSuchPhotoException();
 
         catUser.updateUser(currUser);
@@ -33,13 +34,15 @@ public class OpinionHandler extends  GodHandler {
 
     public void addLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, AlreadyLikedException {
 
-        User uID = currUser.getFollow(userID);
+        User uID = catUser.getUser(userID);
 
-        if(catUser.getUser(userID) == null)
+        if(uID == null)
             throw new NoSuchUserException();
 
-        if (uID == null)
-            throw new NotFollowingException();
+        if (!uID.equals(currUser.getFollow(userID))) {
+            if (!uID.equals(currUser))
+                throw new NotFollowingException();
+        }
 
         Photo pID = uID.getPhoto(photoID);
 
@@ -54,13 +57,15 @@ public class OpinionHandler extends  GodHandler {
 
     public void addDisLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, AlreadyDislikedException {
 
-        User uID = currUser.getFollow(userID);
+        User uID = catUser.getUser(userID);
 
-        if(catUser.getUser(userID) == null)
+        if(uID == null)
             throw new NoSuchUserException();
 
-        if (uID == null)
-            throw new NotFollowingException();
+        if (!uID.equals(currUser.getFollow(userID))) {
+            if (!uID.equals(currUser))
+                throw new NotFollowingException();
+        }
 
         Photo pID = uID.getPhoto(photoID);
         if (pID == null)

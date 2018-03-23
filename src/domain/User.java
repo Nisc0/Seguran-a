@@ -137,4 +137,14 @@ public class User implements IUser, Serializable {
         return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof User) {
+            User u = (User) o;
+            if (this.userID == u.getID())
+                return true;
+        }
+        return false;
+    }
+
 }

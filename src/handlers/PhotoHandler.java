@@ -32,26 +32,30 @@ public class PhotoHandler extends GodHandler{
 
     public Iterable<PhotoData> getPhotosData(String userID) throws NoSuchUserException, NotFollowingException {
 
-        User uID = currUser.getFollow(userID);
+        User uID = catUser.getUser(userID);
 
-        if(catUser.getUser(userID) == null)
+        if(uID == null)
             throw new NoSuchUserException();
 
-        if (uID == null)
-            throw new NotFollowingException();
+        if (!uID.equals(currUser.getFollow(userID))) {
+            if (!uID.equals(currUser))
+                throw new NotFollowingException();
+        }
 
         return uID.getAllPhotosData();
     }
 
     public PhotoOpinion getPhotoOpinion(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException {
 
-        User uID = currUser.getFollow(userID);
+        User uID = catUser.getUser(userID);
 
-        if(catUser.getUser(userID) == null)
+        if(uID == null)
             throw new NoSuchUserException();
 
-        if (uID == null)
-            throw new NotFollowingException();
+        if (!uID.equals(currUser.getFollow(userID))) {
+            if (!uID.equals(currUser))
+                throw new NotFollowingException();
+        }
 
         PhotoOpinion phO = uID.getPhotoOpinion(photoID);
         if(phO == null)
@@ -63,16 +67,17 @@ public class PhotoHandler extends GodHandler{
 
     public Iterable<Photo> getAllUserPhotos(String userID) throws NoSuchUserException, NotFollowingException {
 
-        User uID = currUser.getFollow(userID);
-
-        if(catUser.getUser(userID) == null)
-            throw new NoSuchUserException();
+        User uID = catUser.getUser(userID);
 
         if(uID == null)
-            throw new NotFollowingException();
+            throw new NoSuchUserException();
+
+        if (!uID.equals(currUser.getFollow(userID))) {
+            if (!uID.equals(currUser))
+                throw new NotFollowingException();
+        }
 
         Iterable<Photo> uPh = uID.getAllPhotos();
-
         catUser.getUserPhotos(userID, uPh);
 
         return uPh;

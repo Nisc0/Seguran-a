@@ -25,8 +25,10 @@ public class SessionHandler extends GodHandler {
         }
 
         //VVV estamos a dar a pass a este handler VVV
-        if (u.getPass().equals(pass))
+        if (u.getPass().equals(pass)) {
+            setCurrUser(u);
             return true;
+        }
 
         throw new WrongUserPasswordException();
 
