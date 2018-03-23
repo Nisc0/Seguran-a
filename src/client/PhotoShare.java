@@ -131,7 +131,8 @@ public class PhotoShare {
                             break;
                         case 'c':
                             if (in.length == 4) {
-                                if (cm.commentPhoto(currUser, in[1], in[2], in[3]))
+                                String[] comments = line.split("\"");
+                                if (cm.commentPhoto(currUser, comments[1], in[in.length-2], in[in.length-1]))
                                     System.out.println("You've commented given photo!");
                             } else {
                                 System.out.println("Please, call it like this: -c " +
@@ -201,5 +202,4 @@ public class PhotoShare {
             }
         }
     }
-}
 }

@@ -3,7 +3,6 @@ package domain;
 import domain_interface.IPhoto;
 
 import java.awt.image.BufferedImage;
-import java.nio.Buffer;
 import java.util.*;
 
 /**
@@ -34,7 +33,6 @@ public class Photo implements IPhoto {
         datePub = cal.getTime();
         likes = 0;
         dislikes = 0;
-        setImage(image);
     }
 
     public void setImage(BufferedImage image) { this.image = image; }
@@ -44,6 +42,8 @@ public class Photo implements IPhoto {
     }
 
     public String getExtension(){ return extension;}
+
+    public BufferedImage getImage() { return image; }
 
     public void addComment(String user, String comm) {
         comments.add(new Comment(user, comm));
@@ -81,9 +81,15 @@ public class Photo implements IPhoto {
         return new PhotoOpinion(photoID, likes, dislikes, comments);
     }
 
-    //TODO
+    @Override
     public String toString(){
-        return "ola";
+        StringBuilder sb = new StringBuilder();
+        sb.append("photoID: " + photoID + ", ");
+        sb.append(datePub.toString() + ", ");
+        sb.append("likes: " + likes + ", ");
+        sb.append("dislikes: " + dislikes + ", ");
+        sb.append("comments: " + comments);
+        return sb.toString();
     }
 
 }

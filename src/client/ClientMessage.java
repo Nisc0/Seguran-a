@@ -49,13 +49,8 @@ public class ClientMessage {
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
             AlreadyNotFollowingException {
 
-        byte[] imageToSend = null;
-        try {
-            imageToSend = serializeImage(img, photo);
-        } catch (IOException e) {
-            System.out.println("Serialization of photo failed!");
-        }
-        MsgPhoto msg = (MsgPhoto) cl.sendReceive(new MsgPhoto(MsgType.ADDPHOTO, null, currUser, null, true, photoID, photo, imageToSend));
+
+        MsgPhoto msg = (MsgPhoto) cl.sendReceive(new MsgPhoto(MsgType.ADDPHOTO, null, currUser, null, true, photoID, photo));
         findException(msg.getC_err());
         return msg.getSuccess();
     }
@@ -157,21 +152,6 @@ public class ClientMessage {
             default:
                 break;
         }
-    }
-
-    private byte[] serializeImage(BufferedImage img, Photo photo) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(img, photo.getExtension(), baos);
-        baos.flush();
-        byte[] imageInByte = baos.toByteArray();
-        baos.close();
-        return imageInByte;
-    }
-
-    private BufferedImage deserializeImage(byte[] img) throws IOException{
-        ByteArrayInputStream baos = new ByteArrayInputStream(img);
-        BufferedImage image = ImageIO.read(baos);
-        return image;
     }
 
 }
