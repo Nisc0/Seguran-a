@@ -92,7 +92,7 @@ public class Photo implements IPhoto, Serializable {
 
     @Override
     public Photo clone() {
-        Photo res = new Photo(this.photoID);
+        Photo res = new Photo(this.photoID+"."+this.extension);
         res.likes = this.likes;
         res.dislikes = this.dislikes;
         for (Comment c : comments) {
