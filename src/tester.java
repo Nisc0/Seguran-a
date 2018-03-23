@@ -24,42 +24,52 @@ public class tester {
 
         System.out.println("yoho");
 
-        User u = new User("diogo", "ola");
-        System.out.println("created user 1");
-        User a = new User("bruno", "piroquia");
-        System.out.println("created user 2");
-        User b=  new User("nisco", "moto");
-        User c = new User("noob", "boon");
-
         CatalogoUser cat = CatalogoUser.getCatalogo();
 
-        cat.addUser(u);
-        System.out.println(u);
-        cat.addUser(a);
-        System.out.println(a);
-        cat.addUser(b);
-        System.out.println(b);
-        cat.addUser(c);
-        System.out.println(c);
+        System.out.println("Catalogo aberto");
 
-        SessionHandler sHandler = new SessionHandler(u);
-        PhotoHandler pHandler = new PhotoHandler(u);
-        OpinionHandler oHandler = new OpinionHandler(u);
-        FollowerHandler fHandler = new FollowerHandler(u);
-        //CRUZ
-        String cruz = "Cruz";
-        //Login
-        System.out.println("o " + cruz + " quer fazer login");
+        SessionHandler sessH = new SessionHandler();
+
+        System.out.println("SessionHandler aberto");
+
         boolean bol = false;
+
         try {
-            bol = sHandler.startSession(u.getID(), u.getPass());
-        } catch (WrongUserPasswordException e) {
+
+            bol = sessH.startSession("diogo", "ola");
+            System.out.println(bol);
+            bol =sessH.startSession("bruno", "piroquia");
+            System.out.println(bol);
+            bol=sessH.startSession("nisco", "moto");
+            System.out.println(bol);
+            bol=sessH.startSession("noob", "boon");
+            System.out.println(bol);
+        }
+        catch (WrongUserPasswordException e) {
             e.printStackTrace();
         }
-        System.out.println(bol);
 
-        File file_users = new File("Files/Users");
-        file_users.mkdirs();
+        System.out.println(cat.getUser("diogo"));
+        System.out.println(cat.getUser("bruno"));
+        System.out.println(cat.getUser("nisco"));
+        System.out.println(cat.getUser("noob"));
+
+        File photosInput = new File("photos");
+        photosInput.mkdir();
+
+        try {
+            BufferedImage dp = ImageIO.read(new File(photosInput, "hooo.jpeg"));
+            BufferedImage ep = ImageIO.read(new File(photosInput, "index.jpeg"));
+            BufferedImage fp = ImageIO.read(new File(photosInput, "lalala.jpeg"));
+
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+//        PhotoHandler pHandler = new PhotoHandler(u);
+  //      OpinionHandler oHandler = new OpinionHandler(u);
+    //    FollowerHandler fHandler = new FollowerHandler(u);
 
         /**
         //Photos
@@ -116,6 +126,7 @@ public class tester {
         }
 
          **/
-    }
 
+
+    }
 }

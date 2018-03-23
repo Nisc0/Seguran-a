@@ -8,16 +8,19 @@ public class SessionHandler extends GodHandler {
 
     private static CatalogoUser catUser;
 
-    public SessionHandler(User curr) {
-        this.currUser = curr;
+    public SessionHandler() {
         catUser = CatalogoUser.getCatalogo();
     }
 
     public boolean startSession(String userID, String pass) throws WrongUserPasswordException {
 
         User u = catUser.getUser(userID);
+        boolean res;
+
         if (u == null) {
-            catUser.addUser(new User(userID, pass));
+            u = new User(userID, pass);
+            catUser.addUser(u);
+            setCurrUser(u);
             return false;
         }
 

@@ -18,7 +18,7 @@ public class Testing {
             cat.addUser(u);
             cat.addUser(new User("Bruno", "piroquia"));
 
-            SessionHandler sh = new SessionHandler(u);
+            SessionHandler sh = new SessionHandler();
             sh.startSession("Diogo", "ola");
             System.out.println("sessao iniciada");
 
