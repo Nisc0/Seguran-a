@@ -15,8 +15,7 @@ public class PhotoHandler extends GodHandler{
 
     private static CatalogoUser catUser;
 
-    public PhotoHandler(User curr) {
-        this.currUser = curr;
+    public PhotoHandler() {
         catUser = CatalogoUser.getCatalogo();
     }
 

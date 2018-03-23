@@ -71,9 +71,13 @@ public class tester {
         Photo p2 = new Photo("index.jpeg");
         Photo p3 = new Photo("lalala.jpeg");
 
-        System.out.println("SessionHandler aberto");
+        PhotoHandler photoH = new PhotoHandler();
 
-        System.out.println("adding Photo... " + pHandler.addPhoto(cruz, p1, dp));
+        System.out.println("PhotoHandler aberto");
+
+        System.out.println(photoH.getCurrUser());
+
+        //System.out.println("adding Photo... " + pHandler.addPhoto(cruz, p1, dp));
 
 //        PhotoHandler pHandler = new PhotoHandler(u);
   //      OpinionHandler oHandler = new OpinionHandler(u);
