@@ -21,6 +21,8 @@ public class ServerNetwork{
 
         try {
             sSoc = new ServerSocket(Integer.parseInt(port));
+            System.err.println("thread criada starserver!");
+
         } catch (IOException e) {
             System.err.println(e.getMessage());
             System.exit(-1);
@@ -33,6 +35,8 @@ public class ServerNetwork{
                 Socket inSoc = sSoc.accept();
                 ServerThread newServerThread = new ServerThread(inSoc);
                 newServerThread.start();
+                System.err.println("Thread Criada!");
+
             }
             catch (IOException e) {
                 System.err.println("Erro ao conectar o cliente!");
