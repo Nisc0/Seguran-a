@@ -1,6 +1,6 @@
 package domain;
 
-import domain_interface.IComment;
+import domain.Interface.IComment;
 
 import java.io.Serializable;
 import java.util.Calendar;
