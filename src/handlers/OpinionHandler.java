@@ -21,15 +21,14 @@ public class OpinionHandler extends  GodHandler {
         if(uID == null)
             throw new NoSuchUserException();
 
-        if(!currUser.isFollowing(userID))
-            if (currUser.getID() != userID) {
+        if(!currUser.isFollowing(userID)) {
                 throw new NotFollowingException();
-            }
+        }
 
         if (!uID.makeComment(comment, currUser.getID(), photoID))
             throw new NoSuchPhotoException();
 
-        catUser.updateUser(currUser);
+        catUser.updateUser(uID);
     }
 
     public void addLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, AlreadyLikedException {
@@ -40,19 +39,17 @@ public class OpinionHandler extends  GodHandler {
             throw new NoSuchUserException();
 
         if(!currUser.isFollowing(userID))
-            if (currUser.getID() != userID) {
                 throw new NotFollowingException();
-            }
 
         Photo pID = uID.getPhoto(photoID);
 
         if (pID == null)
             throw new NoSuchPhotoException();
 
-        if (!pID.addOpinion(uID.getID(), true))
+        if (!pID.addOpinion(currUser.getID(), true))
             throw new  AlreadyLikedException();
 
-        catUser.updateUser(currUser);
+        catUser.updateUser(uID);
     }
 
     public void addDisLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, AlreadyDislikedException {
@@ -63,18 +60,16 @@ public class OpinionHandler extends  GodHandler {
             throw new NoSuchUserException();
 
         if(!currUser.isFollowing(userID))
-            if (currUser.getID() != userID) {
                 throw new NotFollowingException();
-            }
 
         Photo pID = uID.getPhoto(photoID);
         if (pID == null)
             throw new NoSuchPhotoException();
 
-        if (!pID.addOpinion(uID.getID(), false))
+        if (!pID.addOpinion(currUser.getID(), false))
             throw new AlreadyDislikedException();
 
-        catUser.updateUser(currUser);
+        catUser.updateUser(uID);
     }
 
 }

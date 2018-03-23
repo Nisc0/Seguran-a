@@ -53,7 +53,7 @@ public class User implements IUser, Serializable {
     }
 
     public boolean isFollowing(String u) {
-        return rec_follows.contains(u);
+        return rec_follows.contains(u) || u.equals(userID);
     }
 
 
@@ -101,17 +101,6 @@ public class User implements IUser, Serializable {
         return res;
     }
 
-    /* mt possivelmente nao preciso
-    @Override
-    public Iterable<PhotoOpinion> getAllPhotoOpinion() {
-
-        List<PhotoOpinion> res = new ArrayList<>();
-        for (Photo ph : photos.values()) {
-            res.add(ph.makePhotoOpinion());
-        }
-        return res;
-    }
-    */
 
     //////////////    TRATAMENTO DE OPINIIONS    /////////////////////
 

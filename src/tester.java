@@ -94,9 +94,9 @@ public class tester {
 
             bol =sessH.startSession("nisco", "moto");
 
-            folH.addFollow("noob");
-
             System.out.println("Start Session: " + sessH.getCurrUser() + "state: " + bol);
+
+            folH.addFollow("noob");
 
             opH.addDisLike("noob", p1.getPhotoID());
 
@@ -114,8 +114,7 @@ public class tester {
 
             folH.removeFollow("noob");
 
-            System.out.println(sessH.getCurrUser().getFollow("noob") == null);
-
+            System.out.println(sessH.getCurrUser().isFollowing("noob"));
         }
         catch (IOException e) {
             e.printStackTrace();

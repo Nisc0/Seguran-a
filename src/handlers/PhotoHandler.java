@@ -73,9 +73,7 @@ public class PhotoHandler extends GodHandler{
             throw new NoSuchUserException();
 
         if(!currUser.isFollowing(userID))
-            if (currUser.getID() != userID) {
                 throw new NotFollowingException();
-            }
 
         Iterable<Photo> uPh = uID.getAllPhotos();
         catUser.getUserPhotos(userID, uPh);

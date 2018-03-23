@@ -70,6 +70,7 @@ public class Photo implements IPhoto, Serializable {
             }
             dislikes++;
         }
+
         return true;
     }
 
