@@ -32,13 +32,6 @@ public interface IUser {
     void removeFollow(String userID);
 
     /**
-     * Obtem um utilizador que se está a seguir
-     * @param userID - o ID do utilizador que queremos obter
-     * @return o utilizador que se está a seguir
-     */
-    User getFollow(String userID);
-
-    /**
      * Adiciona uma foto à lista de fotos do utilizador
      * @param photo - a foto que se quer adicionar
      */

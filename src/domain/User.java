@@ -43,11 +43,6 @@ public class User implements IUser, Serializable {
     //////////////    FOLLOWS    /////////////////////
 
     @Override
-    public User getFollow(String userID) {
-        return follows.get(userID);
-    }
-
-    @Override
     public void addFollow(User u) {
         rec_follows.add(u.getID());
     }
