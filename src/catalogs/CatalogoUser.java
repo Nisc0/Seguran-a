@@ -1,6 +1,6 @@
 package catalogs;
 
-import catalogs_interface.ICatalogoUser;
+import catalogs.Interface.ICatalogoUser;
 import domain.Photo;
 import domain.User;
 import handlers.RecoveryManeger;
