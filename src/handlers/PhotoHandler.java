@@ -27,7 +27,7 @@ public class PhotoHandler extends GodHandler{
 
         currUser.addPhoto(photo);
         catUser.updateUser(currUser);
-        catUser.saveImage(image, currUser);
+        catUser.saveImage(image, currUser, photo.getPhotoID(), photo.getExtension());
 
     }
 

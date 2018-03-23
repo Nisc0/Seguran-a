@@ -99,20 +99,11 @@ public class RecoveryManeger {
         }
     }
 
-    public void saveImage(BufferedImage image, User u) {
+    public void saveImage(BufferedImage image, User u, String photoID, String extension) {
         File fl = new File(file_users, u.getID());
-        FileOutputStream fout;
-        ObjectOutputStream oos;
-        fl.mkdir();
-
+        File file = new File(fl, photoID + "." + extension);
         try {
-
-            fout = new FileOutputStream(fl);
-            oos = new ObjectOutputStream(fout);
-            oos.writeObject(u);
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            ImageIO.write(image, extension, file);
         } catch (IOException e) {
             e.printStackTrace();
         }
