@@ -23,7 +23,7 @@ public class FollowerHandler extends GodHandler{
         if(u == null)
             throw new NoSuchUserException();
 
-        if (u == currUser.getFollow(userID))
+        if (currUser.isFollowing(userID))
             throw new AlreadyFollowingException();
 
         currUser.addFollow(u);
@@ -37,7 +37,7 @@ public class FollowerHandler extends GodHandler{
         if(u == null)
             throw new NoSuchUserException();
 
-        if(null == currUser.getFollow(userID)){
+        if(!currUser.isFollowing(userID)){
             throw new AlreadyNotFollowingException();
         }
 

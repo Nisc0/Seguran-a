@@ -21,10 +21,10 @@ public class OpinionHandler extends  GodHandler {
         if(uID == null)
             throw new NoSuchUserException();
 
-        if (!uID.equals(currUser.getFollow(userID))) {
-            if (!uID.equals(currUser))
+        if(!currUser.isFollowing(userID))
+            if (currUser.getID() != userID) {
                 throw new NotFollowingException();
-        }
+            }
 
         if (!uID.makeComment(comment, currUser.getID(), photoID))
             throw new NoSuchPhotoException();
@@ -39,10 +39,10 @@ public class OpinionHandler extends  GodHandler {
         if(uID == null)
             throw new NoSuchUserException();
 
-        if (!uID.equals(currUser.getFollow(userID))) {
-            if (!uID.equals(currUser))
+        if(!currUser.isFollowing(userID))
+            if (currUser.getID() != userID) {
                 throw new NotFollowingException();
-        }
+            }
 
         Photo pID = uID.getPhoto(photoID);
 
@@ -62,10 +62,10 @@ public class OpinionHandler extends  GodHandler {
         if(uID == null)
             throw new NoSuchUserException();
 
-        if (!uID.equals(currUser.getFollow(userID))) {
-            if (!uID.equals(currUser))
+        if(!currUser.isFollowing(userID))
+            if (currUser.getID() != userID) {
                 throw new NotFollowingException();
-        }
+            }
 
         Photo pID = uID.getPhoto(photoID);
         if (pID == null)

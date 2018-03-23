@@ -37,10 +37,10 @@ public class PhotoHandler extends GodHandler{
         if(uID == null)
             throw new NoSuchUserException();
 
-        if (!uID.equals(currUser.getFollow(userID))) {
-            if (!uID.equals(currUser))
+        if(!currUser.isFollowing(userID))
+            if (currUser.getID() != userID) {
                 throw new NotFollowingException();
-        }
+            }
 
         return uID.getAllPhotosData();
     }
@@ -52,10 +52,10 @@ public class PhotoHandler extends GodHandler{
         if(uID == null)
             throw new NoSuchUserException();
 
-        if (!uID.equals(currUser.getFollow(userID))) {
-            if (!uID.equals(currUser))
+        if(!currUser.isFollowing(userID))
+            if (currUser.getID() != userID) {
                 throw new NotFollowingException();
-        }
+            }
 
         PhotoOpinion phO = uID.getPhotoOpinion(photoID);
         if(phO == null)
@@ -72,10 +72,10 @@ public class PhotoHandler extends GodHandler{
         if(uID == null)
             throw new NoSuchUserException();
 
-        if (!uID.equals(currUser.getFollow(userID))) {
-            if (!uID.equals(currUser))
+        if(!currUser.isFollowing(userID))
+            if (currUser.getID() != userID) {
                 throw new NotFollowingException();
-        }
+            }
 
         Iterable<Photo> uPh = uID.getAllPhotos();
         catUser.getUserPhotos(userID, uPh);

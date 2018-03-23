@@ -50,13 +50,15 @@ public class User implements IUser, Serializable {
     @Override
     public void addFollow(User u) {
         rec_follows.add(u.getID());
-        follows.put(u.getID(), u);
     }
 
     @Override
     public void removeFollow(String userID) {
         rec_follows.remove(userID);
-        follows.remove(userID);
+    }
+
+    public boolean isFollowing(String u) {
+        return rec_follows.contains(u);
     }
 
 
