@@ -4,7 +4,7 @@ import catalogs.CatalogUser;
 import domain.*;
 import exceptions.WrongUserPasswordException;
 
-public class SessionHandler extends GodHandler {
+public class SessionHandler extends GodHandler implements handlers.Interface.ISessionHandler {
 
     private static CatalogUser catUser;
 
@@ -12,6 +12,7 @@ public class SessionHandler extends GodHandler {
         catUser = CatalogUser.getCatalogo();
     }
 
+    @Override
     public boolean startSession(String userID, String pass) throws WrongUserPasswordException {
 
         User u = catUser.getUser(userID);

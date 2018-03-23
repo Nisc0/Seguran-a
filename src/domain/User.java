@@ -1,6 +1,6 @@
 package domain;
 
-import domain_interface.IUser;
+import domain.Interface.IUser;
 
 import java.io.Serializable;
 import java.util.*;

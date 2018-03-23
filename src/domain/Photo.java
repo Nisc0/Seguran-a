@@ -1,6 +1,6 @@
 package domain;
 
-import domain_interface.IPhoto;
+import domain.Interface.IPhoto;
 
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
@@ -37,10 +37,6 @@ public class Photo implements IPhoto, Serializable {
         dislikes = 0;
     }
 
-    public void setImage(BufferedImage image) {
-        this.image = image;
-    }
-
     public String getPhotoID() {
         return photoID;
     }
@@ -51,6 +47,14 @@ public class Photo implements IPhoto, Serializable {
 
     public BufferedImage getImage() {
         return image;
+    }
+
+    public void setImage(BufferedImage image) {
+        this.image = image;
+    }
+
+    public Date getDatePub() {
+        return this.datePub;
     }
 
     public void addComment(String user, String comm) {
@@ -76,10 +80,6 @@ public class Photo implements IPhoto, Serializable {
         }
 
         return true;
-    }
-
-    public Date getDatePub() {
-        return this.datePub;
     }
 
     public PhotoData makePhotoData() {

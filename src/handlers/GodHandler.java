@@ -3,10 +3,12 @@ package handlers;
 import domain.*;
 
 
-public abstract class  GodHandler {
+public abstract class  GodHandler implements handlers.Interface.IGodHandler {
 
     protected static User currUser;
 
+
+    @Override
     public User getCurrUser() {
         return this.currUser;
     }

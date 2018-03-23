@@ -1,17 +1,20 @@
 package handlers;
 
-import catalogs.CatalogUser;
+import catalogs.CatalogoUser;
 import domain.*;
 import exceptions.*;
 
-public class OpinionHandler extends  GodHandler {
+import java.io.IOException;
 
-    private static CatalogUser catUser;
+public class OpinionHandler extends  GodHandler implements handlers.Interface.IOpinionHandler {
+
+    private static CatalogoUser catUser;
 
     public OpinionHandler() {
-        catUser = CatalogUser.getCatalogo();
+        catUser = CatalogoUser.getCatalogo();
     }
 
+    @Override
     public void makeComment(String comment, String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException {
 
         User uID = catUser.getUser(userID);
@@ -29,6 +32,7 @@ public class OpinionHandler extends  GodHandler {
         catUser.updateUser(uID);
     }
 
+    @Override
     public void addLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, AlreadyLikedException {
 
         User uID = catUser.getUser(userID);
@@ -50,6 +54,7 @@ public class OpinionHandler extends  GodHandler {
         catUser.updateUser(uID);
     }
 
+    @Override
     public void addDisLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, AlreadyDislikedException {
 
         User uID = catUser.getUser(userID);

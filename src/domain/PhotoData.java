@@ -1,6 +1,6 @@
 package domain;
 
-import domain_interface.IPhotoData;
+import domain.Interface.IPhotoData;
 
 import java.io.Serializable;
 import java.util.Date;
