@@ -29,7 +29,7 @@ public class ServerMessage {
      * Create the ServerMessage to communicate.
      */
     public ServerMessage() {
-        this.catUser = CatalogUser.getCatalogo();
+        this.catUser = CatalogUser.getCatalog();
     }
 
     /**

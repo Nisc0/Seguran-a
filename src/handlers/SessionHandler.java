@@ -9,7 +9,7 @@ public class SessionHandler extends GodHandler implements handlers.Interface.ISe
     private static CatalogUser catUser;
 
     public SessionHandler() {
-        catUser = CatalogUser.getCatalogo();
+        catUser = CatalogUser.getCatalog();
     }
 
     @Override

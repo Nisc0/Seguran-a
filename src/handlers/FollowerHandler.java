@@ -9,7 +9,7 @@ public class FollowerHandler extends GodHandler implements handlers.Interface.IF
     private static CatalogUser catUser;
 
     public FollowerHandler() {
-        catUser = CatalogUser.getCatalogo();
+        catUser = CatalogUser.getCatalog();
     }
 
     @Override

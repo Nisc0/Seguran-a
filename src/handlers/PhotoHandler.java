@@ -12,7 +12,7 @@ public class PhotoHandler extends GodHandler implements handlers.Interface.IPhot
     private static CatalogUser catUser;
 
     public PhotoHandler() {
-        catUser = CatalogUser.getCatalogo();
+        catUser = CatalogUser.getCatalog();
     }
 
     @Override
@@ -36,7 +36,7 @@ public class PhotoHandler extends GodHandler implements handlers.Interface.IPhot
             throw new NoSuchUserException();
 
         if(!currUser.isFollowing(userID))
-            if (currUser.getID() != userID) {
+            if (!currUser.getID().equals(userID)) {
                 throw new NotFollowingException();
             }
 
@@ -52,7 +52,7 @@ public class PhotoHandler extends GodHandler implements handlers.Interface.IPhot
             throw new NoSuchUserException();
 
         if(!currUser.isFollowing(userID))
-            if (currUser.getID() != userID) {
+            if (!currUser.getID().equals(userID)) {
                 throw new NotFollowingException();
             }
 
