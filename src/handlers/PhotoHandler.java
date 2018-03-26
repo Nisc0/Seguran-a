@@ -11,8 +11,9 @@ public class PhotoHandler extends GodHandler implements handlers.Interface.IPhot
 
     private static CatalogUser catUser;
 
-    public PhotoHandler() {
+    public PhotoHandler(String userID) {
         catUser = CatalogUser.getCatalog();
+        setCurrUser(catUser.getUser(userID));
     }
 
     @Override

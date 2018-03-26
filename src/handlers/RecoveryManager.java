@@ -94,6 +94,7 @@ public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
         File fl = new File(file_users, userID + "/");
         for (Photo p : uPh) {
             File flPh = new File(fl, p.getPhotoID() + "." + p.getExtension());
+            System.out.println(flPh.toString());
             p.setImage(ImageIO.read(flPh));
         }
     }

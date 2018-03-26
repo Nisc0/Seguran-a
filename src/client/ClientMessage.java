@@ -21,8 +21,9 @@ public class ClientMessage {
 
     /**
      * Client Message Construtor
+     *
      * @param server server
-     * @param port server port
+     * @param port   server port
      * @throws IOException
      */
     public ClientMessage(String server, int port) throws IOException {
@@ -33,8 +34,9 @@ public class ClientMessage {
 
     /**
      * Starts a session in the server
+     *
      * @param currUser name of the user
-     * @param pwd user's password
+     * @param pwd      user's password
      * @return
      * @throws IOException
      * @throws ClassNotFoundException
@@ -59,6 +61,7 @@ public class ClientMessage {
 
     /**
      * Ends the session for the user.
+     *
      * @param currUser user to terminate session
      * @return true if success, false othewise
      * @throws IOException
@@ -84,10 +87,11 @@ public class ClientMessage {
 
     /**
      * Adds a photo to the client in the server
+     *
      * @param currUser user to add photo
-     * @param photoID id (name) of the photo
-     * @param photo photo to add
-     * @param img bufferimage
+     * @param photoID  id (name) of the photo
+     * @param photo    photo to add
+     * @param img      bufferimage
      * @return true if success, false othewise
      * @throws IOException
      * @throws ClassNotFoundException
@@ -101,20 +105,22 @@ public class ClientMessage {
      * @throws WrongUserPasswordException
      * @throws AlreadyNotFollowingException
      */
-    public boolean addPhoto(String currUser, String photoID, Photo photo, BufferedImage img) throws IOException, ClassNotFoundException,
-            DuplicatePhotoException, AlreadyFollowingException, NotFollowingException, NoSuchUserException,
-            AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
-            AlreadyNotFollowingException {
+    public boolean addPhoto(String currUser, String photoID, Photo photo, BufferedImage img) throws IOException,
+            ClassNotFoundException, DuplicatePhotoException, AlreadyFollowingException, NotFollowingException,
+            NoSuchUserException, AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException,
+            WrongUserPasswordException, AlreadyNotFollowingException {
 
-        MsgPhoto msg = (MsgPhoto) cl.sendReceive(new MsgPhoto(MsgType.ADDPHOTO, null, currUser, null, true, photoID, photo, img));
+        MsgPhoto msg = (MsgPhoto) cl.sendReceive(new MsgPhoto(MsgType.ADDPHOTO, null, currUser, null, true, photoID,
+                photo, img));
         if (msg.getC_err() != null) findException(msg.getC_err());
         return msg.getSuccess();
     }
 
     /**
      * Retrives all users photo
+     *
      * @param currUser current user
-     * @param userID client to retrive all photos
+     * @param userID   client to retrive all photos
      * @return a list with all photodata from the user
      * @throws IOException
      * @throws ClassNotFoundException
@@ -132,16 +138,18 @@ public class ClientMessage {
             ClassNotFoundException, DuplicatePhotoException, AlreadyFollowingException, NotFollowingException,
             NoSuchUserException, AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException,
             WrongUserPasswordException, AlreadyNotFollowingException {
-        MsgPhotoData msg = (MsgPhotoData) cl.sendReceive(new MsgPhotoData(MsgType.ALLPHOTOSDATA, null, currUser, userID, true, null));
+        MsgPhotoData msg = (MsgPhotoData) cl.sendReceive(new MsgPhotoData(MsgType.ALLPHOTOSDATA, null, currUser,
+                userID, true, null));
         if (msg.getC_err() != null) findException(msg.getC_err());
         return msg.getPhotoDataList();
     }
 
     /**
      * Retrives all opinions from a photo
+     *
      * @param currUser current user
-     * @param userID the user that the photo belongs
-     * @param photoID name of the photo to get the opinion
+     * @param userID   the user that the photo belongs
+     * @param photoID  name of the photo to get the opinion
      * @return the photo opinion
      * @throws IOException
      * @throws ClassNotFoundException
@@ -159,13 +167,13 @@ public class ClientMessage {
             ClassNotFoundException, DuplicatePhotoException, AlreadyFollowingException, NotFollowingException,
             NoSuchUserException, AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException,
             WrongUserPasswordException, AlreadyNotFollowingException {
-        MsgPhoto msg = (MsgPhoto) cl.sendReceive(new MsgPhoto(MsgType.PHOTOOPINION, null, currUser, userID, true, photoID));
+        MsgPhoto msg = (MsgPhoto) cl.sendReceive(new MsgPhoto(MsgType.PHOTOOPINION, null, currUser, userID, true,
+                photoID));
         if (msg.getC_err() != null) findException(msg.getC_err());
         return msg.getOpinion();
     }
 
     /**
-     *
      * @param currUser
      * @param userID
      * @return
@@ -191,7 +199,6 @@ public class ClientMessage {
     }
 
     /**
-     *
      * @param currUser
      * @param comment
      * @param userID
@@ -213,13 +220,13 @@ public class ClientMessage {
             ClassNotFoundException, DuplicatePhotoException, AlreadyFollowingException, NotFollowingException,
             NoSuchUserException, AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException,
             WrongUserPasswordException, AlreadyNotFollowingException {
-        MsgOpinion msg = (MsgOpinion) cl.sendReceive(new MsgOpinion(MsgType.COMMENTPHOTO, null, currUser, userID, true, photoID, comment));
+        MsgOpinion msg = (MsgOpinion) cl.sendReceive(new MsgOpinion(MsgType.COMMENTPHOTO, null, currUser, userID,
+                true, photoID, comment));
         if (msg.getC_err() != null) findException(msg.getC_err());
         return msg.getSuccess();
     }
 
     /**
-     *
      * @param currUser
      * @param userID
      * @param photoID
@@ -236,17 +243,17 @@ public class ClientMessage {
      * @throws WrongUserPasswordException
      * @throws AlreadyNotFollowingException
      */
-    public boolean likePhoto(String currUser, String userID, String photoID) throws IOException, ClassNotFoundException,
-            DuplicatePhotoException, AlreadyFollowingException, NotFollowingException, NoSuchUserException,
-            AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
-            AlreadyNotFollowingException {
-        MsgOpinion msg = (MsgOpinion) cl.sendReceive(new MsgOpinion(MsgType.LIKEPHOTO, null, currUser, userID, true, photoID, true));
+    public boolean likePhoto(String currUser, String userID, String photoID) throws IOException,
+            ClassNotFoundException, DuplicatePhotoException, AlreadyFollowingException, NotFollowingException,
+            NoSuchUserException, AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException,
+            WrongUserPasswordException, AlreadyNotFollowingException {
+        MsgOpinion msg = (MsgOpinion) cl.sendReceive(new MsgOpinion(MsgType.LIKEPHOTO, null, currUser, userID, true,
+                photoID, true));
         if (msg.getC_err() != null) findException(msg.getC_err());
         return msg.getSuccess();
     }
 
     /**
-     *
      * @param currUser
      * @param userID
      * @param photoID
@@ -263,17 +270,17 @@ public class ClientMessage {
      * @throws WrongUserPasswordException
      * @throws AlreadyNotFollowingException
      */
-    public boolean dislikePhoto(String currUser, String userID, String photoID) throws IOException, ClassNotFoundException,
-            DuplicatePhotoException, AlreadyFollowingException, NotFollowingException, NoSuchUserException,
-            AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
-            AlreadyNotFollowingException {
-        MsgOpinion msg = (MsgOpinion) cl.sendReceive(new MsgOpinion(MsgType.DISLIKEPHOTO, null, currUser, userID, true, photoID, false));
+    public boolean dislikePhoto(String currUser, String userID, String photoID) throws IOException,
+            ClassNotFoundException, DuplicatePhotoException, AlreadyFollowingException, NotFollowingException,
+            NoSuchUserException, AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException,
+            WrongUserPasswordException, AlreadyNotFollowingException {
+        MsgOpinion msg = (MsgOpinion) cl.sendReceive(new MsgOpinion(MsgType.DISLIKEPHOTO, null, currUser, userID,
+                true, photoID, false));
         if (msg.getC_err() != null) findException(msg.getC_err());
         return msg.getSuccess();
     }
 
     /**
-     *
      * @param currUser
      * @param userID
      * @return
@@ -293,13 +300,13 @@ public class ClientMessage {
             DuplicatePhotoException, AlreadyFollowingException, NotFollowingException, NoSuchUserException,
             AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
             AlreadyNotFollowingException {
-        MsgFollower msg = (MsgFollower) cl.sendReceive(new MsgFollower(MsgType.FOLLOWUSER, null, currUser, userID, true));
+        MsgFollower msg = (MsgFollower) cl.sendReceive(new MsgFollower(MsgType.FOLLOWUSER, null, currUser, userID,
+                true));
         if (msg.getC_err() != null) findException(msg.getC_err());
         return msg.getSuccess();
     }
 
     /**
-     *
      * @param currUser
      * @param userID
      * @return
@@ -317,14 +324,15 @@ public class ClientMessage {
      */
     public boolean unfollowUser(String currUser, String userID) throws IOException, ClassNotFoundException,
             DuplicatePhotoException, AlreadyFollowingException, NotFollowingException, NoSuchUserException,
-            AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException, AlreadyNotFollowingException {
-        MsgFollower msg = (MsgFollower) cl.sendReceive(new MsgFollower(MsgType.UNFOLLOWUSER, null, currUser, userID, true));
+            AlreadyLikedException, NoSuchPhotoException, AlreadyDislikedException, WrongUserPasswordException,
+            AlreadyNotFollowingException {
+        MsgFollower msg = (MsgFollower) cl.sendReceive(new MsgFollower(MsgType.UNFOLLOWUSER, null, currUser, userID,
+                true));
         if (msg.getC_err() != null) findException(msg.getC_err());
         return msg.getSuccess();
     }
 
     /**
-     *
      * @param err
      * @throws WrongUserPasswordException
      * @throws NotFollowingException

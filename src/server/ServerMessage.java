@@ -40,19 +40,19 @@ public class ServerMessage {
     public MsgSession startSession(MsgSession m) {
         String user = m.getUser();
         String pass = m.getPwd();
-        sessionHandler = new SessionHandler();
+        sessionHandler = new SessionHandler(user);
         MsgSession result;
 
         try {
             if (sessionHandler.startSession(user, pass)) {
-                followerHandler = new FollowerHandler();
-                opinionHandler = new OpinionHandler();
-                photoHandler = new PhotoHandler();
+                followerHandler = new FollowerHandler(user);
+                opinionHandler = new OpinionHandler(user);
+                photoHandler = new PhotoHandler(user);
                 result = new MsgSession(STARTSESSION, null, user, true);
             } else {
-                followerHandler = new FollowerHandler();
-                opinionHandler = new OpinionHandler();
-                photoHandler = new PhotoHandler();
+                followerHandler = new FollowerHandler(user);
+                opinionHandler = new OpinionHandler(user);
+                photoHandler = new PhotoHandler(user);
                 result = new MsgSession(STARTSESSION, USERCREATED, user, true);
             }
         } catch (WrongUserPasswordException e) {

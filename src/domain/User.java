@@ -17,7 +17,6 @@ public class User implements IUser, Serializable {
 
     private String userID;
     private String password;
-    private transient Map<String, User> follows;
     private Map<String, Photo> photos;
     private Set<String> rec_follows;
 
@@ -25,7 +24,6 @@ public class User implements IUser, Serializable {
     public User(String id, String pass) {
         userID = id;
         password = pass;
-        follows = new HashMap<>();
         photos = new HashMap<>();
         rec_follows = new HashSet<>();
 
@@ -121,16 +119,6 @@ public class User implements IUser, Serializable {
     public String toString() {
         return ("userID: " + userID + ", ") +
                 "pass: " + password + ", ";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if(o instanceof User) {
-            User u = (User) o;
-            if (this.userID == u.getID())
-                return true;
-        }
-        return false;
     }
 
 }

@@ -5,8 +5,7 @@ import domain.*;
 
 public abstract class  GodHandler implements handlers.Interface.IGodHandler {
 
-    protected static User currUser;
-
+    protected User currUser;
 
     @Override
     public User getCurrUser() {

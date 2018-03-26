@@ -1,0 +1,8 @@
+grant {
+  permission java.util.PropertyPermission "*", "read";
+  permission java.net.SocketPermission "*:23232", "listen";
+  permission java.net.SocketPermission "*:1024-", "accept";
+  permission java.io.FilePermission "Files/-", "read, write, delete";
+  permission java.io.FilePermission "-", "write";
+  permission java.lang.RuntimePermission "stopThread";
+};

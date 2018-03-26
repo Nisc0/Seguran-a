@@ -6,24 +6,26 @@ import exceptions.*;
 
 import java.io.IOException;
 
-public class OpinionHandler extends  GodHandler implements handlers.Interface.IOpinionHandler {
+public class OpinionHandler extends GodHandler implements handlers.Interface.IOpinionHandler {
 
     private static CatalogUser catUser;
 
-    public OpinionHandler() {
+    public OpinionHandler(String userID) {
         catUser = CatalogUser.getCatalog();
+        setCurrUser(catUser.getUser(userID));
     }
 
     @Override
-    public void makeComment(String comment, String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException {
+    public void makeComment(String comment, String userID, String photoID) throws NoSuchUserException,
+            NotFollowingException, NoSuchPhotoException {
 
         User uID = catUser.getUser(userID);
 
-        if(uID == null)
+        if (uID == null)
             throw new NoSuchUserException();
 
-        if(!currUser.isFollowing(userID)) {
-                throw new NotFollowingException();
+        if (!currUser.isFollowing(userID)) {
+            throw new NotFollowingException();
         }
 
         if (!uID.makeComment(comment, currUser.getID(), photoID))
@@ -33,15 +35,16 @@ public class OpinionHandler extends  GodHandler implements handlers.Interface.IO
     }
 
     @Override
-    public void addLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, AlreadyLikedException {
+    public void addLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException,
+            NoSuchPhotoException, AlreadyLikedException {
 
         User uID = catUser.getUser(userID);
 
-        if(uID == null)
+        if (uID == null)
             throw new NoSuchUserException();
 
-        if(!currUser.isFollowing(userID))
-                throw new NotFollowingException();
+        if (!currUser.isFollowing(userID))
+            throw new NotFollowingException();
 
         Photo pID = uID.getPhoto(photoID);
 
@@ -49,21 +52,22 @@ public class OpinionHandler extends  GodHandler implements handlers.Interface.IO
             throw new NoSuchPhotoException();
 
         if (!pID.addOpinion(currUser.getID(), true))
-            throw new  AlreadyLikedException();
+            throw new AlreadyLikedException();
 
         catUser.updateUser(uID);
     }
 
     @Override
-    public void addDisLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, AlreadyDislikedException {
+    public void addDisLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException,
+            NoSuchPhotoException, AlreadyDislikedException {
 
         User uID = catUser.getUser(userID);
 
-        if(uID == null)
+        if (uID == null)
             throw new NoSuchUserException();
 
-        if(!currUser.isFollowing(userID))
-                throw new NotFollowingException();
+        if (!currUser.isFollowing(userID))
+            throw new NotFollowingException();
 
         Photo pID = uID.getPhoto(photoID);
         if (pID == null)

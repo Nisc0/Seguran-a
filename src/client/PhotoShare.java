@@ -50,6 +50,7 @@ public class PhotoShare {
 
         System.out.println("Awaiting orders:");
         while (isSessionOpen) {
+        System.out.print("> ");
 
             String line = scan.nextLine();
             String[] in = line.split(" ");
@@ -66,7 +67,7 @@ public class PhotoShare {
 
                     if (in[0].length() < 2) {
                         System.out.println("Please, only use: -a, -l, -i, -g, -c, -L, -D, -f, -r, quit");
-                        break;
+                        continue;
                     }
 
                     char op = in[0].charAt(1);
@@ -137,7 +138,7 @@ public class PhotoShare {
                                 File savedPhotos = new File("SavedPhotos");
                                 savedPhotos.mkdir();
                                 for (Photo p : list) {
-                                    File imgFile = new File(savedPhotos, p.getPhotoID());
+                                    File imgFile = new File(savedPhotos, p.getPhotoID()+'.'+p.getExtension());
                                     ImageIO.write(p.getImage(), p.getExtension(), imgFile);
                                 }
                             } else {

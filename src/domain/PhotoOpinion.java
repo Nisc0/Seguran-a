@@ -3,6 +3,7 @@ package domain;
 import domain.Interface.IPhotoOpinion;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public class PhotoOpinion implements IPhotoOpinion, Serializable {
         this.photoID = id;
         this.likes = likes;
         this.dislikes = dislikes;
-        this.comm = comm;
+        this.comm = new ArrayList<>(comm);
     }
 
     @Override
