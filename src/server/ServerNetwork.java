@@ -1,8 +1,10 @@
 package server;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+
+
+import javax.net.ssl.*;
+
 
 public class ServerNetwork{
 
@@ -24,41 +26,41 @@ public class ServerNetwork{
      * @param port number (in String) on which the the port is created
      */
     public void startServer (String port){
-        ServerSocket sSoc = null;
         boolean serverOnline = true;
+        SSLServerSocketFactory sslServerSocketfactory = (SSLServerSocketFactory)SSLServerSocketFactory.getDefault();
+        SSLServerSocket sslServerSocket = null;
 
-        try {
-            sSoc = new ServerSocket(Integer.parseInt(port));
-            System.out.println("serversocket criada starserver!");
-
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
+        try{
+            // Initialize the Server Socket
+            sslServerSocket = (SSLServerSocket)sslServerSocketfactory.createServerSocket(Integer.parseInt(port));
+        }
+        catch (IOException e){
+            System.out.println("Error creating server socket!");
             System.exit(-1);
         }
 
 
-        while(serverOnline) {
-            try {
-                Socket inSoc = sSoc.accept();
-                ServerThread newServerThread = new ServerThread(inSoc);
-                newServerThread.start();
-                System.out.println("Thread Criada!");
+            while(serverOnline) {
+                try {
+                    SSLSocket sslSocket = (SSLSocket) sslServerSocket.accept();
+                    ServerThread newServerThread = new ServerThread(sslSocket);
+                    System.out.println("ServerSocker created!");
+                    newServerThread.start();
+                    System.out.println("Thread Criada!");
+                }
+                catch(IOException e) {
+                    System.out.println("Couldn't connect to client!!");
+                }
 
             }
-            catch (IOException e) {
-                System.out.println("Couldn't connect to client!");
-            }
-
-        }
 
         try {
-            sSoc.close();
-            serverOnline = false;
+            sslServerSocket.close();
         }
-        catch (IOException e){
+        catch (IOException e) {
             System.out.println("Couldn't close server!");
         }
-
     }
+
 
 }
