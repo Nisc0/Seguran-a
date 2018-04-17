@@ -5,6 +5,9 @@ import java.net.Socket;
 
 import message.Message;
 
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+
 //Classe com o metodo send_receive, onde cria a Socket
 public class ClientNetwork {
 
@@ -19,13 +22,15 @@ public class ClientNetwork {
      * @throws IOException
      */
     public ClientNetwork(String ip, int port) throws IOException {
-        socket = new Socket(ip, port);
-        out = new ObjectOutputStream(socket.getOutputStream());
-        in = new ObjectInputStream(socket.getInputStream());
+        SSLSocketFactory sslSocketfactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
+        SSLSocket sslSocket = (SSLSocket) sslSocketfactory.createSocket(ip,port);
+
+        out = new ObjectOutputStream(sslSocket.getOutputStream());
+        in = new ObjectInputStream(sslSocket.getInputStream());
     }
 
     /**
-     * Cummunicates with the server
+     * Communicates with the server
      * @param msg Message to send the server
      * @return Message recieve from the server
      * @throws IOException
@@ -56,29 +61,4 @@ public class ClientNetwork {
         return (Message) in.readObject();
     }
 
-    /**
-     *
-     * @param msg
-     * @return
-     * @throws IOException
-     */
-    private byte[] serialize(Message msg) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ObjectOutputStream os = new ObjectOutputStream(out);
-        os.writeObject(msg);
-        return out.toByteArray();
-    }
-
-    /**
-     *
-     * @param msg
-     * @return
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    private Message deserialize(byte[] msg) throws IOException, ClassNotFoundException {
-        ByteArrayInputStream in = new ByteArrayInputStream(msg);
-        ObjectInputStream is = new ObjectInputStream(in);
-        return (Message) is.readObject();
-    }
 }
