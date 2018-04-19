@@ -55,7 +55,7 @@ public class manUsers {
         if(fl.list().length > 0) {
 
             //verificar se ficheiro das pass's n foi alterado
-            if(!Arrays.equals(obtainMac(key), Files.readAllBytes(macFile.toPath()))) {
+            if(!Arrays.equals(makeMac(key), Files.readAllBytes(macFile.toPath()))) {
                 System.out.println("Acesso Negado: Password Errado ou Ficheiro Alterado");
                 System.exit(-1);
             }
@@ -67,7 +67,8 @@ public class manUsers {
 
             FileOutputStream fos = new FileOutputStream(macFile);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.write(obtainMac(key));
+            oos.write(makeMac(key));
+            fos.close();
         }
 
         //pedido do comando
@@ -76,28 +77,41 @@ public class manUsers {
         String comando = scanner.next();
 
 
+        //inicio do processamento
+        BufferedWriter bw = new BufferedWriter(new FileWriter(passFile, true));
+        BufferedReader br = new BufferedReader(new FileReader(passFile));
+        Base64.Encoder enc = getEncoder();
+        String nome;
+        String pass;
+        String userInfo;
+        byte[] salted;
+        FileOutputStream fos = new FileOutputStream(macFile);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+
         //processamento do comando
         switch (comando) {
 
             case "add":
 
-                FileWriter fw = new FileWriter(passFile, true);
-                Base64.Encoder enc = getEncoder();
-
                 System.out.println("A adicionar novo utilizador:");
 
                 System.out.println("Qual o nome?");
-                String nome = scanner.next();
+                nome = scanner.next();
 
                 System.out.println("Qual a pass?");
-                String pass = scanner.next();
+                pass = scanner.next();
 
                 salt = makeSalt();
 
-                byte[] salted = getSalty(pass, salt);
+                salted = getSalty(pass, salt);
 
-                fw.write(nome + ":" + enc.encodeToString(salt) + ":" + enc.encodeToString(salted));
-                fw.close();
+                bw.write(nome + ":" + enc.encodeToString(salt) + ":" + enc.encodeToString(salted));
+                bw.close();
+
+                oos.write(makeMac(key));
+                fos.close();
+
 
                 break;
 
@@ -106,6 +120,37 @@ public class manUsers {
                 break;
 
             case "modify":
+
+
+                System.out.println("A modificar utilizador:");
+
+                //verificação de nome
+                System.out.println("Qual o nome?");
+                nome = scanner.next();
+                userInfo = searchUser(nome, br);
+
+                if(userInfo == null)
+                    System.out.println("Erro: Utilizador não encontrado");
+
+                //verificação de pass
+                salt = userInfo.split(":")[1].getBytes();
+                System.out.println("Qual a pass antiga?");
+                pass = scanner.next();
+
+                salted = getSalty(pass, salt);
+                if(!salted.equals(userInfo.split(":")[2]))
+                    System.out.println("Erro: Password errada");
+
+                //defenição de nova pass
+                System.out.println("Qual a nova pass?");
+                pass = scanner.next();
+
+                salted = getSalty(pass, salt);
+                bw.write(nome + ":" + enc.encodeToString(salt) + ":" + enc.encodeToString(salted));
+                bw.close();
+
+                oos.write(makeMac(key));
+                fos.close();
 
                 break;
 
@@ -131,7 +176,7 @@ public class manUsers {
     }
 
 
-    private static byte[] obtainMac(SecretKey k) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
+    private static byte[] makeMac(SecretKey k) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
 
         Mac mac = Mac.getInstance("HmacSHA256");
         mac.init(k);
@@ -158,6 +203,16 @@ public class manUsers {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         return digest.digest(bos.toByteArray());
 
+    }
+
+    private static String searchUser(String nome, BufferedReader br) throws IOException {
+
+        String line = br.readLine();
+        while(!nome.equals(line.split(":")[0])) {
+            line = br.readLine();
+        }
+
+        return line;
     }
 
 
