@@ -1,6 +1,7 @@
 package server;
 
 import java.io.IOException;
+import java.net.ServerSocket;
 
 
 import javax.net.ssl.*;
@@ -27,14 +28,18 @@ public class ServerNetwork{
      */
     public void startServer (String port){
         boolean serverOnline = true;
+
         SSLServerSocketFactory sslServerSocketfactory = (SSLServerSocketFactory)SSLServerSocketFactory.getDefault();
         SSLServerSocket sslServerSocket = null;
 
         try{
             // Initialize the Server Socket
-            sslServerSocket = (SSLServerSocket)sslServerSocketfactory.createServerSocket(Integer.parseInt(port));
+            sslServerSocket = (SSLServerSocket) sslServerSocketfactory.createServerSocket(Integer.parseInt(port));
+            sslServerSocket.setNeedClientAuth(true);
+
         }
         catch (IOException e){
+            e.printStackTrace();
             System.out.println("Error creating server socket!");
             System.exit(-1);
         }
@@ -44,7 +49,7 @@ public class ServerNetwork{
                 try {
                     SSLSocket sslSocket = (SSLSocket) sslServerSocket.accept();
                     ServerThread newServerThread = new ServerThread(sslSocket);
-                    System.out.println("ServerSocker created!");
+                    System.out.println("SSL ServerSocker created!");
                     newServerThread.start();
                     System.out.println("Thread Criada!");
                 }

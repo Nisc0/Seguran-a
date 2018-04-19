@@ -23,6 +23,10 @@ public class PhotoShare {
             return;
         }
 
+        System.setProperty("javax.net.ssl.keyStore", "./Autentication/ClientKeyStore.keyStore");
+        System.setProperty("javax.net.ssl.keyStorePassword", "dibrunis");
+        System.setProperty("javax.net.ssl.trustStore", "./Autentication/ClientTrustStore.keyStore");
+
         String[] serverPort;
         String serverAdd = args[2];
         int port;
