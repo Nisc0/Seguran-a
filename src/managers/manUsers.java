@@ -1,5 +1,7 @@
 package managers;
 
+import sun.misc.BASE64Encoder;
+
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -7,12 +9,16 @@ import javax.crypto.spec.PBEKeySpec;
 import java.io.*;
 import java.nio.file.Files;
 import java.security.InvalidKeyException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Random;
 import java.util.Scanner;
+
+import static java.util.Base64.*;
 
 public class manUsers {
 
@@ -35,12 +41,8 @@ public class manUsers {
         System.out.println("Administrador, qual a password?");
         String password = scanner.next();
 
-
-        //vós sois o sal da terra
-        final Random r = new SecureRandom();
-        byte[] salt = new byte[64];
-        r.nextBytes(salt);
-
+        //o nosso sal, cheio de amor
+        byte[] salt = {0x6e, 0x69, 0x73, 0x63, 0x6f, 0x6e, 0x69, 0x69, 0x2d, 0x63, 0x68, 0x61, 0x6e, 0x20, 0x62, 0x72, 0x75, 0x6e, 0x6f, 0x6e, 0x69, 0x69, 0x2d, 0x63, 0x68, 0x61, 0x6e, 0x20, 0x64, 0x61, 0x69, 0x73, 0x75, 0x6b, 0x69};
 
         //codificação de pass do admin
         PBEKeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, 20);
@@ -68,14 +70,34 @@ public class manUsers {
             oos.write(obtainMac(key));
         }
 
+        //pedido do comando
         System.out.println("Comandos: add, delete, modify");
         System.out.println("Administrador, qual o comando?");
         String comando = scanner.next();
 
 
+        //processamento do comando
         switch (comando) {
 
             case "add":
+
+                FileWriter fw = new FileWriter(passFile, true);
+                Base64.Encoder enc = getEncoder();
+
+                System.out.println("A adicionar novo utilizador:");
+
+                System.out.println("Qual o nome?");
+                String nome = scanner.next();
+
+                System.out.println("Qual a pass?");
+                String pass = scanner.next();
+
+                salt = makeSalt();
+
+                byte[] salted = getSalty(pass, salt);
+
+                fw.write(nome + ":" + enc.encodeToString(salt) + ":" + enc.encodeToString(salted));
+                fw.close();
 
                 break;
 
@@ -117,6 +139,27 @@ public class manUsers {
         return mac.doFinal(bt);
     }
 
+    //vós sois o sal da terra
+    private  static  byte[] makeSalt() {
+
+        final Random r = new SecureRandom();
+        byte[] salt = new byte[64];
+        r.nextBytes(salt);
+        return salt;
+
+    }
+
+
+    private static byte[] getSalty(String pass, byte[] salt) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bos.write(pass.getBytes());
+        bos.write(salt);
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        return digest.digest(bos.toByteArray());
+
+    }
+
 
 
 }
@@ -129,3 +172,4 @@ como verificar se o ficheiro das passes esta ok -- done
 
 
 */
+
