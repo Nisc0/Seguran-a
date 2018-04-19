@@ -26,12 +26,7 @@ public class manUsers {
 
     try {
 
-
-        final Random r = new SecureRandom();
-        byte[] salt = new byte[64];
-        r.nextBytes(salt);
-
-        //Cração da pasta
+        //criação da pasta
         fl.mkdir();
 
 
@@ -39,7 +34,13 @@ public class manUsers {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Administrador, qual a password?");
         String password = scanner.next();
-        //TODO: ver se a pass está bem
+
+
+        //vós sois o sal da terra
+        final Random r = new SecureRandom();
+        byte[] salt = new byte[64];
+        r.nextBytes(salt);
+
 
         //codificação de pass do admin
         PBEKeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, 20);
@@ -47,33 +48,47 @@ public class manUsers {
         SecretKey key = kf.generateSecret(keySpec);
 
 
-        //se não é a primeira execução
+        //verificar se é a primeira execução
         fl.isDirectory();
         if(fl.list().length > 0) {
 
-            FileInputStream fPass = new FileInputStream(passFile);
-            FileInputStream fMac = new FileInputStream(macFile);
-
             //verificar se ficheiro das pass's n foi alterado
-            if(!Arrays.equals(obtainMac(key), Files.readAllBytes(macFile.toPath())))
-                //TODO: para execução
-            {
-
+            if(!Arrays.equals(obtainMac(key), Files.readAllBytes(macFile.toPath()))) {
+                System.out.println("Acesso Negado: Password Errado ou Ficheiro Alterado");
+                System.exit(-1);
             }
+        }
+        else {
+            //criação dos ficheiros
+            passFile.createNewFile();
+            macFile.createNewFile();
+
+            FileOutputStream fos = new FileOutputStream(macFile);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.write(obtainMac(key));
+        }
+
+        System.out.println("Comandos: add, delete, modify");
+        System.out.println("Administrador, qual o comando?");
+        String comando = scanner.next();
 
 
+        switch (comando) {
 
+            case "add":
+
+                break;
+
+            case "delete":
+
+                break;
+
+            case "modify":
+
+                break;
 
         }
 
-/*
-
-        //codificação de pass, n sei se é para já
-        PBEKeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, 20);
-        SecretKeyFactory kf = SecretKeyFactory.getInstance("PBEWithHmacSHA256AndAES_128");
-        SecretKey key = kf.generateSecret(keySpec);
-
-*/
 
     }
     catch (NoSuchAlgorithmException e) {
@@ -88,6 +103,9 @@ public class manUsers {
 
 
 
+
+
+
     }
 
 
@@ -98,13 +116,16 @@ public class manUsers {
         byte[] bt = Files.readAllBytes(passFile.toPath());
         return mac.doFinal(bt);
     }
+
+
+
 }
 
 /*
 
 duvidas:
-como defenir qual a pass do admin
-como verificar se o ficheiro das passes esta ok
+como defenir qual a pass do admin -- n se define
+como verificar se o ficheiro das passes esta ok -- done
 
 
 */
