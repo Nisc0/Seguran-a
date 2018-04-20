@@ -65,7 +65,7 @@ public class PhotoShare {
                         }
                     }
 
-                    if (in[0].length() < 2) {
+                    if (in[0].length() < 2 || in[0].charAt(0) != '-') {
                         System.out.println("Please, only use: -a, -l, -i, -g, -c, -L, -D, -f, -r, quit");
                         continue;
                     }
