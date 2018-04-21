@@ -81,10 +81,10 @@ public class manUsers {
             String comand = scanner.next();
 
             while(true) {
-
                 processCommand(comand, scanner, key);
                 System.out.println("Operation successful");
                 System.out.println("What's next the command?");
+                comand = scanner.next();
             }
 
 
@@ -161,7 +161,7 @@ public class manUsers {
 
                 salted = getSalty(pass, salt);
 
-                bw.write(name + ":" + enc.encodeToString(salt) + ":" + enc.encodeToString(salted));
+                bw.write(name + ":" + enc.encodeToString(salt) + ":" + enc.encodeToString(salted) + "\n");
                 bw.close();
 
                 oos.write(makeMac(key));
