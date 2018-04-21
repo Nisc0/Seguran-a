@@ -57,9 +57,12 @@ public class manUsers {
                 FileInputStream fos = new FileInputStream(macFile);
                 ObjectInputStream oos = new ObjectInputStream(fos);
                 //verificar se ficheiro das pass's n foi alterado
-                if(!Arrays.equals(makeMac(key), (byte[]) oos.readObject())) {
+                byte[] oldMac = (byte[]) oos.readObject();
+                oos.close();
+                if(!Arrays.equals(makeMac(key), oldMac)) {
                     System.out.println("Access Denied: Wrong Password or Corrumpted File");
                     System.exit(-1);
+
                 }
             }
             else {
@@ -69,34 +72,21 @@ public class manUsers {
 
                 FileOutputStream fos = new FileOutputStream(macFile);
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
-                oos.write(makeMac(key));
-                fos.close();
+                oos.writeObject(makeMac(key));
+                oos.close();
             }
-
-
 
             //pedido do comando
             System.out.println("Administrator, what's the command?");
             System.out.println("Available Commands: add, delete, modify & quit");
-            String comand = scanner.next();
+            String command = scanner.next();
 
             while(true) {
-                processCommand(comand, scanner, key);
+                processCommand(command, scanner, key);
                 System.out.println("Operation successful");
                 System.out.println("What's next the command?");
-                comand = scanner.next();
+                command = scanner.next();
             }
-
-
-
-
-
-
-
-
-
-
-
 
 
         }
@@ -132,22 +122,25 @@ public class manUsers {
 
 
         //inicio do processamento
-        BufferedWriter bw = new BufferedWriter(new FileWriter(passFile, true));
-        BufferedReader br = new BufferedReader(new FileReader(passFile));
+
         Base64.Encoder enc = getEncoder();
         String name;
         String pass;
         byte[] salt;
         String userInfo;
         byte[] salted;
-        FileOutputStream fos = new FileOutputStream(macFile);
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
+
 
 
         //processamento do comand
         switch (comand) {
 
             case "add":
+
+                BufferedWriter bw = new BufferedWriter(new FileWriter(passFile, true));
+
+                FileOutputStream fos = new FileOutputStream(macFile);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
 
                 System.out.println("Adding new User:");
 
@@ -164,8 +157,8 @@ public class manUsers {
                 bw.write(name + ":" + enc.encodeToString(salt) + ":" + enc.encodeToString(salted) + "\n");
                 bw.close();
 
-                oos.write(makeMac(key));
-                fos.close();
+                oos.writeObject(makeMac(key));
+                oos.close();
 
 
                 break;
@@ -177,22 +170,19 @@ public class manUsers {
                 //verificação de name
                 System.out.println("What's the username?");
                 name = scanner.next();
-                userInfo = searchUser(name, br);
+                userInfo = searchUser(name);
 
-                if(userInfo == null)
+                if(userInfo == null) {
                     System.out.println("Error: User not found");
+                    break;
+                }
 
-                //verificação de pass
-                salt = userInfo.split(":")[1].getBytes();
-                System.out.println("What's the old password?");
-                pass = scanner.next();
+                deleteUser(name);
 
-                salted = getSalty(pass, salt);
-                if(!salted.equals(userInfo.split(":")[2]))
-                    System.out.println("Error: Wrong Password");
-
-                deleteUser(name, br);
-                br.close();
+                FileOutputStream fos3 = new FileOutputStream(macFile);
+                ObjectOutputStream oos3 = new ObjectOutputStream(fos3);
+                oos3.writeObject(makeMac(key));
+                oos3.close();
 
                 break;
 
@@ -203,30 +193,28 @@ public class manUsers {
                 //verificação de name
                 System.out.println("What's the username?");
                 name = scanner.next();
-                userInfo = searchUser(name, br);
+                userInfo = searchUser(name);
 
-                if(userInfo == null)
+                if(userInfo == null) {
                     System.out.println("Error: User not found");
 
-                //verificação de pass
-                salt = userInfo.split(":")[1].getBytes();
-                System.out.println("What's the old password?");
-                pass = scanner.next();
+                    break;
+                }
 
-                salted = getSalty(pass, salt);
-                if(!salted.equals(userInfo.split(":")[2]))
-                    System.out.println("Error: Wrong Password");
+                //verificação de pass
+                salt = makeSalt();
 
                 //defenição de nova pass
                 System.out.println("What's the new password?");
                 pass = scanner.next();
 
                 salted = getSalty(pass, salt);
-                modifyUser(name, enc.encodeToString(salt), enc.encodeToString(salted), br);
-                br.close();
+                modifyUser(name, enc.encodeToString(salt), enc.encodeToString(salted));
 
-                oos.write(makeMac(key));
-                fos.close();
+                FileOutputStream fos2 = new FileOutputStream(macFile);
+                ObjectOutputStream oos2 = new ObjectOutputStream(fos2);
+                oos2.writeObject(makeMac(key));
+                oos2.close();
 
                 break;
 
@@ -263,8 +251,9 @@ public class manUsers {
 
     }
 
-    private static String searchUser(String name, BufferedReader br) throws IOException {
+    private static String searchUser(String name) throws IOException {
 
+        BufferedReader br = new BufferedReader(new FileReader(passFile));
         String line = br.readLine();
         while(!name.equals(line.split(":")[0])) {
             line = br.readLine();
@@ -273,27 +262,34 @@ public class manUsers {
         return line;
     }
 
-    private static boolean deleteUser(String name, BufferedReader br) throws IOException {
+    private static boolean deleteUser(String name) throws IOException {
 
+
+        BufferedReader br = new BufferedReader(new FileReader(passFile));
         File help = new File(fl, "help.txt");
         BufferedWriter bw = new BufferedWriter(new FileWriter(help));
 
-        FileOutputStream fos = new FileOutputStream(macFile);
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
-
         String line = br.readLine();
+        System.out.println(name);
         while(line != null) {
-            if(name != line.split(":")[0])
-                bw.write(line);
+            System.out.println(line.split(":")[0]);
+            if(!name.equals(line.split(":")[0])) {
+                System.out.println("ca dentro:" + line.split(":")[0]);
+                bw.write(line + "\n");
+            }
             line = br.readLine();
         }
+
+        bw.close();
 
         return help.renameTo(passFile);
 
     }
 
-    private static boolean modifyUser(String name, String salt, String salted, BufferedReader br) throws IOException {
+    private static boolean modifyUser(String name, String salt, String salted) throws IOException {
 
+
+        BufferedReader br = new BufferedReader(new FileReader(passFile));
         File help = new File(fl, "help.txt");
         BufferedWriter bw = new BufferedWriter(new FileWriter(help));
 
@@ -302,12 +298,14 @@ public class manUsers {
 
         String line = br.readLine();
         while(line != null) {
-            if(name != line.split(":")[0])
-                bw.write(line);
+            if(!name.equals(line.split(":")[0]))
+                bw.write(line + "\n");
             else
-                bw.write(name + ":" + salt + ":" + salted);
+                bw.write(name + ":" + salt + ":" + salted + "\n");
             line = br.readLine();
         }
+
+        bw.close();
 
         return help.renameTo(passFile);
 
