@@ -73,118 +73,30 @@ public class manUsers {
                 fos.close();
             }
 
+
+
             //pedido do comando
             System.out.println("Administrator, what's the command?");
             System.out.println("Available Commands: add, delete, modify & quit");
             String comand = scanner.next();
 
+            while(true) {
 
-            //inicio do processamento
-            BufferedWriter bw = new BufferedWriter(new FileWriter(passFile, true));
-            BufferedReader br = new BufferedReader(new FileReader(passFile));
-            Base64.Encoder enc = getEncoder();
-            String name;
-            String pass;
-            String userInfo;
-            byte[] salted;
-            FileOutputStream fos = new FileOutputStream(macFile);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-
-
-            //processamento do comand
-            switch (comand) {
-
-                case "add":
-
-                    System.out.println("Adding new User:");
-
-                    System.out.println("What's the username?");
-                    name = scanner.next();
-
-                    System.out.println("What's the password?");
-                    pass = scanner.next();
-
-                    salt = makeSalt();
-
-                    salted = getSalty(pass, salt);
-
-                    bw.write(name + ":" + enc.encodeToString(salt) + ":" + enc.encodeToString(salted));
-                    bw.close();
-
-                    oos.write(makeMac(key));
-                    fos.close();
-
-
-                    break;
-
-                case "delete":
-
-                    System.out.println("Deleting User:");
-
-                    //verificação de name
-                    System.out.println("What's the username?");
-                    name = scanner.next();
-                    userInfo = searchUser(name, br);
-
-                    if(userInfo == null)
-                        System.out.println("Error: User not found");
-
-                    //verificação de pass
-                    salt = userInfo.split(":")[1].getBytes();
-                    System.out.println("What's the old password?");
-                    pass = scanner.next();
-
-                    salted = getSalty(pass, salt);
-                    if(!salted.equals(userInfo.split(":")[2]))
-                        System.out.println("Error: Wrong Password");
-
-                    deleteUser(name, br);
-                    br.close();
-
-                    break;
-
-                case "modify":
-
-                    System.out.println("Modifying User:");
-
-                    //verificação de name
-                    System.out.println("What's the username?");
-                    name = scanner.next();
-                    userInfo = searchUser(name, br);
-
-                    if(userInfo == null)
-                        System.out.println("Error: User not found");
-
-                    //verificação de pass
-                    salt = userInfo.split(":")[1].getBytes();
-                    System.out.println("What's the old password?");
-                    pass = scanner.next();
-
-                    salted = getSalty(pass, salt);
-                    if(!salted.equals(userInfo.split(":")[2]))
-                        System.out.println("Error: Wrong Password");
-
-                    //defenição de nova pass
-                    System.out.println("What's the new password?");
-                    pass = scanner.next();
-
-                    salted = getSalty(pass, salt);
-                    modifyUser(name, enc.encodeToString(salt), enc.encodeToString(salted), br);
-                    br.close();
-
-                    oos.write(makeMac(key));
-                    fos.close();
-
-                    break;
-
-                case "quit":
-
-                    System.out.println("Program terminated!");
-                    System.exit(0);
-
-                    break;
-
+                processCommand(comand, scanner, key);
+                System.out.println("Operation successful");
+                System.out.println("What's next the command?");
             }
+
+
+
+
+
+
+
+
+
+
+
 
 
         }
@@ -203,6 +115,8 @@ public class manUsers {
 
     }
 
+
+
     /////////////////////////////////////// AUXILIARY METHODS  ////////////////////////////////////////////////////////////////////////////
 
 
@@ -213,6 +127,120 @@ public class manUsers {
         byte[] bt = Files.readAllBytes(passFile.toPath());
         return mac.doFinal(bt);
     }
+
+    private static void processCommand(String comand, Scanner scanner, SecretKey key) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
+
+
+        //inicio do processamento
+        BufferedWriter bw = new BufferedWriter(new FileWriter(passFile, true));
+        BufferedReader br = new BufferedReader(new FileReader(passFile));
+        Base64.Encoder enc = getEncoder();
+        String name;
+        String pass;
+        byte[] salt;
+        String userInfo;
+        byte[] salted;
+        FileOutputStream fos = new FileOutputStream(macFile);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+
+        //processamento do comand
+        switch (comand) {
+
+            case "add":
+
+                System.out.println("Adding new User:");
+
+                System.out.println("What's the username?");
+                name = scanner.next();
+
+                System.out.println("What's the password?");
+                pass = scanner.next();
+
+                salt = makeSalt();
+
+                salted = getSalty(pass, salt);
+
+                bw.write(name + ":" + enc.encodeToString(salt) + ":" + enc.encodeToString(salted));
+                bw.close();
+
+                oos.write(makeMac(key));
+                fos.close();
+
+
+                break;
+
+            case "delete":
+
+                System.out.println("Deleting User:");
+
+                //verificação de name
+                System.out.println("What's the username?");
+                name = scanner.next();
+                userInfo = searchUser(name, br);
+
+                if(userInfo == null)
+                    System.out.println("Error: User not found");
+
+                //verificação de pass
+                salt = userInfo.split(":")[1].getBytes();
+                System.out.println("What's the old password?");
+                pass = scanner.next();
+
+                salted = getSalty(pass, salt);
+                if(!salted.equals(userInfo.split(":")[2]))
+                    System.out.println("Error: Wrong Password");
+
+                deleteUser(name, br);
+                br.close();
+
+                break;
+
+            case "modify":
+
+                System.out.println("Modifying User:");
+
+                //verificação de name
+                System.out.println("What's the username?");
+                name = scanner.next();
+                userInfo = searchUser(name, br);
+
+                if(userInfo == null)
+                    System.out.println("Error: User not found");
+
+                //verificação de pass
+                salt = userInfo.split(":")[1].getBytes();
+                System.out.println("What's the old password?");
+                pass = scanner.next();
+
+                salted = getSalty(pass, salt);
+                if(!salted.equals(userInfo.split(":")[2]))
+                    System.out.println("Error: Wrong Password");
+
+                //defenição de nova pass
+                System.out.println("What's the new password?");
+                pass = scanner.next();
+
+                salted = getSalty(pass, salt);
+                modifyUser(name, enc.encodeToString(salt), enc.encodeToString(salted), br);
+                br.close();
+
+                oos.write(makeMac(key));
+                fos.close();
+
+                break;
+
+            case "quit":
+
+                System.out.println("Program terminated!");
+                System.exit(0);
+
+                break;
+
+        }
+    }
+
+
 
     //vós sois o sal da terra
     private  static  byte[] makeSalt() {
