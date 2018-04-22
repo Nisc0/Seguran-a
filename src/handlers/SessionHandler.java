@@ -8,6 +8,7 @@ public class SessionHandler extends GodHandler implements handlers.Interface.ISe
 
     private static CatalogUser catUser;
 
+
     public SessionHandler(String userID) {
         catUser = CatalogUser.getCatalog();
         setCurrUser(catUser.getUser(userID));

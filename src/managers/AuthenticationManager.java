@@ -10,11 +10,27 @@ import static java.util.Base64.getDecoder;
 
 public class AuthenticationManager {
 
-    Base64.Decoder denc = getDecoder();
-    private static File fl = new File("Files");
-    private static File passFile = new File(fl, "users.txt");
 
+    private static AuthenticationManager instance;
+    private static Base64.Decoder denc;
+    private static File fl;
+    private static File passFile;
 
+    private AuthenticationManager() {
+
+        denc= getDecoder();
+        fl= new File("Files");
+        passFile= new File(fl, "users.txt");
+
+    }
+
+    public static AuthenticationManager getAuthenticater(){
+
+        if (AuthenticationManager.instance == null){
+            AuthenticationManager.instance = new AuthenticationManager();
+        }
+        return AuthenticationManager.instance;
+    }
 
     public boolean authenticate (String name, String pass) {
 
