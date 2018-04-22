@@ -1,6 +1,9 @@
 package managers;
 
 import java.io.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Base64;
 
 import static java.util.Base64.getDecoder;
@@ -15,35 +18,56 @@ public class AuthenticationManager {
 
     public boolean authenticate (String name, String pass) {
 
-        try {
+        byte[] salt;
+        byte[] salted;
 
-
+        try{
 
             BufferedReader br = new BufferedReader(new FileReader(passFile));
 
-            FileInputStream fos = new FileInputStream(passFile);
-            ObjectInputStream oos = new ObjectInputStream(fos);
-
             String line = br.readLine();
-            while(line != null) {
-                if(!name.equals(line.split(":")[0]))
-                    bw.write(line + "\n");
-                else
-                    bw.write(name + ":" + salt + ":" + salted + "\n");
+            while(line != null || !line.contains(name)) {
                 line = br.readLine();
             }
 
-            bw.close();
+            if(line == null) {
+                System.out.println("User not found!");
+                return false;
+            }
 
+            salt = denc.decode(line.split(":")[1]);
+            salted = getSalty(pass, salt);
+
+            if(!Arrays.equals(salted, denc.decode(line.split(":")[2]))) {
+                System.out.println("Wrong password!");
+                return false;
+            }
+
+            br.close();
+
+            return true;
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            return false;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return false;
         }
 
+    }
 
-        return false;
+    private static byte[] getSalty(String pass, byte[] salt) throws NoSuchAlgorithmException, IOException {
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bos.write(pass.getBytes());
+        bos.write(salt);
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        return digest.digest(bos.toByteArray());
+
     }
 
 

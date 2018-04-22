@@ -242,7 +242,7 @@ public class manUsers {
     }
 
 
-    private static byte[] getSalty(String pass, byte[] salt) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
+    private static byte[] getSalty(String pass, byte[] salt) throws NoSuchAlgorithmException, IOException {
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bos.write(pass.getBytes());
