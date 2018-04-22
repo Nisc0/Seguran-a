@@ -56,6 +56,7 @@ public class manUsers {
 
                 FileInputStream fos = new FileInputStream(macFile);
                 ObjectInputStream oos = new ObjectInputStream(fos);
+
                 //verificar se ficheiro das pass's n foi alterado
                 byte[] oldMac = (byte[]) oos.readObject();
                 oos.close();
@@ -259,6 +260,8 @@ public class manUsers {
             line = br.readLine();
         }
 
+        br.close();
+
         return line;
     }
 
@@ -280,6 +283,7 @@ public class manUsers {
             line = br.readLine();
         }
 
+        br.close();
         bw.close();
 
         return help.renameTo(passFile);
@@ -305,6 +309,7 @@ public class manUsers {
             line = br.readLine();
         }
 
+        br.close();
         bw.close();
 
         return help.renameTo(passFile);
