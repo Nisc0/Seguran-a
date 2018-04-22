@@ -1,5 +1,7 @@
 package managers;
 
+import exceptions.WrongUserPasswordException;
+
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -32,7 +34,7 @@ public class AuthenticationManager {
         return AuthenticationManager.instance;
     }
 
-    public boolean authenticate (String name, String pass) {
+    public boolean authenticate (String name, String pass) throws WrongUserPasswordException {
 
         byte[] salt;
         byte[] salted;
@@ -55,8 +57,7 @@ public class AuthenticationManager {
             salted = getSalty(pass, salt);
 
             if(!Arrays.equals(salted, denc.decode(line.split(":")[2]))) {
-                System.out.println("Wrong password!");
-                return false;
+                throw new WrongUserPasswordException();
             }
 
             br.close();
