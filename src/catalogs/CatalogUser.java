@@ -41,6 +41,7 @@ public class CatalogUser implements ICatalogUser {
         for (User u: recov.recUsers()) {
             this.users.put(u.getID(), u);
         }
+
     }
 
     public static CatalogUser getCatalog(){
@@ -86,6 +87,7 @@ public class CatalogUser implements ICatalogUser {
     }
 
     public void getUserPhotos(String userID, Iterable<Photo> uPh) {
+
         try {
             recov.recPhotos(userID, uPh);
         } catch (IOException e) {
@@ -94,12 +96,7 @@ public class CatalogUser implements ICatalogUser {
     }
 
     public void updateUser(User u) {
-        try {
             recov.backupUser(u);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 
