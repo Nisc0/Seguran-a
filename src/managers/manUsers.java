@@ -1,7 +1,6 @@
 package managers;
 
-import sun.misc.BASE64Encoder;
-
+import domain.User;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -163,9 +162,17 @@ public class manUsers {
                 oos.writeObject(makeMac(key));
                 oos.close();
 
-
+                // criação pasta para o utilizador
                 File fl = new File(users, name);
                 fl.mkdirs();
+
+                //criação do utilizador
+                User u = new User(name, pass);
+                File fu = new File(fl, name + ".u");
+                fos = new FileOutputStream(fu);
+                oos = new ObjectOutputStream(fos);
+                oos.writeObject(u);
+                oos.close();
 
                 break;
 
