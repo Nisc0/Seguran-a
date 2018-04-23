@@ -24,6 +24,7 @@ public class manUsers {
 
 
     private static File fl = new File("Files");
+    private static File users = new File(fl,"Users");
     private static File passFile = new File(fl, "users.txt");
     private static File macFile = new File(fl, "sec.mac");
 
@@ -138,6 +139,8 @@ public class manUsers {
 
             case "add":
 
+
+
                 BufferedWriter bw = new BufferedWriter(new FileWriter(passFile, true));
 
                 FileOutputStream fos = new FileOutputStream(macFile);
@@ -162,6 +165,9 @@ public class manUsers {
                 oos.close();
 
 
+                File fl = new File(users, name);
+                fl.mkdirs();
+
                 break;
 
             case "delete":
@@ -184,6 +190,9 @@ public class manUsers {
                 ObjectOutputStream oos3 = new ObjectOutputStream(fos3);
                 oos3.writeObject(makeMac(key));
                 oos3.close();
+
+                File fl2 = new File(users, name);
+                deleteFile(fl2);
 
                 break;
 
@@ -229,6 +238,14 @@ public class manUsers {
         }
     }
 
+    private static void deleteFile(File fl2) {
+
+        for(File file: fl2.listFiles())
+                file.delete();
+
+        fl2.delete();
+
+    }
 
 
     //vós sois o sal da terra
