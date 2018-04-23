@@ -5,19 +5,22 @@ import domain.*;
 import exceptions.*;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.security.Security;
 
 
 public class PhotoHandler extends GodHandler implements handlers.Interface.IPhotoHandler {
 
     private static CatalogUser catUser;
 
-    public PhotoHandler(String userID) {
+    public PhotoHandler(String userID) throws IOException, ClassNotFoundException, SecurityException {
         catUser = CatalogUser.getCatalog();
         setCurrUser(catUser.getUser(userID));
     }
 
     @Override
-    public void addPhoto(Photo photo, BufferedImage image) throws DuplicatePhotoException {
+    public void addPhoto(Photo photo, BufferedImage image) throws DuplicatePhotoException, IOException,
+            SecurityException {
 
         if (currUser.getPhoto(photo.getPhotoID()) != null)
             throw new DuplicatePhotoException();
@@ -45,7 +48,8 @@ public class PhotoHandler extends GodHandler implements handlers.Interface.IPhot
     }
 
     @Override
-    public PhotoOpinion getPhotoOpinion(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException {
+    public PhotoOpinion getPhotoOpinion(String userID, String photoID) throws NoSuchUserException,
+            NotFollowingException, NoSuchPhotoException {
 
         User uID = catUser.getUser(userID);
 
@@ -66,7 +70,8 @@ public class PhotoHandler extends GodHandler implements handlers.Interface.IPhot
 
 
     @Override
-    public Iterable<Photo> getAllUserPhotos(String userID) throws NoSuchUserException, NotFollowingException {
+    public Iterable<Photo> getAllUserPhotos(String userID) throws NoSuchUserException, NotFollowingException,
+            IOException, ClassNotFoundException, SecurityException {
 
         User uID = catUser.getUser(userID);
 

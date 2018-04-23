@@ -46,7 +46,7 @@ public class ServerThread extends Thread {
             sendMsg(srvMsg.startSession(logMsg));
             System.out.println("Login done!");
         }
-        catch (ClassNotFoundException | IOException e) {
+        catch (ClassNotFoundException | IOException | SecurityException e) {
             e.printStackTrace();
         }
 
@@ -77,13 +77,12 @@ public class ServerThread extends Thread {
                 else {
                     sendMsg(result);
                 }
-            } catch (ClassNotFoundException | IOException e) {
+            } catch (ClassNotFoundException | IOException | SecurityException e) {
                 e.printStackTrace();
                 break;
             }
         }
     }
-
 
     /**
      *

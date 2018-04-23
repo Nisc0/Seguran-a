@@ -48,7 +48,6 @@ public class ServerNetwork{
             catch (IOException e) {
                 System.out.println("Couldn't connect to client!");
             }
-
         }
 
         try {

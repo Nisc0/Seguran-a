@@ -28,7 +28,7 @@ public class ServerMessage {
     /**
      * Create the ServerMessage to communicate.
      */
-    public ServerMessage() {
+    public ServerMessage() throws IOException, ClassNotFoundException, SecurityException {
         this.catUser = CatalogUser.getCatalog();
     }
 
@@ -37,7 +37,7 @@ public class ServerMessage {
      * @param m Login Message
      * @return abstract Message with result of the login.
      */
-    public MsgSession startSession(MsgSession m) {
+    public MsgSession startSession(MsgSession m) throws IOException, SecurityException, ClassNotFoundException {
         String user = m.getUser();
         String pass = m.getPwd();
         sessionHandler = new SessionHandler(user);
@@ -88,7 +88,8 @@ public class ServerMessage {
      * @param img
      * @return
      */
-    private MsgPhoto addPhoto(String user, String follower, Photo photo, BufferedImage img) {
+    private MsgPhoto addPhoto(String user, String follower, Photo photo, BufferedImage img) throws IOException,
+            SecurityException {
         MsgPhoto result;
         try {
             photoHandler.addPhoto(photo, img);
@@ -152,7 +153,8 @@ public class ServerMessage {
      * @param follower
      * @return
      */
-    private MsgPhoto allPhotos(String user, String follower) {
+    private MsgPhoto allPhotos(String user, String follower) throws IOException, ClassNotFoundException,
+            SecurityException{
         MsgPhoto result;
         ArrayList<Photo> photoList;
         try {
@@ -293,7 +295,7 @@ public class ServerMessage {
      * @return The reply message for the client.
      * @throws IOException
      */
-    public Message unpackAndTreatMsg(Message m) throws IOException {
+    public Message unpackAndTreatMsg(Message m) throws IOException, SecurityException, ClassNotFoundException {
         Message msgResult = null;
         MsgType tpMsg = m.getC_type();
         MsgFollower mFollower;

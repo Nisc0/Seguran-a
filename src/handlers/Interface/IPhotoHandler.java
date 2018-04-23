@@ -9,6 +9,7 @@ import exceptions.NoSuchUserException;
 import exceptions.NotFollowingException;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public interface IPhotoHandler extends IGodHandler {
 
@@ -18,7 +19,7 @@ public interface IPhotoHandler extends IGodHandler {
      * @param image - the image
      * @throws DuplicatePhotoException
      */
-    void addPhoto(Photo photo, BufferedImage image) throws DuplicatePhotoException;
+    void addPhoto(Photo photo, BufferedImage image) throws DuplicatePhotoException, IOException;
 
     /**
      * Get the basic information of all the photos of the desired User
@@ -47,5 +48,6 @@ public interface IPhotoHandler extends IGodHandler {
      * @throws NoSuchUserException
      * @throws NotFollowingException
      */
-    Iterable<Photo> getAllUserPhotos(String userID) throws NoSuchUserException, NotFollowingException;
+    Iterable<Photo> getAllUserPhotos(String userID) throws NoSuchUserException, NotFollowingException, IOException,
+            ClassNotFoundException;
 }

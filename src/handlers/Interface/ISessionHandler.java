@@ -2,6 +2,8 @@ package handlers.Interface;
 
 import exceptions.WrongUserPasswordException;
 
+import java.io.IOException;
+
 public interface ISessionHandler extends IGodHandler {
 
     /**
@@ -11,5 +13,5 @@ public interface ISessionHandler extends IGodHandler {
      * @return true if the was a login, false if it was a register
      * @throws WrongUserPasswordException
      */
-    boolean startSession(String userID, String pass) throws WrongUserPasswordException;
+    boolean startSession(String userID, String pass) throws WrongUserPasswordException, IOException;
 }

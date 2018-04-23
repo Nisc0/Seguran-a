@@ -4,8 +4,9 @@ import domain.Photo;
 import domain.User;
 
 import java.awt.image.BufferedImage;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.SignatureException;
 
 public interface IRecoveryManeger {
 
@@ -22,7 +23,7 @@ public interface IRecoveryManeger {
      * @param u - the User
      * @throws IOException
      */
-    void backupUser(User u) throws IOException;
+    void backupUser(User u) throws IOException, SignatureException, InvalidKeyException;
 
     void simpleRecovery();
 
@@ -30,7 +31,7 @@ public interface IRecoveryManeger {
      * Recovers the Users
      * @return a Iterable with all the recovered Users
      */
-    Iterable<User> recUsers();
+    Iterable<User> recUsers() throws IOException, ClassNotFoundException;
 
     /**
      * Recovers the images in disk to the photos of the desired User
@@ -38,7 +39,7 @@ public interface IRecoveryManeger {
      * @param uPh - the Iterable of the photos to be added the images
      * @throws IOException
      */
-    void recPhotos(String userID, Iterable<Photo> uPh) throws IOException;
+    void recPhotos(String userID, Iterable<Photo> uPh) throws IOException, ClassNotFoundException;
 
     /**
      * Backups a image on the disk
@@ -47,5 +48,5 @@ public interface IRecoveryManeger {
      * @param photoID - the ID of the photo associated with the image
      * @param extension - the extension of the image
      */
-    void saveImage(BufferedImage image, User u, String photoID, String extension);
+    void saveImage(BufferedImage image, User u, String photoID, String extension) throws IOException;
 }

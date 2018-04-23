@@ -1,16 +1,11 @@
 package handlers;
 
-import exceptions.PrivateKeyNotFoundException;
-import sun.security.pkcs11.wrapper.CK_ATTRIBUTE;
-
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
+import javax.crypto.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.security.*;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
 
 public class EncryptManager {
 
@@ -19,31 +14,31 @@ public class EncryptManager {
     private static final String KEYSTORE_PWD = ""; //FIXME
     private static final String KEYSTORE_FILEPATH = ""; //FIXME
     private static final String KEYSTORE_ALIAS = ""; //FIXME
-    private Cipher pkCipher, aesCipher;
+    private Cipher rsaCipher, aesCipher;
     private Signature sig;
     private KeyPair kp;
 
-    public static EncryptManager getInstance() {
+    public static EncryptManager getInstance() throws NoSuchPaddingException, NoSuchAlgorithmException {
         if (ourInstance == null)
             ourInstance = new EncryptManager();
         return ourInstance;
     }
 
-
-    public EncryptManager() { //TODO: tratar do IOException - quando der bosta, eh pra fechar!
-        pkCipher = Cipher.getInstance("RSA");
+    private EncryptManager() throws NoSuchAlgorithmException, NoSuchPaddingException {
+        rsaCipher = Cipher.getInstance("RSA");
         aesCipher = Cipher.getInstance("AES");
         sig = Signature.getInstance("SHA256withRSA");
     }
 
-    private Key getKey(File userDir, File userFile) throws PrivateKeyNotFoundException { //TODO: exceptions
+    private Key getKey(File userDir, File userFile) throws IOException, KeyStoreException, UnrecoverableKeyException,
+            NoSuchAlgorithmException, CertificateException, IllegalBlockSizeException, InvalidKeyException {
         File keyFile = new File(userDir, userFile.getName() + ".key");
-        SecretKey K;
+        Key K;
         if (!keyFile.exists()) {
             K = createKey();
 
             //Encontrar Ku
-            FileInputStream keyStoreFile = new File(KEYSTORE_FILEPATH);
+            FileInputStream keyStoreFile = new FileInputStream(KEYSTORE_FILEPATH);
             KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
             keyStore.load(keyStoreFile, KEYSTORE_PWD.toCharArray());
 
@@ -56,15 +51,16 @@ public class EncryptManager {
                 publicKey = cert.getPublicKey();
                 kp = new KeyPair(publicKey, (PrivateKey) key);
             } else {
-                //fixme - meter no relatorio e ques
-                throw new PrivateKeyNotFoundException();
+                keyStoreFile.close();
+                throw new SecurityException();
             }
 
             //cifrar com Ku
-            pkCipher.init(Cipher.WRAP_MODE, kp.getPublic());
-            byte[] wrappedBytes = pkCipher.wrap(util.BytesUtil.toByteArray(K));
+            rsaCipher.init(Cipher.WRAP_MODE, kp.getPublic());
+            byte[] wrappedBytes = rsaCipher.wrap(K);
             saveKey(wrappedBytes, keyFile);
 
+            keyStoreFile.close();
         } else {
             K = getSecretKey(keyFile);
         }
@@ -72,18 +68,21 @@ public class EncryptManager {
         return K;
     }
 
-    public byte[] encrypt(byte[] plainData, File userDir, File userFile) {
+    public byte[] encrypt(byte[] plainData, File userDir, File userFile) throws CertificateException,
+            UnrecoverableKeyException, NoSuchAlgorithmException, IOException, KeyStoreException,
+            IllegalBlockSizeException, KeyException, BadPaddingException {
         Key k = getKey(userDir, userFile);
         aesCipher.init(Cipher.ENCRYPT_MODE, k);
         return aesCipher.doFinal(plainData);
     }
 
-    public byte[] decrypt(byte[] cipherData, File userDir, File userFile) {
+    public byte[] decrypt(byte[] cipherData, File userDir, File userFile) throws InvalidKeyException,
+            BadPaddingException, IllegalBlockSizeException, IOException, NoSuchAlgorithmException {
         //TODO se nao houver chave no decrypt, se nao houver um keyfile????
         File keyFile = new File(userDir, userFile.getName() + ".key");
         Key k = getSecretKey(keyFile);
         aesCipher.init(Cipher.DECRYPT_MODE, k);
-        aesCipher.doFinal(cipherData);
+        return aesCipher.doFinal(cipherData);
     }
 
     private SecretKey createKey() {
@@ -97,49 +96,36 @@ public class EncryptManager {
         return kg.generateKey();
     }
 
-    private SecretKey getSecretKey(File keyFile) {
+    private Key getSecretKey(File keyFile) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
         byte[] encryptedKey = Files.readAllBytes(keyFile.toPath());
-        pkCipher.init(Cipher.UNWRAP_MODE, kp.getPrivate());
-        return pkCipher.unwrap(encryptedKey, "RSA", Cipher.SECRET_KEY);
+        rsaCipher.init(Cipher.UNWRAP_MODE, kp.getPrivate());
+        return rsaCipher.unwrap(encryptedKey, "AES", Cipher.SECRET_KEY);
     }
 
-    private void saveKey(byte[] wrappedKey, File keyFile) {
-        FileOutputStream fout = null;
-        ObjectOutputStream oos = null;
-        try {
-            fout = new FileOutputStream(keyFile);
-            oos = new ObjectOutputStream(fout);
-            oos.writeObject(wrappedKey);
-            fout.close();
-            oos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void saveKey(byte[] wrappedKey, File keyFile) throws IOException {
+        FileOutputStream fout = new FileOutputStream(keyFile);
+        fout.write(wrappedKey);
+        fout.close();
     }
 
-    public byte[] signFile(byte[] toSign, File userDir, File userFile){
+    public byte[] signFile(byte[] toSign, File userDir, File userFile) throws InvalidKeyException, SignatureException,
+            IOException {
         File sigFile = new File(userDir, userFile.getName() + ".sig");
         sig.initSign(kp.getPrivate());
         sig.update(toSign);
         byte[] signature = sig.sign();
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(sigFile));
-        oos.writeObject(signature);
+        FileOutputStream fout = new FileOutputStream(sigFile);
+        fout.write(signature);
+        fout.close();
         return signature;
     }
 
-    public boolean isVerifiedFile(byte[] toVerifyData, File userDir, File userFile){
+    public boolean isVerifiedFile(byte[] toVerifyData, File userDir, File userFile) throws InvalidKeyException,
+            IOException, SignatureException {
         File sigFile = new File(userDir, userFile.getName() + ".sig");
         sig.initVerify(kp.getPublic());
         byte[] signature = Files.readAllBytes(sigFile.toPath());
         sig.update(signature);
         return sig.verify(toVerifyData);
     }
-
-    //TODO: metodos
-    //cifrar
-        //hash (java faz?)
-    //decifar
-    //assinar ficheiro
-    //verificar a assinatura do ficheiro
-    //
 }

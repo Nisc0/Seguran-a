@@ -8,6 +8,7 @@ import handlers.RecoveryManager;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
+import java.security.Security;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,49 +23,42 @@ import java.util.Map;
 public class CatalogUser implements ICatalogUser {
 
     private static CatalogUser instance;
-    private Map<String,User> users;
+    private Map<String, User> users;
     private RecoveryManager recov;
 
     /**
      * Construtor
      */
-    private CatalogUser() {
+    private CatalogUser() throws IOException, ClassNotFoundException, SecurityException {
         users = new HashMap<>();
         try {
             recov = new RecoveryManager();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             System.out.print("System couldn't recover!");
         }
-        System.out.println("Start recovering!");
-        for (User u: recov.recUsers()) {
+        System.out.println("Starting recovering!");
+        for (User u : recov.recUsers()) {
             this.users.put(u.getID(), u);
         }
     }
 
-    public static CatalogUser getCatalog(){
-        if (CatalogUser.instance == null){
+    public static CatalogUser getCatalog() throws IOException, ClassNotFoundException, SecurityException {
+        if (CatalogUser.instance == null) {
             CatalogUser.instance = new CatalogUser();
         }
         return CatalogUser.instance;
     }
 
     @Override
-    public boolean addUser(User u) {
+    public boolean addUser(User u) throws IOException, SecurityException {
 
-        if(this.containsUser(u.getID()))
+        if (this.containsUser(u.getID()))
             return false;
         else {
-            try {
-                recov.writeFile(u.getID(), u.getPass());
-                users.put(u.getID(), u);
-                this.updateUser(u);
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
-
+            recov.writeFile(u.getID(), u.getPass());
+            users.put(u.getID(), u);
+            this.updateUser(u);
             return true;
         }
     }
@@ -79,31 +73,22 @@ public class CatalogUser implements ICatalogUser {
         return users.get(userID);
     }
 
-
     @Override
     public Iterable<String> getUsers() {
         return users.keySet();
     }
 
-    public void getUserPhotos(String userID, Iterable<Photo> uPh) {
-        try {
-            recov.recPhotos(userID, uPh);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void getUserPhotos(String userID, Iterable<Photo> uPh) throws IOException, ClassNotFoundException,
+            SecurityException {
+        recov.recPhotos(userID, uPh);
     }
 
-    public void updateUser(User u) {
-        try {
-            recov.backupUser(u);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void updateUser(User u) throws IOException, SecurityException {
+        recov.backupUser(u);
     }
 
-
-    public void saveImage(BufferedImage image, User u, String photoID, String extension) {
+    public void saveImage(BufferedImage image, User u, String photoID, String extension) throws IOException,
+            SecurityException {
         recov.saveImage(image, u, photoID, extension);
     }
 }
