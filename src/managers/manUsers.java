@@ -1,7 +1,6 @@
 package managers;
 
-import sun.misc.BASE64Encoder;
-
+import domain.User;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -57,7 +56,6 @@ public class manUsers {
 
                 FileInputStream fos = new FileInputStream(macFile);
                 ObjectInputStream oos = new ObjectInputStream(fos);
-
                 //verificar se ficheiro das pass's n foi alterado
                 byte[] oldMac = (byte[]) oos.readObject();
                 oos.close();
@@ -80,27 +78,25 @@ public class manUsers {
 
             //pedido do comando
             System.out.println("Administrator, what's the command?");
-            System.out.println("Available Commands: add, delete, modify & quit");
+            System.out.println("Available commands: add, delete, modify & quit");
             String command = scanner.next();
-
-            while(true) {
+            String[] commands = {"add", "delete", "modify", "quit"};
+            while(command != "quit") {
+                while(!Arrays.asList(commands).contains(command)) {
+                    System.out.println("Wrong command: " + command + " is not a valid operation, please try again");
+                    System.out.println("Available commands: add, delete, modify & quit");
+                    command = scanner.next();
+                }
                 processCommand(command, scanner, key);
-                System.out.println("Operation successful");
+                //System.out.println("Operation successful");
+                System.out.println("Available commands: add, delete, modify & quit");
                 System.out.println("What's next the command?");
                 command = scanner.next();
             }
 
 
         }
-        catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        catch (NoSuchAlgorithmException | InvalidKeyException | InvalidKeySpecException | ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
 
@@ -140,19 +136,26 @@ public class manUsers {
             case "add":
 
 
-
-                BufferedWriter bw = new BufferedWriter(new FileWriter(passFile, true));
-
-                FileOutputStream fos = new FileOutputStream(macFile);
-                ObjectOutputStream oos = new ObjectOutputStream(fos);
-
                 System.out.println("Adding new User:");
 
                 System.out.println("What's the username?");
                 name = scanner.next();
 
+                userInfo = searchUser(name);
+
+                if(userInfo != null) {
+                    System.out.println("Error: User already exists");
+                    break;
+                }
+
                 System.out.println("What's the password?");
                 pass = scanner.next();
+
+
+                BufferedWriter bw = new BufferedWriter(new FileWriter(passFile, true));
+
+                FileOutputStream fos = new FileOutputStream(macFile);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
 
                 salt = makeSalt();
 
@@ -164,9 +167,17 @@ public class manUsers {
                 oos.writeObject(makeMac(key));
                 oos.close();
 
-
+                // criação pasta para o utilizador
                 File fl = new File(users, name);
                 fl.mkdirs();
+
+                //criação do utilizador
+                User u = new User(name, pass);
+                File fu = new File(fl, name + ".u");
+                fos = new FileOutputStream(fu);
+                oos = new ObjectOutputStream(fos);
+                oos.writeObject(u);
+                oos.close();
 
                 break;
 
@@ -241,7 +252,7 @@ public class manUsers {
     private static void deleteFile(File fl2) {
 
         for(File file: fl2.listFiles())
-                file.delete();
+            file.delete();
 
         fl2.delete();
 
@@ -273,12 +284,11 @@ public class manUsers {
 
         BufferedReader br = new BufferedReader(new FileReader(passFile));
         String line = br.readLine();
-        while(!name.equals(line.split(":")[0])) {
+        while(line != null || !name.equals(line.split(":")[0])) {
             line = br.readLine();
         }
 
         br.close();
-
         return line;
     }
 
@@ -290,11 +300,8 @@ public class manUsers {
         BufferedWriter bw = new BufferedWriter(new FileWriter(help));
 
         String line = br.readLine();
-        System.out.println(name);
         while(line != null) {
-            System.out.println(line.split(":")[0]);
             if(!name.equals(line.split(":")[0])) {
-                System.out.println("ca dentro:" + line.split(":")[0]);
                 bw.write(line + "\n");
             }
             line = br.readLine();
