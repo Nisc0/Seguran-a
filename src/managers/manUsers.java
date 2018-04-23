@@ -80,8 +80,12 @@ public class manUsers {
             System.out.println("Administrator, what's the command?");
             System.out.println("Available Commands: add, delete, modify & quit");
             String command = scanner.next();
-
+            String[] commands = {"add", "delete", "modify", "quit"};
             while(true) {
+                while(!Arrays.asList(commands).contains(command)) {
+                    System.out.println("Wrong command: " + command + " is not a valid operation, please try again");
+                    command = scanner.next();
+                }
                 processCommand(command, scanner, key);
                 System.out.println("Operation successful");
                 System.out.println("What's next the command?");
@@ -90,15 +94,7 @@ public class manUsers {
 
 
         }
-        catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        catch (NoSuchAlgorithmException | InvalidKeyException | InvalidKeySpecException | ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
 
