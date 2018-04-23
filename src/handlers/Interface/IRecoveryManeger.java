@@ -23,7 +23,7 @@ public interface IRecoveryManeger {
      * @param u - the User
      * @throws IOException
      */
-    void backupUser(User u) throws IOException, SignatureException, InvalidKeyException;
+    void backupUser(User u) throws IOException, SecurityException;
 
     void simpleRecovery();
 

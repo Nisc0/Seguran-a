@@ -8,7 +8,6 @@ import handlers.RecoveryManager;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
-import java.security.Security;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +40,7 @@ public class CatalogUser implements ICatalogUser {
         for (User u : recov.recUsers()) {
             this.users.put(u.getID(), u);
         }
+
     }
 
     public static CatalogUser getCatalog() throws IOException, ClassNotFoundException, SecurityException {

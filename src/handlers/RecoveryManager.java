@@ -21,7 +21,8 @@ public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
 
     public RecoveryManager() throws IOException, SecurityException {
         File fl = new File("Files");
-        fl.mkdir();
+        this.file_users = new File(fl, "Users");
+
         fw = new FileWriter(new File(fl, "users.txt"), true);
         fr = new FileReader(new File(fl, "users.txt"));
         this.file_users = new File(fl, "Users");
@@ -106,7 +107,6 @@ public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
         return users;
     }
 
-
     @Override
     public void recPhotos(String userID, Iterable<Photo> uPh) throws IOException, ClassNotFoundException,
             SecurityException {
@@ -126,5 +126,6 @@ public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
             }
         }
     }
+
 
 }
