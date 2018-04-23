@@ -35,10 +35,9 @@ public class manUsers {
             //criação da pasta
             fl.mkdir();
 
-
             //autenticação do admin
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Administrator, what's the passord?");
+            System.out.println("Administrator, what's your password?");
             String password = scanner.next();
 
             //o nosso sal, cheio de amor
@@ -48,7 +47,6 @@ public class manUsers {
             PBEKeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, 20);
             SecretKeyFactory kf = SecretKeyFactory.getInstance("PBEWithHmacSHA256AndAES_128");
             SecretKey key = kf.generateSecret(keySpec);
-
 
             //verificar se é a primeira execução
             fl.isDirectory();
@@ -60,7 +58,7 @@ public class manUsers {
                 byte[] oldMac = (byte[]) oos.readObject();
                 oos.close();
                 if(!Arrays.equals(makeMac(key), oldMac)) {
-                    System.out.println("Access Denied: Wrong Password or Corrumpted File");
+                    System.out.println("Access denied: wrong password or corrupted file");
                     System.exit(-1);
 
                 }
@@ -77,36 +75,31 @@ public class manUsers {
             }
 
             //pedido do comando
-            System.out.println("Administrator, what's the command?");
-            System.out.println("Available commands: add, delete, modify & quit");
+            System.out.println("Administrator, what's your command?");
+            System.out.println("Available commands: add, delete, modify, quit");
             String command = scanner.next();
             String[] commands = {"add", "delete", "modify", "quit"};
             while(command != "quit") {
                 while(!Arrays.asList(commands).contains(command)) {
                     System.out.println("Wrong command: " + command + " is not a valid operation, please try again");
-                    System.out.println("Available commands: add, delete, modify & quit");
+                    System.out.println("Available commands: add, delete, modify, quit");
                     command = scanner.next();
                 }
                 processCommand(command, scanner, key);
                 //System.out.println("Operation successful");
-                System.out.println("Available commands: add, delete, modify & quit");
-                System.out.println("What's next the command?");
+                System.out.println("Available commands: add, delete, modify, quit");
+                System.out.println("What's your next command?");
                 command = scanner.next();
             }
-
 
         }
         catch (NoSuchAlgorithmException | InvalidKeyException | InvalidKeySpecException | ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
 
-
     }
 
-
-
     /////////////////////////////////////// AUXILIARY METHODS  ////////////////////////////////////////////////////////////////////////////
-
 
     private static byte[] makeMac(SecretKey k) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
 
@@ -118,7 +111,6 @@ public class manUsers {
 
     private static void processCommand(String comand, Scanner scanner, SecretKey key) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
 
-
         //inicio do processamento
 
         Base64.Encoder enc = getEncoder();
@@ -128,13 +120,10 @@ public class manUsers {
         String userInfo;
         byte[] salted;
 
-
-
         //processamento do comand
         switch (comand) {
 
             case "add":
-
 
                 System.out.println("Adding new User:");
 
@@ -255,9 +244,7 @@ public class manUsers {
             file.delete();
 
         fl2.delete();
-
     }
-
 
     //vós sois o sal da terra
     private  static  byte[] makeSalt() {
@@ -266,9 +253,7 @@ public class manUsers {
         byte[] salt = new byte[64];
         r.nextBytes(salt);
         return salt;
-
     }
-
 
     private static byte[] getSalty(String pass, byte[] salt) throws NoSuchAlgorithmException, IOException {
 
@@ -277,14 +262,13 @@ public class manUsers {
         bos.write(salt);
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         return digest.digest(bos.toByteArray());
-
     }
 
     private static String searchUser(String name) throws IOException {
 
         BufferedReader br = new BufferedReader(new FileReader(passFile));
         String line = br.readLine();
-        while(line != null || !name.equals(line.split(":")[0])) {
+        while(line != null && !name.equals(line.split(":")[0])) {
             line = br.readLine();
         }
 
@@ -293,7 +277,6 @@ public class manUsers {
     }
 
     private static boolean deleteUser(String name) throws IOException {
-
 
         BufferedReader br = new BufferedReader(new FileReader(passFile));
         File help = new File(fl, "help.txt");

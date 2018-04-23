@@ -10,6 +10,7 @@ import message.*;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 
 
@@ -28,7 +29,7 @@ public class ServerMessage {
     /**
      * Create the ServerMessage to communicate.
      */
-    public ServerMessage() throws IOException, ClassNotFoundException, SecurityException {
+    public ServerMessage() throws IOException, ClassNotFoundException, GeneralSecurityException {
         this.catUser = CatalogUser.getCatalog();
     }
 
@@ -37,7 +38,7 @@ public class ServerMessage {
      * @param m Login Message
      * @return abstract Message with result of the login.
      */
-    public MsgSession startSession(MsgSession m) throws IOException, SecurityException, ClassNotFoundException {
+    public MsgSession startSession(MsgSession m) throws IOException, ClassNotFoundException, GeneralSecurityException {
         String user = m.getUser();
         String pass = m.getPwd();
         sessionHandler = new SessionHandler(user);
@@ -89,7 +90,7 @@ public class ServerMessage {
      * @return
      */
     private MsgPhoto addPhoto(String user, String follower, Photo photo, BufferedImage img) throws IOException,
-            SecurityException {
+            GeneralSecurityException {
         MsgPhoto result;
         try {
             photoHandler.addPhoto(photo, img);
@@ -154,7 +155,7 @@ public class ServerMessage {
      * @return
      */
     private MsgPhoto allPhotos(String user, String follower) throws IOException, ClassNotFoundException,
-            SecurityException{
+            GeneralSecurityException {
         MsgPhoto result;
         ArrayList<Photo> photoList;
         try {
@@ -178,7 +179,8 @@ public class ServerMessage {
      * @param photoID
      * @return
      */
-    private MsgOpinion commentPhoto(String comment, String user, String follower, String photoID) {
+    private MsgOpinion commentPhoto(String comment, String user, String follower, String photoID) throws IOException,
+            GeneralSecurityException {
         MsgOpinion result;
         try {
             opinionHandler.makeComment(comment, follower, photoID);
@@ -202,7 +204,8 @@ public class ServerMessage {
      * @param photoID
      * @return
      */
-    private MsgOpinion likePhoto(String user, String follower, String photoID) {
+    private MsgOpinion likePhoto(String user, String follower, String photoID) throws IOException,
+            GeneralSecurityException {
         MsgOpinion result;
         try {
             opinionHandler.addLike(follower, photoID);
@@ -228,7 +231,8 @@ public class ServerMessage {
      * @param photoID
      * @return
      */
-    private MsgOpinion dislikePhoto(String user, String follower, String photoID) {
+    private MsgOpinion dislikePhoto(String user, String follower, String photoID) throws IOException,
+            GeneralSecurityException {
         MsgOpinion result;
         try {
             opinionHandler.addDisLike(follower, photoID);
@@ -253,7 +257,7 @@ public class ServerMessage {
      * @param follower
      * @return
      */
-    private MsgFollower followUser(String user, String follower) {
+    private MsgFollower followUser(String user, String follower) throws IOException, GeneralSecurityException {
         MsgFollower result;
         try {
             followerHandler.addFollow(follower);
@@ -274,7 +278,7 @@ public class ServerMessage {
      * @param follower
      * @return
      */
-    private MsgFollower unfollowUser(String user, String follower) {
+    private MsgFollower unfollowUser(String user, String follower) throws IOException, GeneralSecurityException {
         MsgFollower result;
         try {
             followerHandler.removeFollow(follower);
@@ -295,7 +299,7 @@ public class ServerMessage {
      * @return The reply message for the client.
      * @throws IOException
      */
-    public Message unpackAndTreatMsg(Message m) throws IOException, SecurityException, ClassNotFoundException {
+    public Message unpackAndTreatMsg(Message m) throws IOException, ClassNotFoundException, GeneralSecurityException {
         Message msgResult = null;
         MsgType tpMsg = m.getC_type();
         MsgFollower mFollower;

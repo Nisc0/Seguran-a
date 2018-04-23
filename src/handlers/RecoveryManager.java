@@ -19,7 +19,7 @@ public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
     private File file_users;
     private EncryptManager em;
 
-    public RecoveryManager() throws IOException, SecurityException {
+    public RecoveryManager() throws IOException, GeneralSecurityException {
         File fl = new File("Files");
         this.file_users = new File(fl, "Users");
 
@@ -30,7 +30,7 @@ public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
         try {
             em = EncryptManager.getInstance();
         } catch (NoSuchPaddingException | NoSuchAlgorithmException e){
-            throw new SecurityException(e.getMessage());
+            throw new GeneralSecurityException(e.getMessage());
         }
     }
 
@@ -42,7 +42,7 @@ public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
     }
 
     @Override
-    public void backupUser(User u) throws IOException, SecurityException {
+    public void backupUser(User u) throws IOException, GeneralSecurityException {
         File fl = new File(file_users, u.getID());
         fl.mkdir();
         File fu = new File(fl, u.getID() + ".u");
@@ -51,14 +51,14 @@ public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
         try {
             signedByteUser = em.signFile(byteUser, fl, fu);
         }catch (InvalidKeyException | SignatureException e){
-            throw new SecurityException(e.getMessage());
+            throw new GeneralSecurityException(e.getMessage());
         }
         writeEncrypt(fl, fu, signedByteUser);
     }
 
     @Override
     public void saveImage(BufferedImage image, User u, String photoID, String extension) throws IOException,
-            SecurityException{
+            GeneralSecurityException{
         File fl = new File(file_users, u.getID());
         File fi = new File(fl, photoID + "." + extension);
         byte[] byteImage = util.BytesUtil.toByteArray(fi);
@@ -66,7 +66,7 @@ public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
     }
 
     private void writeEncrypt(File toEncryptDir, File encryptFile, byte[] byteFile) throws IOException,
-            SecurityException {
+            GeneralSecurityException {
         FileOutputStream fout = null;
         try {
             fout = new FileOutputStream(encryptFile);
@@ -74,7 +74,7 @@ public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
             fout.close();
         } catch (CertificateException | UnrecoverableKeyException | NoSuchAlgorithmException | KeyStoreException |
                 IllegalBlockSizeException | KeyException | BadPaddingException e){
-            throw new SecurityException(e.getMessage());
+            throw new GeneralSecurityException(e.getMessage());
         }
     }
 
@@ -84,7 +84,7 @@ public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
     }
 
     @Override
-    public Iterable<User> recUsers() throws IOException, ClassNotFoundException, SecurityException {
+    public Iterable<User> recUsers() throws IOException, ClassNotFoundException, GeneralSecurityException {
         File[] fls = file_users.listFiles();
         ArrayList<User> users = new ArrayList<>();
 
@@ -101,7 +101,7 @@ public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
 
             } catch (InvalidKeyException | SignatureException | NoSuchAlgorithmException |
                     BadPaddingException | IllegalBlockSizeException e) {
-                throw new SecurityException(e.getMessage());
+                throw new GeneralSecurityException(e.getMessage());
             }
         }
         return users;
@@ -109,7 +109,7 @@ public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
 
     @Override
     public void recPhotos(String userID, Iterable<Photo> uPh) throws IOException, ClassNotFoundException,
-            SecurityException {
+            GeneralSecurityException {
         File fl = new File(file_users, userID + "/");
         for (Photo p : uPh) {
             File flPh = new File(fl, p.getPhotoID() + "." + p.getExtension());
@@ -122,7 +122,7 @@ public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
                 }
             } catch (InvalidKeyException | SignatureException | NoSuchAlgorithmException |
                     BadPaddingException | IllegalBlockSizeException e) {
-                throw new SecurityException(e.getMessage());
+                throw new GeneralSecurityException(e.getMessage());
             }
         }
     }

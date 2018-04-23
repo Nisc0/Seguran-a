@@ -4,6 +4,9 @@ import exceptions.AlreadyFollowingException;
 import exceptions.AlreadyNotFollowingException;
 import exceptions.NoSuchUserException;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 public interface IFollowerHandler extends IGodHandler {
 
     /**
@@ -12,7 +15,8 @@ public interface IFollowerHandler extends IGodHandler {
      * @throws NoSuchUserException
      * @throws AlreadyFollowingException
      */
-    void addFollow(String userID) throws NoSuchUserException, AlreadyFollowingException;
+    void addFollow(String userID) throws NoSuchUserException, AlreadyFollowingException, IOException, GeneralSecurityException;
 
-    void removeFollow(String userID) throws NoSuchUserException, AlreadyNotFollowingException;
+    void removeFollow(String userID) throws NoSuchUserException, AlreadyNotFollowingException, IOException,
+            GeneralSecurityException;
 }

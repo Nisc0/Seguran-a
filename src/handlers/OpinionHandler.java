@@ -5,19 +5,20 @@ import domain.*;
 import exceptions.*;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 public class OpinionHandler extends GodHandler implements handlers.Interface.IOpinionHandler {
 
     private static CatalogUser catUser;
 
-    public OpinionHandler(String userID) {
+    public OpinionHandler(String userID) throws GeneralSecurityException, IOException, ClassNotFoundException {
         catUser = CatalogUser.getCatalog();
         setCurrUser(catUser.getUser(userID));
     }
 
     @Override
     public void makeComment(String comment, String userID, String photoID) throws NoSuchUserException,
-            NotFollowingException, NoSuchPhotoException {
+            NotFollowingException, NoSuchPhotoException, IOException, GeneralSecurityException {
 
         User uID = catUser.getUser(userID);
 
@@ -36,7 +37,7 @@ public class OpinionHandler extends GodHandler implements handlers.Interface.IOp
 
     @Override
     public void addLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException,
-            NoSuchPhotoException, AlreadyLikedException {
+            NoSuchPhotoException, AlreadyLikedException, IOException, GeneralSecurityException {
 
         User uID = catUser.getUser(userID);
 
@@ -59,7 +60,7 @@ public class OpinionHandler extends GodHandler implements handlers.Interface.IOp
 
     @Override
     public void addDisLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException,
-            NoSuchPhotoException, AlreadyDislikedException {
+            NoSuchPhotoException, AlreadyDislikedException, IOException, GeneralSecurityException {
 
         User uID = catUser.getUser(userID);
 

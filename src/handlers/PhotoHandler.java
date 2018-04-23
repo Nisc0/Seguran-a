@@ -6,21 +6,20 @@ import exceptions.*;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.security.Security;
-
+import java.security.GeneralSecurityException;
 
 public class PhotoHandler extends GodHandler implements handlers.Interface.IPhotoHandler {
 
     private static CatalogUser catUser;
 
-    public PhotoHandler(String userID) throws IOException, ClassNotFoundException, SecurityException {
+    public PhotoHandler(String userID) throws IOException, ClassNotFoundException, GeneralSecurityException {
         catUser = CatalogUser.getCatalog();
         setCurrUser(catUser.getUser(userID));
     }
 
     @Override
     public void addPhoto(Photo photo, BufferedImage image) throws DuplicatePhotoException, IOException,
-            SecurityException {
+             GeneralSecurityException {
 
         if (currUser.getPhoto(photo.getPhotoID()) != null)
             throw new DuplicatePhotoException();
@@ -71,7 +70,7 @@ public class PhotoHandler extends GodHandler implements handlers.Interface.IPhot
 
     @Override
     public Iterable<Photo> getAllUserPhotos(String userID) throws NoSuchUserException, NotFollowingException,
-            IOException, ClassNotFoundException, SecurityException {
+            IOException, ClassNotFoundException,  GeneralSecurityException {
 
         User uID = catUser.getUser(userID);
 

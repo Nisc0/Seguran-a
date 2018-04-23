@@ -5,6 +5,7 @@ import domain.User;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.security.Security;
 
 public interface ICatalogUser {
@@ -14,7 +15,7 @@ public interface ICatalogUser {
      * @param u - User to add
      * @return true in success, false otherwise
      */
-    boolean addUser(User u) throws IOException;
+    boolean addUser(User u) throws IOException, GeneralSecurityException;
 
     /**
      * Verify if a user is registered in the System
@@ -42,13 +43,13 @@ public interface ICatalogUser {
      * @param uPh - Iterable with the photos before recovering
      */
     void getUserPhotos(String userID, Iterable<Photo> uPh) throws IOException, ClassNotFoundException,
-            SecurityException;
+            SecurityException, GeneralSecurityException;
 
     /**
      * Backsup the given User
      * @param u - the User to backup
      */
-    void updateUser(User u) throws IOException, SecurityException;
+    void updateUser(User u) throws IOException, SecurityException, GeneralSecurityException;
 
     /**
      * Save a image in the System
@@ -57,7 +58,8 @@ public interface ICatalogUser {
      * @param photoID - the ID of the photo
      * @param extension - the extension of the photo
      */
-    void saveImage(BufferedImage image, User u, String photoID, String extension) throws IOException;
+    void saveImage(BufferedImage image, User u, String photoID, String extension) throws IOException,
+            GeneralSecurityException;
 
 
 }

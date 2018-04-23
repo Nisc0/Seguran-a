@@ -4,17 +4,21 @@ import domain.*;
 import catalogs.*;
 import exceptions.*;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 public class FollowerHandler extends GodHandler implements handlers.Interface.IFollowerHandler {
 
     private static CatalogUser catUser;
 
-    public FollowerHandler(String userID) {
+    public FollowerHandler(String userID) throws IOException, ClassNotFoundException, GeneralSecurityException {
         catUser = CatalogUser.getCatalog();
         setCurrUser(catUser.getUser(userID));
     }
 
     @Override
-    public void addFollow(String userID) throws NoSuchUserException, AlreadyFollowingException {
+    public void addFollow(String userID) throws NoSuchUserException, AlreadyFollowingException, IOException,
+            GeneralSecurityException {
 
         User u = catUser.getUser(userID);
 
@@ -29,7 +33,8 @@ public class FollowerHandler extends GodHandler implements handlers.Interface.IF
     }
 
     @Override
-    public void removeFollow(String userID) throws NoSuchUserException, AlreadyNotFollowingException {
+    public void removeFollow(String userID) throws NoSuchUserException, AlreadyNotFollowingException, IOException,
+            GeneralSecurityException {
 
         User u = catUser.getUser(userID);
 

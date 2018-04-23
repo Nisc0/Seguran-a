@@ -2,6 +2,9 @@ package handlers.Interface;
 
 import exceptions.*;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 public interface IOpinionHandler extends IGodHandler {
 
     /**
@@ -13,7 +16,7 @@ public interface IOpinionHandler extends IGodHandler {
      * @throws NotFollowingException
      * @throws NoSuchPhotoException
      */
-    void makeComment(String comment, String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException;
+    void makeComment(String comment, String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, IOException, GeneralSecurityException;
 
     /**
      * Add a Like to a photo of a User
@@ -24,7 +27,7 @@ public interface IOpinionHandler extends IGodHandler {
      * @throws NoSuchPhotoException
      * @throws AlreadyLikedException
      */
-    void addLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, AlreadyLikedException;
+    void addLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, AlreadyLikedException, IOException, GeneralSecurityException;
 
     /**
      * Add a DisLike to a photo of a User
@@ -35,5 +38,5 @@ public interface IOpinionHandler extends IGodHandler {
      * @throws NoSuchPhotoException
      * @throws AlreadyDislikedException
      */
-    void addDisLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, AlreadyDislikedException;
+    void addDisLike(String userID, String photoID) throws NoSuchUserException, NotFollowingException, NoSuchPhotoException, AlreadyDislikedException, IOException, GeneralSecurityException;
 }

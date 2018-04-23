@@ -78,13 +78,11 @@ public class AuthenticationManager {
     }
 
     private static byte[] getSalty(String pass, byte[] salt) throws NoSuchAlgorithmException, IOException {
-
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bos.write(pass.getBytes());
         bos.write(salt);
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         return digest.digest(bos.toByteArray());
-
     }
 
 

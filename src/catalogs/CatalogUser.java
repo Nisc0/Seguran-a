@@ -8,6 +8,7 @@ import handlers.RecoveryManager;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
+import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +29,7 @@ public class CatalogUser implements ICatalogUser {
     /**
      * Construtor
      */
-    private CatalogUser() throws IOException, ClassNotFoundException, SecurityException {
+    private CatalogUser() throws IOException, ClassNotFoundException, GeneralSecurityException {
         users = new HashMap<>();
         try {
             recov = new RecoveryManager();
@@ -43,7 +44,7 @@ public class CatalogUser implements ICatalogUser {
 
     }
 
-    public static CatalogUser getCatalog() throws IOException, ClassNotFoundException, SecurityException {
+    public static CatalogUser getCatalog() throws IOException, ClassNotFoundException, GeneralSecurityException {
         if (CatalogUser.instance == null) {
             CatalogUser.instance = new CatalogUser();
         }
@@ -51,7 +52,7 @@ public class CatalogUser implements ICatalogUser {
     }
 
     @Override
-    public boolean addUser(User u) throws IOException, SecurityException {
+    public boolean addUser(User u) throws IOException, GeneralSecurityException {
 
         if (this.containsUser(u.getID()))
             return false;
@@ -79,16 +80,16 @@ public class CatalogUser implements ICatalogUser {
     }
 
     public void getUserPhotos(String userID, Iterable<Photo> uPh) throws IOException, ClassNotFoundException,
-            SecurityException {
+            GeneralSecurityException {
         recov.recPhotos(userID, uPh);
     }
 
-    public void updateUser(User u) throws IOException, SecurityException {
+    public void updateUser(User u) throws IOException, GeneralSecurityException {
         recov.backupUser(u);
     }
 
     public void saveImage(BufferedImage image, User u, String photoID, String extension) throws IOException,
-            SecurityException {
+            GeneralSecurityException {
         recov.saveImage(image, u, photoID, extension);
     }
 }

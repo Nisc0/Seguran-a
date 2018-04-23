@@ -8,6 +8,7 @@ import static message.MsgType.*;
 
 import java.io.*;
 import java.net.Socket;
+import java.security.GeneralSecurityException;
 
 
 //Threads utilizadas para comunicacao com os clientes
@@ -46,7 +47,7 @@ public class ServerThread extends Thread {
             sendMsg(srvMsg.startSession(logMsg));
             System.out.println("Login done!");
         }
-        catch (ClassNotFoundException | IOException | SecurityException e) {
+        catch (ClassNotFoundException | IOException | GeneralSecurityException e) {
             e.printStackTrace();
         }
 
@@ -77,7 +78,7 @@ public class ServerThread extends Thread {
                 else {
                     sendMsg(result);
                 }
-            } catch (ClassNotFoundException | IOException | SecurityException e) {
+            } catch (ClassNotFoundException | IOException | GeneralSecurityException e) {
                 e.printStackTrace();
                 break;
             }
