@@ -17,7 +17,6 @@ public class EncryptManager {
     private Cipher rsaCipher, aesCipher;
     private Signature sig;
     private KeyPair kp;
-    private FileInputStream keyStoreFile;
 
     public static EncryptManager getInstance() throws GeneralSecurityException, IOException {
         if (ourInstance == null)
@@ -30,14 +29,16 @@ public class EncryptManager {
         aesCipher = Cipher.getInstance("AES");
         sig = Signature.getInstance("SHA256withRSA");
 
+        FileInputStream keyStoreFile = null;
+
         //Encontrar Ku
         try {
             keyStoreFile = new FileInputStream(KEYSTORE_FILEPATH);
-        } catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             System.out.println("No .keystore file found!");
             throw e;
         }
-        KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+        KeyStore keyStore = KeyStore.getInstance("JKS");
         keyStore.load(keyStoreFile, KEYSTORE_PWD.toCharArray());
 
         Key key = keyStore.getKey(KEYSTORE_ALIAS, KEYSTORE_PWD.toCharArray());
@@ -52,6 +53,7 @@ public class EncryptManager {
             keyStoreFile.close();
             throw new GeneralSecurityException();
         }
+        keyStoreFile.close();
     }
 
     private Key getKey(File userDir, File userFile) throws IOException, NoSuchAlgorithmException,
@@ -65,9 +67,8 @@ public class EncryptManager {
             rsaCipher.init(Cipher.WRAP_MODE, kp.getPublic());
             byte[] wrappedBytes = rsaCipher.wrap(K);
             //System.out.println(Arrays.toString(wrappedBytes));
-            saveKey(wrappedBytes, keyFile);
+            Files.write(keyFile.toPath(), wrappedBytes);
 
-            keyStoreFile.close();
         } else {
             K = getSecretKey(keyFile);
         }
@@ -78,7 +79,6 @@ public class EncryptManager {
     public byte[] encrypt(byte[] plainData, File userDir, File userFile) throws NoSuchAlgorithmException, IOException,
             IllegalBlockSizeException, KeyException, BadPaddingException {
         Key k = getKey(userDir, userFile);
-
         aesCipher.init(Cipher.ENCRYPT_MODE, k);
         return aesCipher.doFinal(plainData);
     }
@@ -110,19 +110,13 @@ public class EncryptManager {
         return rsaCipher.unwrap(encryptedKey, "AES", Cipher.SECRET_KEY);
     }
 
-    private void saveKey(byte[] wrappedKey, File keyFile) throws IOException {
-        Files.write(keyFile.toPath(), wrappedKey);
-    }
-
     public byte[] signFile(byte[] toSign, File userDir, File userFile) throws InvalidKeyException, SignatureException,
             IOException {
         File sigFile = new File(userDir, userFile.getName() + ".sig");
         sig.initSign(kp.getPrivate());
         sig.update(toSign);
         byte[] signature = sig.sign();
-        FileOutputStream fout = new FileOutputStream(sigFile);
-        fout.write(signature);
-        fout.close();
+        Files.write(sigFile.toPath(), signature);
         return signature;
     }
 

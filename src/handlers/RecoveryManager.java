@@ -88,6 +88,7 @@ public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
             File[] filesUser = f.listFiles((file, s) -> s.toLowerCase().endsWith(".u"));
 
             File userFile = filesUser[0];
+            System.out.println(userFile.getPath());
             try {
                 byte[] encryptedFile = Files.readAllBytes(userFile.toPath());
                 byte[] decryptedFile = em.decrypt(encryptedFile, f, userFile);
