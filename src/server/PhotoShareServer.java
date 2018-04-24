@@ -10,8 +10,8 @@ public class PhotoShareServer {
 
 
 		ServerNetwork server = ServerNetwork.getInstance();
+		System.out.println("Server initialized at port " + port + "!");
 		server.startServer(port);
-		System.out.println("Server initialized at port " + port + " !");
 	}
 
 }

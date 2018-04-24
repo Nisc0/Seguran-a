@@ -1,6 +1,7 @@
 package handlers;
 
-import domain.*;
+import domain.Photo;
+import domain.User;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -46,22 +47,21 @@ public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
         File fl = new File(file_users, u.getID());
         fl.mkdir();
         File fu = new File(fl, u.getID() + ".u");
-        byte[] byteUser = util.BytesUtil.toByteArray(fu);
-        byte[] signedByteUser = null;
+        byte[] byteUser = util.BytesUtil.toByteArray(u);
         try {
-            signedByteUser = em.signFile(byteUser, fl, fu);
+            em.signFile(byteUser, fl, fu);
         }catch (InvalidKeyException | SignatureException e){
             throw new GeneralSecurityException(e.getMessage());
         }
-        writeEncrypt(fl, fu, signedByteUser);
+        writeEncrypt(fl, fu, byteUser);
     }
 
     @Override
     public void saveImage(BufferedImage image, User u, String photoID, String extension) throws IOException,
             GeneralSecurityException{
         File fl = new File(file_users, u.getID());
-        File fi = new File(fl, photoID + "." + extension);
-        byte[] byteImage = util.BytesUtil.toByteArray(fi);
+        File fi = new File(fl, photoID + "." + extension + ".sc");
+        byte[] byteImage = util.BytesUtil.serializeImage(image, extension);
         writeEncrypt(fl, fi, byteImage);
     }
 
@@ -91,11 +91,14 @@ public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
             System.out.println(userFile.getPath());
             try {
                 byte[] encryptedFile = Files.readAllBytes(userFile.toPath());
+                System.out.println(Arrays.toString(encryptedFile));
                 byte[] decryptedFile = em.decrypt(encryptedFile, f, userFile);
 
-                if (em.isVerifiedFile(decryptedFile, f, userFile))
+                System.out.println(Arrays.toString(decryptedFile));
+                if (em.isVerifiedFile(decryptedFile, f, userFile)) {
+                    System.out.println(Arrays.toString(decryptedFile));
                     users.add((User) util.BytesUtil.toObject(decryptedFile));
-
+                }
             } catch (InvalidKeyException | SignatureException | NoSuchAlgorithmException |
                     BadPaddingException | IllegalBlockSizeException e) {
                 e.printStackTrace();
@@ -110,16 +113,15 @@ public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
             GeneralSecurityException {
         File fl = new File(file_users, userID + "/");
         for (Photo p : uPh) {
-            File flPh = new File(fl, p.getPhotoID() + "." + p.getExtension());
+            File flPh = new File(fl, p.getPhotoID() + "." + p.getExtension() + ".sc");
             try {
                 byte[] encryptedFile = Files.readAllBytes(flPh.toPath());
                 byte[] decryptedFile = em.decrypt(encryptedFile, fl, flPh);
 
-                if (em.isVerifiedFile(decryptedFile, fl, flPh)) {
-                    p.setImage((BufferedImage) util.BytesUtil.toObject(decryptedFile));
-                }
-            } catch (InvalidKeyException | SignatureException | NoSuchAlgorithmException |
-                    BadPaddingException | IllegalBlockSizeException e) {
+                p.setImage(util.BytesUtil.deserializeImage(decryptedFile));
+
+            } catch (InvalidKeyException | NoSuchAlgorithmException | BadPaddingException |
+                    IllegalBlockSizeException e) {
                 throw new GeneralSecurityException(e.getMessage());
             }
         }

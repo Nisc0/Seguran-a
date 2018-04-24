@@ -49,14 +49,13 @@ public class ServerNetwork{
                 try {
                     SSLSocket sslSocket = (SSLSocket) sslServerSocket.accept();
                     ServerThread newServerThread = new ServerThread(sslSocket);
-                    System.out.println("SSL ServerSocker created!");
+                    System.out.println("SSL Server socket created!");
                     newServerThread.start();
-                    System.out.println("Thread Criada!");
+                    System.out.println("Thread created!");
                 }
                 catch(IOException e) {
                     System.out.println("Couldn't connect to client!!");
                 }
-
             }
 
         try {

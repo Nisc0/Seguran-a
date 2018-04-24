@@ -20,7 +20,6 @@ public class PhotoHandler extends GodHandler implements handlers.Interface.IPhot
     @Override
     public void addPhoto(Photo photo, BufferedImage image) throws DuplicatePhotoException, IOException,
              GeneralSecurityException {
-
         if (currUser.getPhoto(photo.getPhotoID()) != null)
             throw new DuplicatePhotoException();
 

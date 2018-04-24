@@ -161,12 +161,7 @@ public class manUsers {
                 fl.mkdirs();
 
                 //criação do utilizador
-                User u = new User(name, pass);
-                File fu = new File(fl, name + ".u");
-                fos = new FileOutputStream(fu);
-                oos = new ObjectOutputStream(fos);
-                oos.writeObject(u);
-                oos.close();
+                new User(name, pass);
 
                 break;
 

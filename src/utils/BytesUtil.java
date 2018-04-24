@@ -1,10 +1,8 @@
 package util;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 
 public class BytesUtil {
 
@@ -47,5 +45,20 @@ public class BytesUtil {
             }
         }
         return obj;
+    }
+
+    public static byte[] serializeImage(BufferedImage img, String extension) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(img, extension, baos);
+        baos.flush();
+        byte[] imageInByte = baos.toByteArray();
+        baos.close();
+        return imageInByte;
+    }
+
+    public static BufferedImage deserializeImage(byte[] img) throws IOException {
+        ByteArrayInputStream bais = new ByteArrayInputStream(img);
+        BufferedImage image = ImageIO.read(bais);
+        return image;
     }
 }

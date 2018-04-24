@@ -1,6 +1,6 @@
 package handlers;
 
-import domain.*;
+import domain.User;
 
 
 public abstract class  GodHandler implements handlers.Interface.IGodHandler {

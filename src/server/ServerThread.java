@@ -32,7 +32,7 @@ public class ServerThread extends Thread {
      * Runs the thread.
      */
     public void run(){
-        System.out.println("ola!");
+        System.out.println("Now running...");
         try {
              outStream = new ObjectOutputStream(socket.getOutputStream());
              inStream = new ObjectInputStream(socket.getInputStream());

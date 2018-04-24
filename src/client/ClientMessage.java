@@ -120,7 +120,7 @@ public class ClientMessage {
      * Retrives all users photo
      *
      * @param currUser current user
-     * @param userID   client to retrive all photos
+     * @param userID   client to retrieve all photos
      * @return a list with all photodata from the user
      * @throws IOException
      * @throws ClassNotFoundException

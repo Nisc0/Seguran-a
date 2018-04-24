@@ -41,7 +41,7 @@ public class AuthenticationManager {
             BufferedReader br = new BufferedReader(new FileReader(passFile));
 
             String line = br.readLine();
-            while(line != null || !line.contains(name)) {
+            while(line != null && !line.contains(name)) {
                 line = br.readLine();
             }
 

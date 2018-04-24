@@ -38,7 +38,7 @@ public class MsgPhoto extends Message {
 
         byte[] photoBytes = null;
         try {
-            photoBytes = serializeImage(img, photo);
+            photoBytes = util.BytesUtil.serializeImage(img, photo.getExtension());
         } catch (IOException e) {
             System.out.println("Serialization of photo failed!");
         }
@@ -55,7 +55,7 @@ public class MsgPhoto extends Message {
         int i = 0;
         for (Photo ph : photoList) {
             try {
-                photoListBytes[i] = serializeImage(ph.getImage(), ph);
+                photoListBytes[i] = util.BytesUtil.serializeImage(ph.getImage(), ph.getExtension());
             } catch (IOException e) {
                 System.out.println("Serialization of photo failed!");
             }
@@ -89,7 +89,7 @@ public class MsgPhoto extends Message {
         int i = 0;
         for (Photo ph : photoL) {
             try {
-                ph.setImage(deserializeImage(imagesSerialized[i]));
+                ph.setImage(util.BytesUtil.deserializeImage(imagesSerialized[i]));
             } catch (IOException e) {
                 System.out.println("Deserialization of photo failed!");
             }
@@ -99,21 +99,6 @@ public class MsgPhoto extends Message {
     }
 
     public BufferedImage getBufferedImage() throws IOException {
-        return deserializeImage(photoBytes);
-    }
-
-    private byte[] serializeImage(BufferedImage img, Photo photo) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(img, photo.getExtension(), baos);
-        baos.flush();
-        byte[] imageInByte = baos.toByteArray();
-        baos.close();
-        return imageInByte;
-    }
-
-    private BufferedImage deserializeImage(byte[] img) throws IOException {
-        ByteArrayInputStream bais = new ByteArrayInputStream(img);
-        BufferedImage image = ImageIO.read(bais);
-        return image;
+        return util.BytesUtil.deserializeImage(photoBytes);
     }
 }
