@@ -19,7 +19,6 @@ public class AuthenticationManager {
     private static File passFile;
 
     private AuthenticationManager() {
-
         denc= getDecoder();
         fl= new File("Files");
         passFile= new File(fl, "users.txt");
@@ -27,7 +26,6 @@ public class AuthenticationManager {
     }
 
     public static AuthenticationManager getAuthenticater(){
-
         if (AuthenticationManager.instance == null){
             AuthenticationManager.instance = new AuthenticationManager();
         }
@@ -35,7 +33,6 @@ public class AuthenticationManager {
     }
 
     public boolean authenticate (String name, String pass) throws WrongUserPasswordException {
-
         byte[] salt;
         byte[] salted;
 
@@ -54,7 +51,7 @@ public class AuthenticationManager {
             }
 
             salt = denc.decode(line.split(":")[1]);
-            salted = getSalty(pass, salt);
+            salted = getSaltedPassword(pass, salt);
 
             if(!Arrays.equals(salted, denc.decode(line.split(":")[2]))) {
                 throw new WrongUserPasswordException();
@@ -77,13 +74,12 @@ public class AuthenticationManager {
 
     }
 
-    private static byte[] getSalty(String pass, byte[] salt) throws NoSuchAlgorithmException, IOException {
+    private static byte[] getSaltedPassword(String pass, byte[] salt) throws NoSuchAlgorithmException, IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bos.write(pass.getBytes());
         bos.write(salt);
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         return digest.digest(bos.toByteArray());
     }
-
 
 }

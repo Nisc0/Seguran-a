@@ -7,11 +7,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.io.*;
 import java.nio.file.Files;
-import java.security.InvalidKeyException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
+import java.security.*;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Random;
@@ -41,7 +37,9 @@ public class manUsers {
             String password = scanner.next();
 
             //o nosso sal, cheio de amor
-            byte[] salt = {0x6e, 0x69, 0x73, 0x63, 0x6f, 0x6e, 0x69, 0x69, 0x2d, 0x63, 0x68, 0x61, 0x6e, 0x20, 0x62, 0x72, 0x75, 0x6e, 0x6f, 0x6e, 0x69, 0x69, 0x2d, 0x63, 0x68, 0x61, 0x6e, 0x20, 0x64, 0x61, 0x69, 0x73, 0x75, 0x6b, 0x69};
+            byte[] salt = {0x6e, 0x69, 0x73, 0x63, 0x6f, 0x6e, 0x69, 0x69, 0x2d, 0x63, 0x68, 0x61, 0x6e, 0x20, 0x62,
+                    0x72, 0x75, 0x6e, 0x6f, 0x6e, 0x69, 0x69, 0x2d, 0x63, 0x68, 0x61, 0x6e, 0x20, 0x64, 0x61, 0x69,
+                    0x73, 0x75, 0x6b, 0x69};
 
             //codificação de pass do admin
             PBEKeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, 20);
@@ -93,7 +91,8 @@ public class manUsers {
             }
 
         }
-        catch (NoSuchAlgorithmException | InvalidKeyException | InvalidKeySpecException | ClassNotFoundException | IOException e) {
+        catch (ClassNotFoundException | GeneralSecurityException | IOException e) {
+            System.out.println("Something went wrong!");
             e.printStackTrace();
         }
 
@@ -109,7 +108,8 @@ public class manUsers {
         return mac.doFinal(bt);
     }
 
-    private static void processCommand(String comand, Scanner scanner, SecretKey key) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
+    private static void processCommand(String comand, Scanner scanner, SecretKey key) throws IOException,
+            GeneralSecurityException {
 
         //inicio do processamento
 
@@ -148,7 +148,7 @@ public class manUsers {
 
                 salt = makeSalt();
 
-                salted = getSalty(pass, salt);
+                salted = getSaltedPassword(pass, salt);
 
                 bw.write(name + ":" + enc.encodeToString(salt) + ":" + enc.encodeToString(salted) + "\n");
                 bw.close();
@@ -218,7 +218,7 @@ public class manUsers {
                 System.out.println("What's the new password?");
                 pass = scanner.next();
 
-                salted = getSalty(pass, salt);
+                salted = getSaltedPassword(pass, salt);
                 modifyUser(name, enc.encodeToString(salt), enc.encodeToString(salted));
 
                 FileOutputStream fos2 = new FileOutputStream(macFile);
@@ -255,7 +255,7 @@ public class manUsers {
         return salt;
     }
 
-    private static byte[] getSalty(String pass, byte[] salt) throws NoSuchAlgorithmException, IOException {
+    private static byte[] getSaltedPassword(String pass, byte[] salt) throws NoSuchAlgorithmException, IOException {
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bos.write(pass.getBytes());
@@ -294,11 +294,9 @@ public class manUsers {
         bw.close();
 
         return help.renameTo(passFile);
-
     }
 
     private static boolean modifyUser(String name, String salt, String salted) throws IOException {
-
 
         BufferedReader br = new BufferedReader(new FileReader(passFile));
         File help = new File(fl, "help.txt");
@@ -323,16 +321,4 @@ public class manUsers {
 
     }
 
-
-
 }
-
-/*
-
-duvidas:
-como defenir qual a pass do admin -- n se define
-como verificar se o ficheiro das passes esta ok -- done
-
-
-*/
-

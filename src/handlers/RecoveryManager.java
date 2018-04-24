@@ -9,8 +9,8 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.security.*;
-import java.security.cert.CertificateException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
 
@@ -67,13 +67,9 @@ public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
 
     private void writeEncrypt(File toEncryptDir, File encryptFile, byte[] byteFile) throws IOException,
             GeneralSecurityException {
-        FileOutputStream fout = null;
         try {
-            fout = new FileOutputStream(encryptFile);
-            fout.write(em.encrypt(byteFile, toEncryptDir, encryptFile));
-            fout.close();
-        } catch (CertificateException | UnrecoverableKeyException | NoSuchAlgorithmException | KeyStoreException |
-                IllegalBlockSizeException | KeyException | BadPaddingException e){
+            Files.write(encryptFile.toPath(), em.encrypt(byteFile, toEncryptDir, encryptFile));
+        } catch (NoSuchAlgorithmException | IllegalBlockSizeException | KeyException | BadPaddingException e){
             throw new GeneralSecurityException(e.getMessage());
         }
     }
@@ -101,6 +97,7 @@ public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
 
             } catch (InvalidKeyException | SignatureException | NoSuchAlgorithmException |
                     BadPaddingException | IllegalBlockSizeException e) {
+                e.printStackTrace();
                 throw new GeneralSecurityException(e.getMessage());
             }
         }

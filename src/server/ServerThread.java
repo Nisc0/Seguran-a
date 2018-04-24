@@ -39,6 +39,7 @@ public class ServerThread extends Thread {
         }
         catch (IOException e) {
             e.printStackTrace();
+            System.exit(-1);
         }
 
         try {
@@ -49,6 +50,7 @@ public class ServerThread extends Thread {
         }
         catch (ClassNotFoundException | IOException | GeneralSecurityException e) {
             e.printStackTrace();
+            System.exit(-1);
         }
 
         boolean online = true;

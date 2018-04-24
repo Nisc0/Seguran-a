@@ -1,8 +1,11 @@
 package domain;
 
 import domain.Interface.IUser;
+import handlers.RecoveryManager;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.security.GeneralSecurityException;
 import java.util.*;
 
 /**
@@ -19,14 +22,16 @@ public class User implements IUser, Serializable {
     private String password;
     private Map<String, Photo> photos;
     private Set<String> rec_follows;
+    private RecoveryManager recov;
 
 
-    public User(String id, String pass) {
+    public User(String id, String pass) throws IOException, GeneralSecurityException {
         userID = id;
         password = pass;
         photos = new HashMap<>();
         rec_follows = new HashSet<>();
-
+        RecoveryManager recov = new RecoveryManager();
+        recov.backupUser(this);
     }
 
     @Override

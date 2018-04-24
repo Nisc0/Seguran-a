@@ -5,59 +5,66 @@ import java.io.*;
 import java.nio.file.Files;
 import java.security.*;
 import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
+import java.util.Arrays;
 
 public class EncryptManager {
 
     //TODO: interface?
     private static EncryptManager ourInstance;
-    private static final String KEYSTORE_PWD = ""; //FIXME
-    private static final String KEYSTORE_FILEPATH = ""; //FIXME
-    private static final String KEYSTORE_ALIAS = ""; //FIXME
+    private static final String KEYSTORE_PWD = "dibrunis"; //FIXME
+    private static final String KEYSTORE_FILEPATH = "./Autentication/ServerKeyStore.keyStore"; //FIXME
+    private static final String KEYSTORE_ALIAS = "ServerKeyStore"; //FIXME
     private Cipher rsaCipher, aesCipher;
     private Signature sig;
     private KeyPair kp;
+    private FileInputStream keyStoreFile;
 
-    public static EncryptManager getInstance() throws NoSuchPaddingException, NoSuchAlgorithmException {
+    public static EncryptManager getInstance() throws GeneralSecurityException, IOException {
         if (ourInstance == null)
             ourInstance = new EncryptManager();
         return ourInstance;
     }
 
-    private EncryptManager() throws NoSuchAlgorithmException, NoSuchPaddingException {
-        rsaCipher = Cipher.getInstance("RSA");
+    private EncryptManager() throws IOException, GeneralSecurityException {
+        rsaCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
         aesCipher = Cipher.getInstance("AES");
         sig = Signature.getInstance("SHA256withRSA");
+
+        //Encontrar Ku
+        try {
+            keyStoreFile = new FileInputStream(KEYSTORE_FILEPATH);
+        } catch (FileNotFoundException e){
+            System.out.println("No .keystore file found!");
+            throw e;
+        }
+        KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+        keyStore.load(keyStoreFile, KEYSTORE_PWD.toCharArray());
+
+        Key key = keyStore.getKey(KEYSTORE_ALIAS, KEYSTORE_PWD.toCharArray());
+
+        PublicKey publicKey;
+
+        if (key instanceof PrivateKey) {
+            Certificate cert = keyStore.getCertificate(KEYSTORE_ALIAS);
+            publicKey = cert.getPublicKey();
+            kp = new KeyPair(publicKey, (PrivateKey) key);
+        } else {
+            keyStoreFile.close();
+            throw new GeneralSecurityException();
+        }
     }
 
-    private Key getKey(File userDir, File userFile) throws IOException, KeyStoreException, UnrecoverableKeyException,
-            NoSuchAlgorithmException, CertificateException, IllegalBlockSizeException, InvalidKeyException {
+    private Key getKey(File userDir, File userFile) throws IOException, NoSuchAlgorithmException,
+            IllegalBlockSizeException, InvalidKeyException {
         File keyFile = new File(userDir, userFile.getName() + ".key");
         Key K;
         if (!keyFile.exists()) {
             K = createKey();
 
-            //Encontrar Ku
-            FileInputStream keyStoreFile = new FileInputStream(KEYSTORE_FILEPATH);
-            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            keyStore.load(keyStoreFile, KEYSTORE_PWD.toCharArray());
-
-            Key key = keyStore.getKey(KEYSTORE_ALIAS, KEYSTORE_PWD.toCharArray());
-
-            PublicKey publicKey;
-
-            if (key instanceof PrivateKey) {
-                Certificate cert = keyStore.getCertificate(KEYSTORE_ALIAS);
-                publicKey = cert.getPublicKey();
-                kp = new KeyPair(publicKey, (PrivateKey) key);
-            } else {
-                keyStoreFile.close();
-                throw new SecurityException();
-            }
-
             //cifrar com Ku
             rsaCipher.init(Cipher.WRAP_MODE, kp.getPublic());
             byte[] wrappedBytes = rsaCipher.wrap(K);
+            //System.out.println(Arrays.toString(wrappedBytes));
             saveKey(wrappedBytes, keyFile);
 
             keyStoreFile.close();
@@ -68,10 +75,10 @@ public class EncryptManager {
         return K;
     }
 
-    public byte[] encrypt(byte[] plainData, File userDir, File userFile) throws CertificateException,
-            UnrecoverableKeyException, NoSuchAlgorithmException, IOException, KeyStoreException,
+    public byte[] encrypt(byte[] plainData, File userDir, File userFile) throws NoSuchAlgorithmException, IOException,
             IllegalBlockSizeException, KeyException, BadPaddingException {
         Key k = getKey(userDir, userFile);
+
         aesCipher.init(Cipher.ENCRYPT_MODE, k);
         return aesCipher.doFinal(plainData);
     }
@@ -98,14 +105,13 @@ public class EncryptManager {
 
     private Key getSecretKey(File keyFile) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
         byte[] encryptedKey = Files.readAllBytes(keyFile.toPath());
+        //System.out.println(Arrays.toString(encryptedKey));
         rsaCipher.init(Cipher.UNWRAP_MODE, kp.getPrivate());
         return rsaCipher.unwrap(encryptedKey, "AES", Cipher.SECRET_KEY);
     }
 
     private void saveKey(byte[] wrappedKey, File keyFile) throws IOException {
-        FileOutputStream fout = new FileOutputStream(keyFile);
-        fout.write(wrappedKey);
-        fout.close();
+        Files.write(keyFile.toPath(), wrappedKey);
     }
 
     public byte[] signFile(byte[] toSign, File userDir, File userFile) throws InvalidKeyException, SignatureException,
