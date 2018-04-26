@@ -6,7 +6,9 @@ public class IPCheck {
 
 
     /**
-
+     * Verifies the validity of a given ip
+     * @param ip - the ip to be verified
+     * @return true if the ip is valid, false otherwise
      */
     public static boolean isIPValid(String ip) {
         Pattern p = Pattern.compile("^"
