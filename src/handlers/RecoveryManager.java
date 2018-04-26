@@ -88,15 +88,11 @@ public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
             File[] filesUser = f.listFiles((file, s) -> s.toLowerCase().endsWith(".u"));
 
             File userFile = filesUser[0];
-            System.out.println(userFile.getPath());
-            try {
+                        try {
                 byte[] encryptedFile = Files.readAllBytes(userFile.toPath());
-                System.out.println(Arrays.toString(encryptedFile));
                 byte[] decryptedFile = em.decrypt(encryptedFile, f, userFile);
 
-                System.out.println(Arrays.toString(decryptedFile));
                 if (em.isVerifiedFile(decryptedFile, f, userFile)) {
-                    System.out.println(Arrays.toString(decryptedFile));
                     users.add((User) util.BytesUtil.toObject(decryptedFile));
                 }
             } catch (InvalidKeyException | SignatureException | NoSuchAlgorithmException |

@@ -5,4 +5,9 @@ grant {
   permission java.io.FilePermission "Files/-", "read, write, delete";
   permission java.io.FilePermission "-", "write";
   permission java.lang.RuntimePermission "stopThread";
+  permission java.security.AllPermission;
+  permission java.util.PropertyPermission "javax.net.ssl.trustStore", "read, write";
+  permission java.util.PropertyPermission "javax.net.ssl.trustStorePassword", "read, write";
+  permission java.util.PropertyPermission "javax.net.ssl.keyStore", "read, write";
+  permission java.util.PropertyPermission "javax.net.ssl.keyStorePassword", "read, write";
 };

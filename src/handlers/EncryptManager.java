@@ -9,13 +9,12 @@ import java.nio.file.Files;
 import java.security.*;
 import java.security.cert.Certificate;
 
-public class EncryptManager {
+public class EncryptManager implements IEncryptManager {
 
-    //TODO: interface?
     private static EncryptManager ourInstance;
-    private static final String KEYSTORE_PWD = "dibrunis"; //FIXME
-    private static final String KEYSTORE_FILEPATH = "./Autentication/ServerKeyStore.keyStore"; //FIXME
-    private static final String KEYSTORE_ALIAS = "ServerKeyStore"; //FIXME
+    private static final String KEYSTORE_PWD = "dibrunis";
+    private static final String KEYSTORE_FILEPATH = "./Autentication/ServerKeyStore.keyStore";
+    private static final String KEYSTORE_ALIAS = "ServerKeyStore";
     private Cipher rsaCipher, aesCipher;
     private Signature sig;
     private KeyPair kp;
@@ -77,6 +76,7 @@ public class EncryptManager {
         return K;
     }
 
+    @Override
     public byte[] encrypt(byte[] plainData, File userDir, File userFile) throws NoSuchAlgorithmException, IOException,
             IllegalBlockSizeException, KeyException, BadPaddingException {
         Key k = getKey(userDir, userFile);
@@ -84,11 +84,10 @@ public class EncryptManager {
         return aesCipher.doFinal(plainData);
     }
 
+    @Override
     public byte[] decrypt(byte[] cipherData, File userDir, File userFile) throws InvalidKeyException,
             BadPaddingException, IllegalBlockSizeException, IOException, NoSuchAlgorithmException {
-        //TODO se nao houver chave no decrypt, se nao houver um keyfile????
         File keyFile = new File(userDir, userFile.getName() + ".key");
-        System.out.println(keyFile.getPath());
         Key k = getSecretKey(keyFile);
         aesCipher.init(Cipher.DECRYPT_MODE, k);
         return aesCipher.doFinal(cipherData);
@@ -107,11 +106,11 @@ public class EncryptManager {
 
     private Key getSecretKey(File keyFile) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
         byte[] encryptedKey = Files.readAllBytes(keyFile.toPath());
-        //System.out.println(Arrays.toString(encryptedKey));
         rsaCipher.init(Cipher.UNWRAP_MODE, kp.getPrivate());
         return rsaCipher.unwrap(encryptedKey, "AES", Cipher.SECRET_KEY);
     }
 
+    @Override
     public void signFile(byte[] toSign, File userDir, File userFile) throws InvalidKeyException, SignatureException,
             IOException {
         File sigFile = new File(userDir, userFile.getName() + ".sig");
@@ -121,6 +120,7 @@ public class EncryptManager {
         Files.write(sigFile.toPath(), signature);
     }
 
+    @Override
     public boolean isVerifiedFile(byte[] toVerifyData, File userDir, File userFile) throws InvalidKeyException,
             IOException, SignatureException {
         File sigFile = new File(userDir, userFile.getName() + ".sig");
