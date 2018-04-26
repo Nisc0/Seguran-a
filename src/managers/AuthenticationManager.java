@@ -1,6 +1,7 @@
 package managers;
 
 import exceptions.WrongUserPasswordException;
+import managers.Interface.IAuthenticationManager;
 
 import java.io.*;
 import java.security.MessageDigest;
@@ -10,7 +11,7 @@ import java.util.Base64;
 
 import static java.util.Base64.getDecoder;
 
-public class AuthenticationManager {
+public class AuthenticationManager implements IAuthenticationManager {
 
 
     private static AuthenticationManager instance;
@@ -32,7 +33,8 @@ public class AuthenticationManager {
         return AuthenticationManager.instance;
     }
 
-    public boolean authenticate (String name, String pass) throws WrongUserPasswordException {
+    @Override
+    public boolean authenticate(String name, String pass) throws WrongUserPasswordException {
         byte[] salt;
         byte[] salted;
 

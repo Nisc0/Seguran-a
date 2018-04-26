@@ -1,4 +1,6 @@
-package handlers;
+package managers;
+
+import managers.Interface.IEncryptManager;
 
 import javax.crypto.*;
 import java.io.File;

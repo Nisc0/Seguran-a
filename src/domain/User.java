@@ -1,7 +1,7 @@
 package domain;
 
 import domain.Interface.IUser;
-import handlers.RecoveryManager;
+import managers.RecoveryManager;
 
 import java.io.IOException;
 import java.io.Serializable;

@@ -1,7 +1,8 @@
-package handlers;
+package managers;
 
 import domain.Photo;
 import domain.User;
+import managers.Interface.IRecoveryManeger;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -11,9 +12,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.security.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
-public class RecoveryManager implements handlers.Interface.IRecoveryManeger {
+public class RecoveryManager implements IRecoveryManeger {
 
     private FileWriter fw;
     private FileReader fr;

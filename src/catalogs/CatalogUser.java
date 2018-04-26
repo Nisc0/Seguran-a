@@ -3,7 +3,7 @@ package catalogs;
 import catalogs.Interface.ICatalogUser;
 import domain.Photo;
 import domain.User;
-import handlers.RecoveryManager;
+import managers.RecoveryManager;
 
 import java.awt.image.BufferedImage;
 import java.io.*;

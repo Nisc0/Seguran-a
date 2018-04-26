@@ -1,4 +1,4 @@
-package managers;
+package manUsers;
 
 import domain.User;
 import javax.crypto.Mac;

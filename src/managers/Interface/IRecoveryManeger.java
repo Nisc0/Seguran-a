@@ -1,4 +1,4 @@
-package handlers.Interface;
+package managers.Interface;
 
 import domain.Photo;
 import domain.User;
