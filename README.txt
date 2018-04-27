@@ -1,11 +1,19 @@
--> Seguranca e Confiabilidade - Fase 1
+-> Seguranca e Confiabilidade - Fase 2
 Trabalho realizado por:
 Grupo 001
 47823 - Francisco Caeiro
-47289 - Bruno Andrade
+47829 - Bruno Andrade
 47840 - Diogo Caria Ferreira
 
+//TODO:!!!!!!! porque valta ver como é com os ficheiros
+
 Para executar o programa, apenas, quando na pasta de compilação, executar o comando:
+java manUsers.manUsers
+
+Depois da execução do comando, responder às perguntas que surgirão de modo a efetuar as operações de administrador.
+Nota: A password do administrador é definida na primeira execução do programa!
+
+De seguida
 java client.PhotoShare <userID> <password> <serverAdress:port>
 
 Após este comando, o utilizador executou o seu login.
