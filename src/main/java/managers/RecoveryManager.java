@@ -47,7 +47,7 @@ public class RecoveryManager implements IRecoveryManeger {
         File fl = new File(file_users, u.getID());
         fl.mkdir();
         File fu = new File(fl, u.getID() + ".u");
-        byte[] byteUser = util.BytesUtil.toByteArray(u);
+        byte[] byteUser = utils.BytesUtil.toByteArray(u);
         try {
             em.signFile(byteUser, fl, fu);
         }catch (InvalidKeyException | SignatureException e){
@@ -61,7 +61,7 @@ public class RecoveryManager implements IRecoveryManeger {
             GeneralSecurityException{
         File fl = new File(file_users, u.getID());
         File fi = new File(fl, photoID + "." + extension + ".sc");
-        byte[] byteImage = util.BytesUtil.serializeImage(image, extension);
+        byte[] byteImage = utils.BytesUtil.serializeImage(image, extension);
         writeEncrypt(fl, fi, byteImage);
     }
 
@@ -93,7 +93,7 @@ public class RecoveryManager implements IRecoveryManeger {
                 byte[] decryptedFile = em.decrypt(encryptedFile, f, userFile);
 
                 if (em.isVerifiedFile(decryptedFile, f, userFile)) {
-                    users.add((User) util.BytesUtil.toObject(decryptedFile));
+                    users.add((User) utils.BytesUtil.toObject(decryptedFile));
                 }
             } catch (InvalidKeyException | SignatureException | NoSuchAlgorithmException |
                     BadPaddingException | IllegalBlockSizeException e) {
@@ -114,7 +114,7 @@ public class RecoveryManager implements IRecoveryManeger {
                 byte[] encryptedFile = Files.readAllBytes(flPh.toPath());
                 byte[] decryptedFile = em.decrypt(encryptedFile, fl, flPh);
 
-                p.setImage(util.BytesUtil.deserializeImage(decryptedFile));
+                p.setImage(utils.BytesUtil.deserializeImage(decryptedFile));
 
             } catch (InvalidKeyException | NoSuchAlgorithmException | BadPaddingException |
                     IllegalBlockSizeException e) {

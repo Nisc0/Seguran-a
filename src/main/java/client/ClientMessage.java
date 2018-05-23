@@ -328,7 +328,7 @@ public class ClientMessage {
             AlreadyNotFollowingException {
         MsgFollower msg = (MsgFollower) cl.sendReceive(new MsgFollower(MsgType.UNFOLLOWUSER, null, currUser, userID,
                 true));
-        if (!msg.getSuccess()) findException(msg.getC_err());
+        if (msg.getC_err() != null) findException(msg.getC_err());
         return msg.getSuccess();
     }
 

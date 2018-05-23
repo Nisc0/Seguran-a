@@ -51,10 +51,7 @@ public class ServerMessage {
                 photoHandler = new PhotoHandler(user);
                 result = new MsgSession(STARTSESSION, null, user, true);
             } else {
-                followerHandler = new FollowerHandler(user);
-                opinionHandler = new OpinionHandler(user);
-                photoHandler = new PhotoHandler(user);
-                result = new MsgSession(STARTSESSION, USERCREATED, user, true);
+                result = new MsgSession(STARTSESSION, NOSUCHUSER, user, false);
             }
         } catch (WrongUserPasswordException e) {
             result = new MsgSession(STARTSESSION, WRONGPASSWORD, user, false);
@@ -362,7 +359,6 @@ public class ServerMessage {
                 mFollower = (MsgFollower) m;
                 msgResult = unfollowUser(mFollower.getUser(), mFollower.getFollowID());
                 break;
-
             default:
                 break;
         }

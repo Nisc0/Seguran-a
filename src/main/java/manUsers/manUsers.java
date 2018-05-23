@@ -89,7 +89,6 @@ public class manUsers {
                 System.out.println("What's your next command?");
                 command = scanner.next();
             }
-            scanner.close();
 
         }
         catch (ClassNotFoundException | GeneralSecurityException | IOException e) {

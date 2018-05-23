@@ -54,7 +54,7 @@ public class PhotoShare {
 
         System.out.println("Awaiting orders:");
         while (isSessionOpen) {
-            System.out.print("> ");
+        System.out.print("> ");
 
             String line = scan.nextLine();
             String[] in = line.split(" ");
@@ -85,10 +85,11 @@ public class PhotoShare {
                                     String photoID = null;
                                     try {
                                         File imgFile = new File(in[i]);
+                                        System.out.println(imgFile.toString());
                                         img = ImageIO.read(imgFile);
                                         photoID = imgFile.getName();
                                     } catch (IOException e) {
-                                        System.out.println("Given photo doesn't exist!");
+                                        e.printStackTrace();
                                         break;
                                     }
 
@@ -98,15 +99,11 @@ public class PhotoShare {
                                     }
 
                                     Photo ph = new Photo(photoID);
-                                    System.out.println(photoID);
 
-                                    try {
-                                        if (cm.addPhoto(currUser, photoID, ph, img)) {
-                                            System.out.println("You've added given photo!");
-                                        }
-                                    } catch (DuplicatePhotoException e) {
-                                        System.out.println(e.getMessage());
-                                    }
+                                    if (cm.addPhoto(currUser, photoID, ph, img)) {
+                                        System.out.println("You've added given photo!");
+                                    } else
+                                        continue;
                                 }
                             } else {
                                 System.out.println("Please, call it like this: -a " +
@@ -145,7 +142,7 @@ public class PhotoShare {
                                 File savedPhotos = new File("SavedPhotos");
                                 savedPhotos.mkdir();
                                 for (Photo p : list) {
-                                    File imgFile = new File(savedPhotos, p.getPhotoID() + '.' + p.getExtension());
+                                    File imgFile = new File(savedPhotos, p.getPhotoID()+'.'+p.getExtension());
                                     ImageIO.write(p.getImage(), p.getExtension(), imgFile);
                                 }
                             } else {
@@ -156,7 +153,7 @@ public class PhotoShare {
                             }
                             break;
                         case 'c':
-                            if (in.length >= 4) {
+                            if (in.length == 4) {
                                 String[] comments = line.split("\"");
                                 if (cm.commentPhoto(currUser, comments[1], in[in.length - 2], in[in.length - 1]))
                                     System.out.println("You've commented given photo!");
@@ -190,13 +187,10 @@ public class PhotoShare {
                             if (in.length > 1) {
                                 int i;
                                 for (i = 1; i < in.length; i++) {
-                                    try {
-                                        if (cm.followUser(currUser, in[i]))
-                                            System.out.println("You're now following given user!");
-
-                                    } catch (AlreadyFollowingException | NoSuchUserException e) {
-                                        System.out.println(e.getMessage());
-                                    }
+                                    if (cm.followUser(currUser, in[i]))
+                                        System.out.println("You're now following given username!");
+                                    else
+                                        continue;
                                 }
                             } else {
                                 System.out.println("Please, call it like this: -f " +
@@ -208,12 +202,10 @@ public class PhotoShare {
                             if (in.length > 1) {
                                 int i;
                                 for (i = 1; i < in.length; i++) {
-                                    try {
-                                        if (cm.unfollowUser(currUser, in[i]))
-                                            System.out.println("You're now unfollowing given username!");
-                                    } catch (AlreadyNotFollowingException | NoSuchUserException e) {
-                                        System.out.println(e.getMessage());
-                                    }
+                                    if (cm.unfollowUser(currUser, in[i]))
+                                        System.out.println("You're now unfollowing given username!");
+                                    else
+                                        continue;
                                 }
                             } else {
                                 System.out.println("Please, call it like this: -r " +

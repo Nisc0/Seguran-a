@@ -1,14 +1,11 @@
 package message;
 
-import domain.Photo;
-import domain.PhotoOpinion;
-
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+
+import domain.Photo;
+import domain.PhotoOpinion;
 
 public class MsgPhoto extends Message {
 
@@ -38,7 +35,7 @@ public class MsgPhoto extends Message {
 
         byte[] photoBytes = null;
         try {
-            photoBytes = util.BytesUtil.serializeImage(img, photo.getExtension());
+            photoBytes = utils.BytesUtil.serializeImage(img, photo.getExtension());
         } catch (IOException e) {
             System.out.println("Serialization of photo failed!");
         }
@@ -55,7 +52,7 @@ public class MsgPhoto extends Message {
         int i = 0;
         for (Photo ph : photoList) {
             try {
-                photoListBytes[i] = util.BytesUtil.serializeImage(ph.getImage(), ph.getExtension());
+                photoListBytes[i] = utils.BytesUtil.serializeImage(ph.getImage(), ph.getExtension());
             } catch (IOException e) {
                 System.out.println("Serialization of photo failed!");
             }
@@ -89,7 +86,7 @@ public class MsgPhoto extends Message {
         int i = 0;
         for (Photo ph : photoL) {
             try {
-                ph.setImage(util.BytesUtil.deserializeImage(imagesSerialized[i]));
+                ph.setImage(utils.BytesUtil.deserializeImage(imagesSerialized[i]));
             } catch (IOException e) {
                 System.out.println("Deserialization of photo failed!");
             }
@@ -99,6 +96,6 @@ public class MsgPhoto extends Message {
     }
 
     public BufferedImage getBufferedImage() throws IOException {
-        return util.BytesUtil.deserializeImage(photoBytes);
+        return utils.BytesUtil.deserializeImage(photoBytes);
     }
 }

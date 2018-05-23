@@ -26,6 +26,7 @@ public class Photo implements IPhoto, Serializable {
 
     public Photo(String name) {
         String[] fName = name.split("\\.");
+        System.out.println(name);
         photoID = fName[0];
         extension = fName[1];
         opinion = new HashMap<>();
