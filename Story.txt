@@ -1,0 +1,37 @@
+User existentes:
+Bruno
+Diogo
+Nisco
+Neelo
+(todos iniciados)
+
+Diogo adiciona foto (-a)	V
+Diogo segue Bruno (-f)		V
+Nisco copia fotos de Diogo (-g)	X
+Diogo adiciona foto (-a)	V
+Bruno segue Diogo (-f)		V
+Nisco segue Bruno (-f)		V
+Nisco segue Diogo (-f)		V
+Diogo manda log out	--	V
+Bruno gosta foto Diogo (-L)	V
+Neelo adiciona foto (-a)	V
+Diogo manda log in		V
+Diogo segue Neelo (-f)		V
+Bruno segue Neelo (-f)		V
+Bruno comenta foto Neelo (-c)	V
+Diogo comenta foto Neelo (-c)	V
+Joao manda log in		X
+Nisco segue Diogo (-f)		X
+Nisco comenta foto Diogo (-c)	V
+Bruno desgosta foto Diogo (-D)	V
+Bruno dessgue neelo (-r)	V
+Diogo comenta foto Neelo (-c)	V
+Bruno adiciona foto (-a)	V
+Nisco gosta foto Bruno(-L)	X
+Nisco recebe gostos e comentarios de foto Bruno (-i)	V
+Neelo adiciona foto (-a)	V
+Diogo obtem lista de fotos Neelo (-l)	V
+Neelo obtem lista fotos Neelo (-l) X
+Diogo comenta foto (-c)		V
+
+FIM
