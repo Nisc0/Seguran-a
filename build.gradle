@@ -64,7 +64,7 @@ task client1(type: JavaExec) {
 task client2(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'client.PhotoShare'
-    args = ["didiogo", "diogo", "10.101.149.64:23232"]
+    args = ["diogo", "diogo", "10.101.149.64:23232"]
     jvmArgs += ["-Djava.security.manager", "-Djava.security.policy==clientPolicy.policy"]
     standardInput = System.in
 }

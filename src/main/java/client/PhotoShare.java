@@ -87,24 +87,18 @@ public class PhotoShare {
 									File imgFile = new File(in[i]);
 									img = ImageIO.read(imgFile);
 									photoID = imgFile.getName();
-								} catch (IOException e) {
-									System.out.println("Photo doesn't exist!");
-									break;
-								}
 
-								if (photoID == null) {
-									System.out.println("Incorrect photoID!");
-									break;
-								}
-
-								Photo ph = new Photo(photoID);
-								System.out.println(photoID);
-								try {
+									Photo ph = new Photo(photoID);
+									System.out.println(photoID);
+									
 									if (cm.addPhoto(currUser, photoID, ph, img)) {
 										System.out.println("You've added given photo!");
 									}
+									
 								} catch (DuplicatePhotoException e) {
 									System.out.println(e.getMessage());
+								} catch (IOException e) {
+									System.out.println("Photo doesn't exist!");
 								}
 							}
 						} else {
@@ -151,7 +145,7 @@ public class PhotoShare {
 						}
 						break;
 					case 'c':
-						if (in.length == 4) {
+						if (in.length >= 4) {
 							String[] comments = line.split("\"");
 							if (cm.commentPhoto(currUser, comments[1], in[in.length - 2], in[in.length - 1]))
 								System.out.println("You've commented given photo!");
