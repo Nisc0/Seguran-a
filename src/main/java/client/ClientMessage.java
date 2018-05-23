@@ -367,8 +367,6 @@ public class ClientMessage {
                 throw new NoSuchPhotoException("Given photo tag doesn't exist!");
             case DUPLICATEPHOTO:
                 throw new DuplicatePhotoException("Given photo already exists!");
-            case USERCREATED:
-                System.out.println("New user created!");
             default:
                 break;
         }
