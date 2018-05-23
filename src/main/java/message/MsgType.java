@@ -1,0 +1,15 @@
+package message;
+
+public enum MsgType {
+    STARTSESSION,
+    ENDSESSION,
+    ADDPHOTO,
+    ALLPHOTOSDATA,
+    PHOTOOPINION,
+    ALLPHOTOS,
+    COMMENTPHOTO,
+    LIKEPHOTO,
+    DISLIKEPHOTO,
+    FOLLOWUSER,
+    UNFOLLOWUSER
+}

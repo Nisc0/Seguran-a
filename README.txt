@@ -5,16 +5,26 @@ Grupo 001
 47829 - Bruno Andrade
 47840 - Diogo Caria Ferreira
 
-//TODO:!!!!!!! porque valta ver como é com os ficheiros
-
-Para executar o programa, apenas, quando na pasta de compilação, executar o comando:
-java manUsers.manUsers
-
+Para executar o programa, quando na pasta do projeto (PhotoShare_001), executar o comando:
+./gradlew manUsers
 Depois da execução do comando, responder às perguntas que surgirão de modo a efetuar as operações de administrador.
 Nota: A password do administrador é definida na primeira execução do programa!
 
-De seguida
-java client.PhotoShare <userID> <password> <serverAdress:port>
+Para, de seguida, ligar o servidor, usar o comando:
+./gradlew server
+Nota: Como pretendido, a porta do servidor é a 23232!
+
+Em seguida, alterar o ficheiro build.gradle e substituir:
+<tasknameClient> - pelo nome de execução
+<user> - pelo nome de cliente
+<pass> - pela password do cliente
+<ip:port> - pelo ip e a porta respetiva
+Nota: Para a execução de mais do que cliente, copiar a task e fornecer nomes diferentes dos selecionados na task anterior.
+
+Para efeitos de exemplo já se encontra um cliente preparado a exectar, na mesma máquina que o servidor, através do comando:
+./gradlew client
+Nota: Este cliente tem de username user, e de password pass, como tal, tem de ser adicionado no manUsers, se se desejar utilizar-lo.
+
 
 Após este comando, o utilizador executou o seu login.
 Pode agora utilizar o programa PhotoShare.
@@ -47,5 +57,3 @@ um erro.
 -r <followUserIds> - remove os utilizadores followUserIds como seguidores do utilizador
 local. Se algum dos utilizadores não fizer parte da lista de seguidores deve ser devolvido
 um erro.
-
-Não foi conseguido testar as politicas.
