@@ -18,7 +18,7 @@ Em seguida, alterar o ficheiro build.gradle e substituir:
 <tasknameClient> - pelo nome de execução
 <user> - pelo nome de cliente
 <pass> - pela password do cliente
-<ip:port> - pelo ip e a porta respetiva
+<ip> - pelo ip do servidor
 Nota: Para a execução de mais do que cliente, copiar a task e fornecer nomes diferentes dos selecionados na task anterior.
 
 Para efeitos de exemplo já se encontra um cliente preparado a exectar, na mesma máquina que o servidor, através do comando:

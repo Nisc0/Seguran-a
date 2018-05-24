@@ -50,35 +50,7 @@ task server(type: JavaExec) {
 task client(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'client.PhotoShare'
-    args = ["bruno", "bruno", "10.101.149.64:23232"]
-    jvmArgs += ["-Djava.security.manager", "-Djava.security.policy==clientPolicy.policy"]
-    standardInput = System.in
-}
-task client1(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    main = 'client.PhotoShare'
-    args = ["nisco", "nisco", "10.101.149.64:23232"]
-    jvmArgs += ["-Djava.security.manager", "-Djava.security.policy==clientPolicy.policy"]
-    standardInput = System.in
-}
-task client2(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    main = 'client.PhotoShare'
-    args = ["diogo", "diogo", "10.101.149.64:23232"]
-    jvmArgs += ["-Djava.security.manager", "-Djava.security.policy==clientPolicy.policy"]
-    standardInput = System.in
-}
-task client3(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    main = 'client.PhotoShare'
-    args = ["neelo", "neelo", "10.101.149.64:23232"]
-    jvmArgs += ["-Djava.security.manager", "-Djava.security.policy==clientPolicy.policy"]
-    standardInput = System.in
-}
-task client4(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    main = 'client.PhotoShare'
-    args = ["joao", "joao", "10.101.149.64:23232"]
+    args = ["<user>", "<pass>", "<ip>:23232"]
     jvmArgs += ["-Djava.security.manager", "-Djava.security.policy==clientPolicy.policy"]
     standardInput = System.in
 }
@@ -86,7 +58,7 @@ task client4(type: JavaExec) {
 //task <tasknameClient>(type: JavaExec) {
 //    classpath = sourceSets.main.runtimeClasspath
 //    main = 'client.PhotoShare'
-//    args = ["<user>", "<pass>", "<ip:port>"]
+//    args = ["<user>", "<pass>", "<ip>:23232"]
 //    jvmArgs += ["-Djava.security.manager", "-Djava.security.policy==clientPolicy.policy"]
 //    standardInput = System.in
 //}

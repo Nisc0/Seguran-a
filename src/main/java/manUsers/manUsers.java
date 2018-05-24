@@ -1,6 +1,7 @@
 package manUsers;
 
 import domain.User;
+
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -19,20 +20,22 @@ public class manUsers {
 
 
     private static File fl = new File("Files");
-    private static File users = new File(fl,"Users");
+    private static File users = new File(fl, "Users");
     private static File passFile = new File(fl, "users.txt");
     private static File macFile = new File(fl, "sec.mac");
 
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
+
+        Scanner scanner = null;
+        SecretKey key = null;
 
         try {
-
             //criação da pasta
             fl.mkdir();
 
             //autenticação do admin
-            Scanner scanner = new Scanner(System.in);
+            scanner = new Scanner(System.in);
             System.out.println("Administrator, what's your password?");
             String password = scanner.next();
 
@@ -44,24 +47,24 @@ public class manUsers {
             //codificação de pass do admin
             PBEKeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, 20);
             SecretKeyFactory kf = SecretKeyFactory.getInstance("PBEWithHmacSHA256AndAES_128");
-            SecretKey key = kf.generateSecret(keySpec);
+            key = kf.generateSecret(keySpec);
 
             //verificar se é a primeira execução
             fl.isDirectory();
-            if(fl.list().length > 0) {
+            if (fl.list().length > 0) {
 
                 FileInputStream fos = new FileInputStream(macFile);
                 ObjectInputStream oos = new ObjectInputStream(fos);
                 //verificar se ficheiro das pass's n foi alterado
                 byte[] oldMac = (byte[]) oos.readObject();
                 oos.close();
-                if(!Arrays.equals(makeMac(key), oldMac)) {
+                if (!Arrays.equals(makeMac(key), oldMac)) {
                     System.out.println("Access denied: wrong password or corrupted file");
                     System.exit(-1);
-
+                } else {
+                    System.out.println("Valid MAC!");
                 }
-            }
-            else {
+            } else {
                 //criação dos ficheiros
                 passFile.createNewFile();
                 macFile.createNewFile();
@@ -70,15 +73,21 @@ public class manUsers {
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
                 oos.writeObject(makeMac(key));
                 oos.close();
+                System.out.println("First time running manUsers!");
             }
-
+        } catch (ClassNotFoundException | GeneralSecurityException | IOException e) {
+            System.out.println("Something went wrong!");
+            System.out.println("Access denied: wrong password or corrupted file");
+            System.exit(-1);
+        }
+        try {
             //pedido do comando
             System.out.println("Administrator, what's your command?");
             System.out.println("Available commands: add, delete, modify, quit");
             String command = scanner.next();
             String[] commands = {"add", "delete", "modify", "quit"};
-            while(command != "quit") {
-                while(!Arrays.asList(commands).contains(command)) {
+            while (command != "quit") {
+                while (!Arrays.asList(commands).contains(command)) {
                     System.out.println("Wrong command: " + command + " is not a valid operation, please try again");
                     System.out.println("Available commands: add, delete, modify, quit");
                     command = scanner.next();
@@ -90,15 +99,15 @@ public class manUsers {
                 command = scanner.next();
             }
 
-        }
-        catch (ClassNotFoundException | GeneralSecurityException | IOException e) {
+        } catch (GeneralSecurityException | IOException e) {
             System.out.println("Something went wrong!");
             e.printStackTrace();
         }
 
     }
 
-    /////////////////////////////////////// AUXILIARY METHODS  ////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////// AUXILIARY METHODS
+    // //////////////////////////////////////////////////////////////////////////
 
     private static byte[] makeMac(SecretKey k) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
 
@@ -132,7 +141,7 @@ public class manUsers {
 
                 userInfo = searchUser(name);
 
-                if(userInfo != null) {
+                if (userInfo != null) {
                     System.out.println("Error: User already exists");
                     break;
                 }
@@ -174,7 +183,7 @@ public class manUsers {
                 name = scanner.next();
                 userInfo = searchUser(name);
 
-                if(userInfo == null) {
+                if (userInfo == null) {
                     System.out.println("Error: User not found");
                     break;
                 }
@@ -200,7 +209,7 @@ public class manUsers {
                 name = scanner.next();
                 userInfo = searchUser(name);
 
-                if(userInfo == null) {
+                if (userInfo == null) {
                     System.out.println("Error: User not found");
 
                     break;
@@ -235,14 +244,14 @@ public class manUsers {
 
     private static void deleteFile(File fl2) {
 
-        for(File file: fl2.listFiles())
+        for (File file : fl2.listFiles())
             file.delete();
 
         fl2.delete();
     }
 
     //vós sois o sal da terra
-    private  static  byte[] makeSalt() {
+    private static byte[] makeSalt() {
 
         final Random r = new SecureRandom();
         byte[] salt = new byte[64];
@@ -263,7 +272,7 @@ public class manUsers {
 
         BufferedReader br = new BufferedReader(new FileReader(passFile));
         String line = br.readLine();
-        while(line != null && !name.equals(line.split(":")[0])) {
+        while (line != null && !name.equals(line.split(":")[0])) {
             line = br.readLine();
         }
 
@@ -278,8 +287,8 @@ public class manUsers {
         BufferedWriter bw = new BufferedWriter(new FileWriter(help));
 
         String line = br.readLine();
-        while(line != null) {
-            if(!name.equals(line.split(":")[0])) {
+        while (line != null) {
+            if (!name.equals(line.split(":")[0])) {
                 bw.write(line + "\n");
             }
             line = br.readLine();
@@ -301,8 +310,8 @@ public class manUsers {
         ObjectOutputStream oos = new ObjectOutputStream(fos);
 
         String line = br.readLine();
-        while(line != null) {
-            if(!name.equals(line.split(":")[0]))
+        while (line != null) {
+            if (!name.equals(line.split(":")[0]))
                 bw.write(line + "\n");
             else
                 bw.write(name + ":" + salt + ":" + salted + "\n");
